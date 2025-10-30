@@ -1,0 +1,13 @@
+Ogólny schemat pracy inżynierskiej: 
+    1. Temat pracy; 
+    2. Streszczenie pl/en;
+    3. Spis treści;
+    4. Wprowadzenie merytoryczne w tematykę pracy; 
+    5. Analiza dostępnych rozwiązań odnoszących się do tematyki pracy; 
+    6. Cel i założenia pracy (opracowane na podstwie przeprowadzonej analizy); 
+    7. Koncepcja rozwiązania (na podstwie przyjetych założeń); 
+    8. Szczegóły dotyczące rozwiązania problemu inżynierskiego; 
+    9. Walidacja i testy; 
+    10. Zakończenie zawierające podsumowanie (odnosimy się do wszystkich przyjętych założeń) i wnioski; 
+    11. Bibliografia; 
+    12. Załączniki; 
