@@ -1,0 +1,1 @@
+/usr/bin/c++ -g -Wl,--dependency-file=CMakeFiles/gra.dir/link.d CMakeFiles/gra.dir/src/main.cpp.o -o gra  /usr/lib64/libsfml-window.so.2.6.2 /usr/lib64/libsfml-system.so.2.6.2 /usr/lib64/libGL.so /usr/lib64/libGLEW.so

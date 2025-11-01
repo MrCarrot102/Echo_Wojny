@@ -1,0 +1,35 @@
+# Echo wojny (tytuł roboczy) 
+
+Roadmap projektu
+
+1. Fundament (Renderowanie i Kamera)
+    a. silnik renderujacy 
+    b. implementacja kamery 2D
+    c. sterowanie kamerą 
+    d. test świata
+
+2. Silnik symulacji (czas i zassoby)
+    a. struktura danych gry
+    b. cykl dnia i nocy
+    c. wizualizacja dnia i nocy (szkielet)
+
+3. Encje (mieszkańcy i zasoby) 
+    a. struktura mieszkańca
+    b. losowe cechy
+    c. struktura zasobów
+    d. wizualizacja danych 
+    e. podstawowa symulacja ai 
+
+4. Budynki i interakcja 
+    a. struktura budynków 
+    b. system "budowania" 
+    c. interakcja
+
+5. Pętla rozgrywki (zbieractwo i przetwarzanie) 
+    a. proste ai zadań
+    b. zbieranie zasobów
+    c. oczyszczanie i przygotowywanie zasobów
+
+6. Wydarzenia i zagrożenia 
+    a. szkielet systemu wydarzeń
+    

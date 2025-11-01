@@ -1,0 +1,3 @@
+/home/mateuszsierakowski/Documents/Echo_Wojny/build/CMakeFiles/gra.dir
+/home/mateuszsierakowski/Documents/Echo_Wojny/build/CMakeFiles/edit_cache.dir
+/home/mateuszsierakowski/Documents/Echo_Wojny/build/CMakeFiles/rebuild_cache.dir
