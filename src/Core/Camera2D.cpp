@@ -1,0 +1,34 @@
+#include "Core/Camera2D.h"
+
+Camera2D::Camera2D(float width, float height)
+    : m_Position(0.0f, 0.0f), m_Zoom(1.0f), m_Width(width), m_Height(height)
+{
+    // ustawianie projekcji 
+    m_ProjectionMatrix = glm::ortho(0.0f, m_Width, 0.0f, m_Height, -1.0f, 1.0f);
+    // ustawianie widoku 
+    recalculateViewMatrix(); 
+}
+
+void Camera2D::update(float deltaTime, const sf::Window& window){
+    // tymczasowa logika sterowania 
+    float speed = 200.0f * dletaTieme; 
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) m_Position.y += speed; 
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) m_Position.y -= speed; 
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) m_Position.x += speed; 
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) m_Position.x -= speed; 
+
+    // dodać obsługę myszy itd; 
+
+    recalculateViewMatrix(); 
+}
+
+void Camera2D::recalculateViewMatrix(){
+    // przesuwanie świata w przeciwnym ruchu do kamery 
+    glm::mat4 transform = glm::translate(glm::mat4(1.0f), glm::vec3(-m_Position.x, -m_Position.y, 0.0f));
+
+    // TODO dodać skalowanie zoom 
+
+    m_ViewMatrix = transform; 
+    m_PorjectionViewMatrix = m_ProjectionMatrix * m_ViewMatrix;
+}
+
