@@ -7,12 +7,12 @@
 class PrimitiveRenderer {
     public: 
         PrimitiveRenderer(); 
-        ~PrimitiveRenderer();
+       // ~PrimitiveRenderer();
 
-        void DrawSquare(Camera2D& camera, 
-                        const glm::vec2& position, 
-                        const glm::vec2& size, 
-                        const glm::vec4& color): 
+        void drawSquare(Camera2D& camera, 
+                    const glm::vec2& position, 
+                    const glm::vec2& size, 
+                    const glm::vec4& color);
 
     private:
         std::unique_ptr<Shader> m_Shader;

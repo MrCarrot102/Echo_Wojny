@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # --- Znajdź Pakiety ---
-find_package(SFML 2.5 REQUIRED system window)
+find_package(SFML 2.5 REQUIRED COMPONENTS system window graphics audio network)
 find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
 
@@ -24,10 +24,15 @@ add_executable(gra ${APP_SOURCES}) # Tworzymy "gra" z tych plików
 # --- Linkowanie i Dołączanie ---
 target_link_libraries(gra 
     PRIVATE
-    ${SFML_LIBRARIES}
+    sfml-system
+    sfml-window
+    sfml-graphics
+    sfml-audio
+    sfml-network
     OpenGL::GL
     GLEW::GLEW
 )
+
 
 # Powiedz CMake, żeby szukał nagłówków (.h) w całym folderze src
 # To pozwoli nam robić #include "Core/Application.h"

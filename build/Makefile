@@ -129,6 +129,102 @@ gra/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/gra.dir/build.make CMakeFiles/gra.dir/build
 .PHONY : gra/fast
 
+src/Core/Application.o: src/Core/Application.cpp.o
+.PHONY : src/Core/Application.o
+
+# target to build an object file
+src/Core/Application.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gra.dir/build.make CMakeFiles/gra.dir/src/Core/Application.cpp.o
+.PHONY : src/Core/Application.cpp.o
+
+src/Core/Application.i: src/Core/Application.cpp.i
+.PHONY : src/Core/Application.i
+
+# target to preprocess a source file
+src/Core/Application.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gra.dir/build.make CMakeFiles/gra.dir/src/Core/Application.cpp.i
+.PHONY : src/Core/Application.cpp.i
+
+src/Core/Application.s: src/Core/Application.cpp.s
+.PHONY : src/Core/Application.s
+
+# target to generate assembly for a file
+src/Core/Application.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gra.dir/build.make CMakeFiles/gra.dir/src/Core/Application.cpp.s
+.PHONY : src/Core/Application.cpp.s
+
+src/Core/Camera2D.o: src/Core/Camera2D.cpp.o
+.PHONY : src/Core/Camera2D.o
+
+# target to build an object file
+src/Core/Camera2D.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gra.dir/build.make CMakeFiles/gra.dir/src/Core/Camera2D.cpp.o
+.PHONY : src/Core/Camera2D.cpp.o
+
+src/Core/Camera2D.i: src/Core/Camera2D.cpp.i
+.PHONY : src/Core/Camera2D.i
+
+# target to preprocess a source file
+src/Core/Camera2D.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gra.dir/build.make CMakeFiles/gra.dir/src/Core/Camera2D.cpp.i
+.PHONY : src/Core/Camera2D.cpp.i
+
+src/Core/Camera2D.s: src/Core/Camera2D.cpp.s
+.PHONY : src/Core/Camera2D.s
+
+# target to generate assembly for a file
+src/Core/Camera2D.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gra.dir/build.make CMakeFiles/gra.dir/src/Core/Camera2D.cpp.s
+.PHONY : src/Core/Camera2D.cpp.s
+
+src/Rendering/PrimitiveRenderer.o: src/Rendering/PrimitiveRenderer.cpp.o
+.PHONY : src/Rendering/PrimitiveRenderer.o
+
+# target to build an object file
+src/Rendering/PrimitiveRenderer.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gra.dir/build.make CMakeFiles/gra.dir/src/Rendering/PrimitiveRenderer.cpp.o
+.PHONY : src/Rendering/PrimitiveRenderer.cpp.o
+
+src/Rendering/PrimitiveRenderer.i: src/Rendering/PrimitiveRenderer.cpp.i
+.PHONY : src/Rendering/PrimitiveRenderer.i
+
+# target to preprocess a source file
+src/Rendering/PrimitiveRenderer.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gra.dir/build.make CMakeFiles/gra.dir/src/Rendering/PrimitiveRenderer.cpp.i
+.PHONY : src/Rendering/PrimitiveRenderer.cpp.i
+
+src/Rendering/PrimitiveRenderer.s: src/Rendering/PrimitiveRenderer.cpp.s
+.PHONY : src/Rendering/PrimitiveRenderer.s
+
+# target to generate assembly for a file
+src/Rendering/PrimitiveRenderer.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gra.dir/build.make CMakeFiles/gra.dir/src/Rendering/PrimitiveRenderer.cpp.s
+.PHONY : src/Rendering/PrimitiveRenderer.cpp.s
+
+src/Rendering/Shader.o: src/Rendering/Shader.cpp.o
+.PHONY : src/Rendering/Shader.o
+
+# target to build an object file
+src/Rendering/Shader.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gra.dir/build.make CMakeFiles/gra.dir/src/Rendering/Shader.cpp.o
+.PHONY : src/Rendering/Shader.cpp.o
+
+src/Rendering/Shader.i: src/Rendering/Shader.cpp.i
+.PHONY : src/Rendering/Shader.i
+
+# target to preprocess a source file
+src/Rendering/Shader.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gra.dir/build.make CMakeFiles/gra.dir/src/Rendering/Shader.cpp.i
+.PHONY : src/Rendering/Shader.cpp.i
+
+src/Rendering/Shader.s: src/Rendering/Shader.cpp.s
+.PHONY : src/Rendering/Shader.s
+
+# target to generate assembly for a file
+src/Rendering/Shader.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gra.dir/build.make CMakeFiles/gra.dir/src/Rendering/Shader.cpp.s
+.PHONY : src/Rendering/Shader.cpp.s
+
 src/main.o: src/main.cpp.o
 .PHONY : src/main.o
 
@@ -162,6 +258,18 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... gra"
+	@echo "... src/Core/Application.o"
+	@echo "... src/Core/Application.i"
+	@echo "... src/Core/Application.s"
+	@echo "... src/Core/Camera2D.o"
+	@echo "... src/Core/Camera2D.i"
+	@echo "... src/Core/Camera2D.s"
+	@echo "... src/Rendering/PrimitiveRenderer.o"
+	@echo "... src/Rendering/PrimitiveRenderer.i"
+	@echo "... src/Rendering/PrimitiveRenderer.s"
+	@echo "... src/Rendering/Shader.o"
+	@echo "... src/Rendering/Shader.i"
+	@echo "... src/Rendering/Shader.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"

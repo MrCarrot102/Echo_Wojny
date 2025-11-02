@@ -86,22 +86,89 @@ CMakeFiles/gra.dir/src/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/gra.dir/src/main.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mateuszsierakowski/Documents/Echo_Wojny/src/main.cpp -o CMakeFiles/gra.dir/src/main.cpp.s
 
+CMakeFiles/gra.dir/src/Core/Application.cpp.o: CMakeFiles/gra.dir/flags.make
+CMakeFiles/gra.dir/src/Core/Application.cpp.o: /home/mateuszsierakowski/Documents/Echo_Wojny/src/Core/Application.cpp
+CMakeFiles/gra.dir/src/Core/Application.cpp.o: CMakeFiles/gra.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/mateuszsierakowski/Documents/Echo_Wojny/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/gra.dir/src/Core/Application.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/gra.dir/src/Core/Application.cpp.o -MF CMakeFiles/gra.dir/src/Core/Application.cpp.o.d -o CMakeFiles/gra.dir/src/Core/Application.cpp.o -c /home/mateuszsierakowski/Documents/Echo_Wojny/src/Core/Application.cpp
+
+CMakeFiles/gra.dir/src/Core/Application.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/gra.dir/src/Core/Application.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mateuszsierakowski/Documents/Echo_Wojny/src/Core/Application.cpp > CMakeFiles/gra.dir/src/Core/Application.cpp.i
+
+CMakeFiles/gra.dir/src/Core/Application.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/gra.dir/src/Core/Application.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mateuszsierakowski/Documents/Echo_Wojny/src/Core/Application.cpp -o CMakeFiles/gra.dir/src/Core/Application.cpp.s
+
+CMakeFiles/gra.dir/src/Core/Camera2D.cpp.o: CMakeFiles/gra.dir/flags.make
+CMakeFiles/gra.dir/src/Core/Camera2D.cpp.o: /home/mateuszsierakowski/Documents/Echo_Wojny/src/Core/Camera2D.cpp
+CMakeFiles/gra.dir/src/Core/Camera2D.cpp.o: CMakeFiles/gra.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/mateuszsierakowski/Documents/Echo_Wojny/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/gra.dir/src/Core/Camera2D.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/gra.dir/src/Core/Camera2D.cpp.o -MF CMakeFiles/gra.dir/src/Core/Camera2D.cpp.o.d -o CMakeFiles/gra.dir/src/Core/Camera2D.cpp.o -c /home/mateuszsierakowski/Documents/Echo_Wojny/src/Core/Camera2D.cpp
+
+CMakeFiles/gra.dir/src/Core/Camera2D.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/gra.dir/src/Core/Camera2D.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mateuszsierakowski/Documents/Echo_Wojny/src/Core/Camera2D.cpp > CMakeFiles/gra.dir/src/Core/Camera2D.cpp.i
+
+CMakeFiles/gra.dir/src/Core/Camera2D.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/gra.dir/src/Core/Camera2D.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mateuszsierakowski/Documents/Echo_Wojny/src/Core/Camera2D.cpp -o CMakeFiles/gra.dir/src/Core/Camera2D.cpp.s
+
+CMakeFiles/gra.dir/src/Rendering/Shader.cpp.o: CMakeFiles/gra.dir/flags.make
+CMakeFiles/gra.dir/src/Rendering/Shader.cpp.o: /home/mateuszsierakowski/Documents/Echo_Wojny/src/Rendering/Shader.cpp
+CMakeFiles/gra.dir/src/Rendering/Shader.cpp.o: CMakeFiles/gra.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/mateuszsierakowski/Documents/Echo_Wojny/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/gra.dir/src/Rendering/Shader.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/gra.dir/src/Rendering/Shader.cpp.o -MF CMakeFiles/gra.dir/src/Rendering/Shader.cpp.o.d -o CMakeFiles/gra.dir/src/Rendering/Shader.cpp.o -c /home/mateuszsierakowski/Documents/Echo_Wojny/src/Rendering/Shader.cpp
+
+CMakeFiles/gra.dir/src/Rendering/Shader.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/gra.dir/src/Rendering/Shader.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mateuszsierakowski/Documents/Echo_Wojny/src/Rendering/Shader.cpp > CMakeFiles/gra.dir/src/Rendering/Shader.cpp.i
+
+CMakeFiles/gra.dir/src/Rendering/Shader.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/gra.dir/src/Rendering/Shader.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mateuszsierakowski/Documents/Echo_Wojny/src/Rendering/Shader.cpp -o CMakeFiles/gra.dir/src/Rendering/Shader.cpp.s
+
+CMakeFiles/gra.dir/src/Rendering/PrimitiveRenderer.cpp.o: CMakeFiles/gra.dir/flags.make
+CMakeFiles/gra.dir/src/Rendering/PrimitiveRenderer.cpp.o: /home/mateuszsierakowski/Documents/Echo_Wojny/src/Rendering/PrimitiveRenderer.cpp
+CMakeFiles/gra.dir/src/Rendering/PrimitiveRenderer.cpp.o: CMakeFiles/gra.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/mateuszsierakowski/Documents/Echo_Wojny/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/gra.dir/src/Rendering/PrimitiveRenderer.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/gra.dir/src/Rendering/PrimitiveRenderer.cpp.o -MF CMakeFiles/gra.dir/src/Rendering/PrimitiveRenderer.cpp.o.d -o CMakeFiles/gra.dir/src/Rendering/PrimitiveRenderer.cpp.o -c /home/mateuszsierakowski/Documents/Echo_Wojny/src/Rendering/PrimitiveRenderer.cpp
+
+CMakeFiles/gra.dir/src/Rendering/PrimitiveRenderer.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/gra.dir/src/Rendering/PrimitiveRenderer.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mateuszsierakowski/Documents/Echo_Wojny/src/Rendering/PrimitiveRenderer.cpp > CMakeFiles/gra.dir/src/Rendering/PrimitiveRenderer.cpp.i
+
+CMakeFiles/gra.dir/src/Rendering/PrimitiveRenderer.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/gra.dir/src/Rendering/PrimitiveRenderer.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mateuszsierakowski/Documents/Echo_Wojny/src/Rendering/PrimitiveRenderer.cpp -o CMakeFiles/gra.dir/src/Rendering/PrimitiveRenderer.cpp.s
+
 # Object files for target gra
 gra_OBJECTS = \
-"CMakeFiles/gra.dir/src/main.cpp.o"
+"CMakeFiles/gra.dir/src/main.cpp.o" \
+"CMakeFiles/gra.dir/src/Core/Application.cpp.o" \
+"CMakeFiles/gra.dir/src/Core/Camera2D.cpp.o" \
+"CMakeFiles/gra.dir/src/Rendering/Shader.cpp.o" \
+"CMakeFiles/gra.dir/src/Rendering/PrimitiveRenderer.cpp.o"
 
 # External object files for target gra
 gra_EXTERNAL_OBJECTS =
 
 gra: CMakeFiles/gra.dir/src/main.cpp.o
+gra: CMakeFiles/gra.dir/src/Core/Application.cpp.o
+gra: CMakeFiles/gra.dir/src/Core/Camera2D.cpp.o
+gra: CMakeFiles/gra.dir/src/Rendering/Shader.cpp.o
+gra: CMakeFiles/gra.dir/src/Rendering/PrimitiveRenderer.cpp.o
 gra: CMakeFiles/gra.dir/build.make
 gra: CMakeFiles/gra.dir/compiler_depend.ts
-gra: /usr/lib64/libsfml-window.so.2.6.2
-gra: /usr/lib64/libsfml-system.so.2.6.2
+gra: /usr/lib64/libsfml-graphics.so.2.6.2
+gra: /usr/lib64/libsfml-audio.so.2.6.2
+gra: /usr/lib64/libsfml-network.so.2.6.2
 gra: /usr/lib64/libGL.so
 gra: /usr/lib64/libGLEW.so
+gra: /usr/lib64/libsfml-window.so.2.6.2
+gra: /usr/lib64/libsfml-system.so.2.6.2
 gra: CMakeFiles/gra.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/mateuszsierakowski/Documents/Echo_Wojny/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable gra"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/mateuszsierakowski/Documents/Echo_Wojny/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX executable gra"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/gra.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

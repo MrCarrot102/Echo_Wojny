@@ -3,8 +3,8 @@
 #include <fstream> 
 #include <sstream> 
 
-Shader::Shader(const std::string& vetexPath, cosnt std::string& framgentPath) {
-    std::string vertexSource = loadShaderSource(vertexPath); 
+Shader::Shader(const std::string& vetexPath, const std::string& fragmentPath) {
+    std::string vertexSource = loadShaderSource(vetexPath); 
     std::string fragmentSource = loadShaderSource(fragmentPath); 
     m_RendererID = createShaderProgram(vertexSource, fragmentSource); 
 }
@@ -23,11 +23,11 @@ void Shader::unbind() const {
 
 // implementacja setuniform
 void Shader::setUniform4f(const std::string& name, float v0, float v1, float v2, float v3) {
-    glUnifomr4f(getUniformLocation(name), v0, v1, v2, v3);
+    glUniform4f(getUniformLocation(name), v0, v1, v2, v3);
 }
 
-void Shader::setUniformVec4(const setd::string& name, const glm::vec4& vec){
-    flUnitform4f(getUniformLocation(name), vec.x, vec.y, vec.z, vec.w); 
+void Shader::setUniformVec4(const std::string& name, const glm::vec4& vec){
+    glUniform4f(getUniformLocation(name), vec.x, vec.y, vec.z, vec.w); 
 }
 
 void Shader::setUniformMat4(const std::string& name, const glm::mat4& matrix){
@@ -36,7 +36,7 @@ void Shader::setUniformMat4(const std::string& name, const glm::mat4& matrix){
 
 GLint Shader::getUniformLocation(const std::string& name){
     // kiedys dodac mape (cache) do przechowywania lokalizacji 
-    return glGetUniformLocation(m_RenderID, name.c_str()); 
+    return glGetUniformLocation(m_RendererID, name.c_str()); 
 }
 
 // funkcje pomocnicze skopiowane z main.cpp
@@ -51,10 +51,10 @@ std::string Shader::loadShaderSource(const std::string& filepath){
     return buffer.str(); 
 }
 
-GLuint Shader::compileShader(GLuint type, const std::string& sosurce){
+GLuint Shader::compileShader(GLuint type, const std::string& source){
     GLuint id = glCreateShader(type); 
     const char* stc = source.c_str(); 
-    glShaderSource(id, 1, &src, nullptr);
+    glShaderSource(id, 1, &stc, nullptr);
     glCompileShader(id); 
 
     int result; 
@@ -72,9 +72,9 @@ GLuint Shader::compileShader(GLuint type, const std::string& sosurce){
     return id; 
 }
 
-Gluint Shader::createShaderProgram(const std::string& vertexShader, const std::string& fragmentShader){
+GLuint Shader::createShaderProgram(const std::string& vertexShader, const std::string& fragmentShader){
     GLuint program = glCreateProgram();
-    GLuint vs = compileSgader(GL_VERTEX_SHADER, vertexShader); 
+    GLuint vs = compileShader(GL_VERTEX_SHADER, vertexShader); 
     GLuint fs = compileShader(GL_FRAGMENT_SHADER, fragmentShader); 
 
     glAttachShader(program, vs);

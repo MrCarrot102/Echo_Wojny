@@ -1,5 +1,5 @@
-CMakeFiles/gra.dir/src/main.cpp.o: \
- /home/mateuszsierakowski/Documents/Echo_Wojny/src/main.cpp \
+CMakeFiles/gra.dir/src/Core/Application.cpp.o: \
+ /home/mateuszsierakowski/Documents/Echo_Wojny/src/Core/Application.cpp \
  /usr/include/stdc-predef.h \
  /home/mateuszsierakowski/Documents/Echo_Wojny/src/Core/Application.h \
  /usr/include/SFML/Window.hpp /usr/include/SFML/System.hpp \

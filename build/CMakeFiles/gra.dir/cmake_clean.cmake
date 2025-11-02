@@ -1,5 +1,13 @@
 file(REMOVE_RECURSE
   "CMakeFiles/gra.dir/link.d"
+  "CMakeFiles/gra.dir/src/Core/Application.cpp.o"
+  "CMakeFiles/gra.dir/src/Core/Application.cpp.o.d"
+  "CMakeFiles/gra.dir/src/Core/Camera2D.cpp.o"
+  "CMakeFiles/gra.dir/src/Core/Camera2D.cpp.o.d"
+  "CMakeFiles/gra.dir/src/Rendering/PrimitiveRenderer.cpp.o"
+  "CMakeFiles/gra.dir/src/Rendering/PrimitiveRenderer.cpp.o.d"
+  "CMakeFiles/gra.dir/src/Rendering/Shader.cpp.o"
+  "CMakeFiles/gra.dir/src/Rendering/Shader.cpp.o.d"
   "CMakeFiles/gra.dir/src/main.cpp.o"
   "CMakeFiles/gra.dir/src/main.cpp.o.d"
   "gra"

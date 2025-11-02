@@ -11,7 +11,7 @@ Camera2D::Camera2D(float width, float height)
 
 void Camera2D::update(float deltaTime, const sf::Window& window){
     // tymczasowa logika sterowania 
-    float speed = 200.0f * dletaTieme; 
+    float speed = 200.0f * deltaTime; 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) m_Position.y += speed; 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) m_Position.y -= speed; 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) m_Position.x += speed; 
@@ -29,6 +29,6 @@ void Camera2D::recalculateViewMatrix(){
     // TODO dodać skalowanie zoom 
 
     m_ViewMatrix = transform; 
-    m_PorjectionViewMatrix = m_ProjectionMatrix * m_ViewMatrix;
+    m_ProjectionViewMatrix = m_ProjectionMatrix * m_ViewMatrix;
 }
 

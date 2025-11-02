@@ -8,6 +8,10 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
+  "/home/mateuszsierakowski/Documents/Echo_Wojny/src/Core/Application.cpp" "CMakeFiles/gra.dir/src/Core/Application.cpp.o" "gcc" "CMakeFiles/gra.dir/src/Core/Application.cpp.o.d"
+  "/home/mateuszsierakowski/Documents/Echo_Wojny/src/Core/Camera2D.cpp" "CMakeFiles/gra.dir/src/Core/Camera2D.cpp.o" "gcc" "CMakeFiles/gra.dir/src/Core/Camera2D.cpp.o.d"
+  "/home/mateuszsierakowski/Documents/Echo_Wojny/src/Rendering/PrimitiveRenderer.cpp" "CMakeFiles/gra.dir/src/Rendering/PrimitiveRenderer.cpp.o" "gcc" "CMakeFiles/gra.dir/src/Rendering/PrimitiveRenderer.cpp.o.d"
+  "/home/mateuszsierakowski/Documents/Echo_Wojny/src/Rendering/Shader.cpp" "CMakeFiles/gra.dir/src/Rendering/Shader.cpp.o" "gcc" "CMakeFiles/gra.dir/src/Rendering/Shader.cpp.o.d"
   "/home/mateuszsierakowski/Documents/Echo_Wojny/src/main.cpp" "CMakeFiles/gra.dir/src/main.cpp.o" "gcc" "CMakeFiles/gra.dir/src/main.cpp.o.d"
   "" "gra" "gcc" "CMakeFiles/gra.dir/link.d"
   )
