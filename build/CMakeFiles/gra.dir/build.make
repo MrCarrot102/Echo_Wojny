@@ -161,8 +161,6 @@ gra: CMakeFiles/gra.dir/src/Rendering/PrimitiveRenderer.cpp.o
 gra: CMakeFiles/gra.dir/build.make
 gra: CMakeFiles/gra.dir/compiler_depend.ts
 gra: /usr/lib64/libsfml-graphics.so.2.6.2
-gra: /usr/lib64/libsfml-audio.so.2.6.2
-gra: /usr/lib64/libsfml-network.so.2.6.2
 gra: /usr/lib64/libGL.so
 gra: /usr/lib64/libGLEW.so
 gra: /usr/lib64/libsfml-window.so.2.6.2

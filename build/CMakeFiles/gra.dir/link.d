@@ -8,8 +8,6 @@ gra: \
   CMakeFiles/gra.dir/src/Rendering/Shader.cpp.o \
   CMakeFiles/gra.dir/src/Rendering/PrimitiveRenderer.cpp.o \
   /usr/lib64/libsfml-graphics.so.2.6.2 \
-  /usr/lib64/libsfml-audio.so.2.6.2 \
-  /usr/lib64/libsfml-network.so.2.6.2 \
   /usr/lib64/libGL.so \
   /usr/lib64/libGLEW.so \
   /usr/lib64/libsfml-window.so.2.6.2 \
@@ -41,12 +39,6 @@ gra: \
   /usr/lib/gcc/x86_64-redhat-linux/15/crtend.o \
   /usr/lib/gcc/x86_64-redhat-linux/15/../../../../lib64/crtn.o \
   /usr/lib64/libfreetype.so.6 \
-  /usr/lib64/libopenal.so.1 \
-  /usr/lib64/libvorbisenc.so.2 \
-  /usr/lib64/libvorbisfile.so.3 \
-  /usr/lib64/libvorbis.so.0 \
-  /usr/lib64/libogg.so.0 \
-  /usr/lib64/libFLAC.so.14 \
   /usr/lib64/libGLX.so.0 \
   /usr/lib64/libX11.so.6 \
   /usr/lib64/libXext.so.6 \
@@ -60,7 +52,6 @@ gra: \
   /usr/lib64/libpng16.so.16 \
   /usr/lib64/libharfbuzz.so.0 \
   /usr/lib64/libbrotlidec.so.1 \
-  /usr/lib64/libfmt.so.11 \
   /usr/lib64/libxcb.so.1 \
   /usr/lib64/libXrender.so.1 \
   /usr/lib64/libXfixes.so.3 \
@@ -88,10 +79,6 @@ CMakeFiles/gra.dir/src/Rendering/Shader.cpp.o:
 CMakeFiles/gra.dir/src/Rendering/PrimitiveRenderer.cpp.o:
 
 /usr/lib64/libsfml-graphics.so.2.6.2:
-
-/usr/lib64/libsfml-audio.so.2.6.2:
-
-/usr/lib64/libsfml-network.so.2.6.2:
 
 /usr/lib64/libGL.so:
 
@@ -155,18 +142,6 @@ CMakeFiles/gra.dir/src/Rendering/PrimitiveRenderer.cpp.o:
 
 /usr/lib64/libfreetype.so.6:
 
-/usr/lib64/libopenal.so.1:
-
-/usr/lib64/libvorbisenc.so.2:
-
-/usr/lib64/libvorbisfile.so.3:
-
-/usr/lib64/libvorbis.so.0:
-
-/usr/lib64/libogg.so.0:
-
-/usr/lib64/libFLAC.so.14:
-
 /usr/lib64/libGLX.so.0:
 
 /usr/lib64/libX11.so.6:
@@ -192,8 +167,6 @@ CMakeFiles/gra.dir/src/Rendering/PrimitiveRenderer.cpp.o:
 /usr/lib64/libharfbuzz.so.0:
 
 /usr/lib64/libbrotlidec.so.1:
-
-/usr/lib64/libfmt.so.11:
 
 /usr/lib64/libxcb.so.1:
 

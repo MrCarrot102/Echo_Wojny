@@ -1,10 +1,11 @@
 #include "Rendering/PrimitiveRenderer.h"
 #include <glm/gtc/matrix_transform.hpp>
+#include <iostream> 
 
 
 PrimitiveRenderer::PrimitiveRenderer() {
     // shader prowadzacy do assets/ 
-    m_Shader = std::make_unique<Shader>("assets/shaders/primitive.vert", "assets/shaders/primitive.frag");
+    m_Shader = std::make_unique<Shader>("assets/shaders/simple.vert", "assets/shaders/simple.frag");
 
     // tworzenie geometri vbo i vao 
    float vertices[] = {
@@ -30,6 +31,13 @@ PrimitiveRenderer::PrimitiveRenderer() {
     glBindVertexArray(0); 
 }
 
+// dodanie destruktora 
+PrimitiveRenderer::~PrimitiveRenderer() {
+    glDeleteVertexArrays(1, &m_QuadVAO); 
+    glDeleteBuffers(1, &m_QuadVBO);
+}
+
+
 void PrimitiveRenderer::drawSquare(Camera2D& camera, 
                                     const glm::vec2& position, 
                                     const glm::vec2& size, 
@@ -50,8 +58,9 @@ void PrimitiveRenderer::drawSquare(Camera2D& camera,
     
     // rysowanie 
     glBindVertexArray(m_QuadVAO);
+    
     glDrawArrays(GL_TRIANGLES, 0, 6);
+  
     glBindVertexArray(0);
-
     m_Shader->unbind();
 }

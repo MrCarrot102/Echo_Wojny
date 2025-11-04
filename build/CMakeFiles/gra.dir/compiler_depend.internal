@@ -1116,6 +1116,7 @@ CMakeFiles/gra.dir/src/Rendering/PrimitiveRenderer.cpp.o
  /usr/include/c++/15/bits/hash_bytes.h
  /usr/include/c++/15/bits/invoke.h
  /usr/include/c++/15/bits/ios_base.h
+ /usr/include/c++/15/bits/istream.tcc
  /usr/include/c++/15/bits/locale_classes.h
  /usr/include/c++/15/bits/locale_classes.tcc
  /usr/include/c++/15/bits/locale_conv.h
@@ -1197,6 +1198,8 @@ CMakeFiles/gra.dir/src/Rendering/PrimitiveRenderer.cpp.o
  /usr/include/c++/15/initializer_list
  /usr/include/c++/15/ios
  /usr/include/c++/15/iosfwd
+ /usr/include/c++/15/iostream
+ /usr/include/c++/15/istream
  /usr/include/c++/15/iterator
  /usr/include/c++/15/limits
  /usr/include/c++/15/locale
@@ -2314,7 +2317,6 @@ gra
  /usr/lib/gcc/x86_64-redhat-linux/15/libgcc.a
  /usr/lib/gcc/x86_64-redhat-linux/15/libgcc_s.so
  /usr/lib/gcc/x86_64-redhat-linux/15/libstdc++.so
- /usr/lib64/libFLAC.so.14
  /usr/lib64/libGL.so
  /usr/lib64/libGLEW.so
  /usr/lib64/libGLX.so.0
@@ -2331,24 +2333,16 @@ gra
  /usr/lib64/libbz2.so.1
  /usr/lib64/libc_nonshared.a
  /usr/lib64/libcap.so.2
- /usr/lib64/libfmt.so.11
  /usr/lib64/libfreetype.so.6
  /usr/lib64/libglib-2.0.so.0
  /usr/lib64/libgraphite2.so.3
  /usr/lib64/libharfbuzz.so.0
- /usr/lib64/libogg.so.0
- /usr/lib64/libopenal.so.1
  /usr/lib64/libpcre2-8.so.0
  /usr/lib64/libpng16.so.16
- /usr/lib64/libsfml-audio.so.2.6.2
  /usr/lib64/libsfml-graphics.so.2.6.2
- /usr/lib64/libsfml-network.so.2.6.2
  /usr/lib64/libsfml-system.so.2.6.2
  /usr/lib64/libsfml-window.so.2.6.2
  /usr/lib64/libudev.so.1
- /usr/lib64/libvorbis.so.0
- /usr/lib64/libvorbisenc.so.2
- /usr/lib64/libvorbisfile.so.3
  /usr/lib64/libxcb.so.1
  /usr/lib64/libz.so.1
  /home/mateuszsierakowski/Documents/Echo_Wojny/build/CMakeFiles/gra.dir/src/Core/Application.cpp.o

@@ -7,7 +7,7 @@
 class PrimitiveRenderer {
     public: 
         PrimitiveRenderer(); 
-       // ~PrimitiveRenderer();
+        ~PrimitiveRenderer();
 
         void drawSquare(Camera2D& camera, 
                     const glm::vec2& position, 

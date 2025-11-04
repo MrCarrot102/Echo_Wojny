@@ -355,4 +355,5 @@ CMakeFiles/gra.dir/src/Rendering/PrimitiveRenderer.cpp.o: \
  /usr/include/c++/15/bits/atomic_base.h \
  /usr/include/c++/15/bits/atomic_lockfree_defines.h \
  /usr/include/c++/15/backward/auto_ptr.h \
- /usr/include/c++/15/pstl/glue_memory_defs.h
+ /usr/include/c++/15/pstl/glue_memory_defs.h /usr/include/c++/15/iostream \
+ /usr/include/c++/15/istream /usr/include/c++/15/bits/istream.tcc
