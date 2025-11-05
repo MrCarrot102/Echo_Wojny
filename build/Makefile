@@ -177,6 +177,30 @@ src/Core/Camera2D.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/gra.dir/build.make CMakeFiles/gra.dir/src/Core/Camera2D.cpp.s
 .PHONY : src/Core/Camera2D.cpp.s
 
+src/Game/GameState.o: src/Game/GameState.cpp.o
+.PHONY : src/Game/GameState.o
+
+# target to build an object file
+src/Game/GameState.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gra.dir/build.make CMakeFiles/gra.dir/src/Game/GameState.cpp.o
+.PHONY : src/Game/GameState.cpp.o
+
+src/Game/GameState.i: src/Game/GameState.cpp.i
+.PHONY : src/Game/GameState.i
+
+# target to preprocess a source file
+src/Game/GameState.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gra.dir/build.make CMakeFiles/gra.dir/src/Game/GameState.cpp.i
+.PHONY : src/Game/GameState.cpp.i
+
+src/Game/GameState.s: src/Game/GameState.cpp.s
+.PHONY : src/Game/GameState.s
+
+# target to generate assembly for a file
+src/Game/GameState.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gra.dir/build.make CMakeFiles/gra.dir/src/Game/GameState.cpp.s
+.PHONY : src/Game/GameState.cpp.s
+
 src/Rendering/PrimitiveRenderer.o: src/Rendering/PrimitiveRenderer.cpp.o
 .PHONY : src/Rendering/PrimitiveRenderer.o
 
@@ -264,6 +288,9 @@ help:
 	@echo "... src/Core/Camera2D.o"
 	@echo "... src/Core/Camera2D.i"
 	@echo "... src/Core/Camera2D.s"
+	@echo "... src/Game/GameState.o"
+	@echo "... src/Game/GameState.i"
+	@echo "... src/Game/GameState.s"
 	@echo "... src/Rendering/PrimitiveRenderer.o"
 	@echo "... src/Rendering/PrimitiveRenderer.i"
 	@echo "... src/Rendering/PrimitiveRenderer.s"

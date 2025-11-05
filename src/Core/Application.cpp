@@ -37,6 +37,9 @@ void Application::init() {
     m_Camera = std::make_unique<Camera2D>((float)windowWidth, (float)widnowHeight); 
     m_Renderer = std::make_unique<PrimitiveRenderer>(); 
 
+    
+    m_GameState = std::make_unique<GameState>(); 
+
     // ustawianie koloru tla
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 }
@@ -70,6 +73,9 @@ void Application::pollEvents() {
 void Application::update(float deltaTime){
     // aktualizacja logiki gry 
     m_Camera->update(deltaTime, m_Window); 
+
+    // tick w symulacji 
+    m_GameState->update(deltaTime); 
 }
 
 void Application::render(){

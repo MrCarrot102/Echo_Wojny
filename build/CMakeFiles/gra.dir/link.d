@@ -7,6 +7,7 @@ gra: \
   CMakeFiles/gra.dir/src/Core/Camera2D.cpp.o \
   CMakeFiles/gra.dir/src/Rendering/Shader.cpp.o \
   CMakeFiles/gra.dir/src/Rendering/PrimitiveRenderer.cpp.o \
+  CMakeFiles/gra.dir/src/Game/GameState.cpp.o \
   /usr/lib64/libsfml-graphics.so.2.6.2 \
   /usr/lib64/libGL.so \
   /usr/lib64/libGLEW.so \
@@ -77,6 +78,8 @@ CMakeFiles/gra.dir/src/Core/Camera2D.cpp.o:
 CMakeFiles/gra.dir/src/Rendering/Shader.cpp.o:
 
 CMakeFiles/gra.dir/src/Rendering/PrimitiveRenderer.cpp.o:
+
+CMakeFiles/gra.dir/src/Game/GameState.cpp.o:
 
 /usr/lib64/libsfml-graphics.so.2.6.2:
 

@@ -1,10 +1,12 @@
 #pragma once 
-#include <SFML/Window.hpp> 
-#include <GL/glew.h> 
+ 
 #include "Core/Camera2D.h"
 #include "Rendering/PrimitiveRenderer.h"
-#include <memory> 
+#include "Game/GameState.h"
 
+#include <SFML/Window.hpp>
+#include <memory> 
+#include <GL/glew.h> 
 
 class Application{
     public: 
@@ -27,4 +29,7 @@ class Application{
         // smart pointery do kontroli czasu zycia opiektow w opengl BO MOGE 
         std::unique_ptr<Camera2D> m_Camera; 
         std::unique_ptr<PrimitiveRenderer> m_Renderer; 
+
+
+        std::unique_ptr<GameState> m_GameState; 
 };

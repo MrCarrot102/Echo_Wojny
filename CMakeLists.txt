@@ -21,6 +21,7 @@ set(APP_SOURCES
     src/Core/Camera2D.cpp
     src/Rendering/Shader.cpp
     src/Rendering/PrimitiveRenderer.cpp
+    src/Game/GameState.cpp
 )
 add_executable(gra ${APP_SOURCES})
 
