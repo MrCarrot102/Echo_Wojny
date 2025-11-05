@@ -2,6 +2,7 @@
 #include <iostream> 
 #include <fstream> 
 #include <sstream> 
+#include <iostream> 
 
 Shader::Shader(const std::string& vetexPath, const std::string& fragmentPath) {
     std::string vertexSource = loadShaderSource(vetexPath); 
@@ -43,12 +44,20 @@ GLint Shader::getUniformLocation(const std::string& name){
 std::string Shader::loadShaderSource(const std::string& filepath){
     std::ifstream file(filepath); 
     if(!file.is_open()){
-        std::cerr << "Nie można otworzyć pliku shadera: " << filepath << std::endl;
+        std::cerr << "Nie można otworzyć pliku shadera: " << filepath << std::endl; 
         return ""; 
     }
-    std::stringstream buffer; 
-    buffer << file.rdbuf();
-    return buffer.str(); 
+
+    // zmieniona metoda odczytu danych linia po lini 
+    std::string line; 
+    std::stringstream ss; 
+
+    while(std::getline(file, line)){
+        // wczytywanie linie i dodawanie nowej 
+        ss << line << "\n"; 
+    }
+
+    return ss.str(); 
 }
 
 GLuint Shader::compileShader(GLuint type, const std::string& source){

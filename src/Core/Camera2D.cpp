@@ -14,8 +14,8 @@ void Camera2D::update(float deltaTime, const sf::Window& window){
     float speed = 200.0f * deltaTime; 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) m_Position.y += speed; 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) m_Position.y -= speed; 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) m_Position.x += speed; 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) m_Position.x -= speed; 
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) m_Position.x -= speed; 
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) m_Position.x += speed; 
 
     // dodać obsługę myszy itd; 
 
