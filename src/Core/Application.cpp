@@ -83,8 +83,32 @@ void Application::render(){
 
     // renderowanie gry 
 
-    m_Renderer->drawSquare(*m_Camera, {100.0f, 50.0f}, {30.0f, 30.0f}, {1.0f, 0.0f, 0.0f, 1.0f});
-    m_Renderer->drawSquare(*m_Camera, {200.0f, 150.0f}, {50.0f, 50.0f}, {0.0f, 1.0f, 0.0f, 1.0f});
+    // 1 renderowanie zasobow 
+    for (const auto& node : m_GameState->getResourceNodes()) { 
+        glm::vec4 color; 
+        if (node.resourceType == ResourceNode::TREE){
+            color = {0.0f, 0.5f, 0.0f, 1.0f}; // ciemnozielony na drzewo 
+        } else if (node.resourceType == ResourceNode::ROCK) {
+            color = {0.5f, 0.5f, 0.5f, 1.0f}; // szary na kamienie 
+        }
+        m_Renderer->drawSquare(*m_Camera, node.position, {10.0f, 10.0f}, color);
+    }
+
+    // 2 renderowanie mieszkancow 
+    for (const auto& villager : m_GameState->getVillagers()) {
+        glm::vec4 color = {1.0f, 0.0f, 0.0f, 1.0f}; // czerwony 
+        m_Renderer->drawSquare(*m_Camera, villager.position, {10.0f, 10.0f}, color);
+    }
+
+
+
+
+
+
+
+
+    //m_Renderer->drawSquare(*m_Camera, {100.0f, 50.0f}, {30.0f, 30.0f}, {1.0f, 0.0f, 0.0f, 1.0f});
+    //m_Renderer->drawSquare(*m_Camera, {200.0f, 150.0f}, {50.0f, 50.0f}, {0.0f, 1.0f, 0.0f, 1.0f});
 
     // koniec renderowania 
 

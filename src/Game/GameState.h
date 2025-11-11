@@ -1,5 +1,8 @@
 #pragma once 
+#include <vector> 
 
+#include "Game/Villager.h"
+#include "Game/ResourceNode.h"     
 
 class GameState {
     public: 
@@ -9,16 +12,19 @@ class GameState {
         void update(float deltaTime); 
 
         // dane gry 
-
-        // czas 
-        int dayCounter; 
-        // czas w godzinach 
-        float timeOfDay; 
-
-        // zasoby globalne 
+        int dayCounter;  
+        float timeOfDay;  
         int globalFood; 
         int globalWood; 
         int globalWater; 
+
+        // npc 
+        std::vector<Villager> m_villagers; 
+        std::vector<ResourceNode> m_resourceNodes; 
+
+        // gettery 
+        const std::vector<Villager>& getVillagers() const {return m_villagers; }
+        const std::vector<ResourceNode>& getResourceNodes() const {return m_resourceNodes; }
 
     private: 
         // liczenie czasu 

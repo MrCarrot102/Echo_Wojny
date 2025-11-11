@@ -358,5 +358,7 @@ CMakeFiles/gra.dir/src/Core/Application.cpp.o: \
  /usr/include/c++/15/backward/auto_ptr.h \
  /usr/include/c++/15/pstl/glue_memory_defs.h \
  /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/GameState.h \
+ /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/Villager.h \
+ /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/ResourceNode.h \
  /usr/include/c++/15/iostream /usr/include/c++/15/istream \
  /usr/include/c++/15/bits/istream.tcc

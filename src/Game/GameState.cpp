@@ -9,7 +9,15 @@ GameState::GameState()
       globalWater(50),
       m_TimeAccumulator(0.0f)
 {
-    // nie trzeba konstruktora wszystko jest w liscie inicjalizowane 
+    // testowanie npc 
+    m_villagers.emplace_back("Adam", glm::vec2(100.0f, 100.0f));
+    m_villagers.emplace_back("Ewa", glm::vec2(120.0f, 100.0f));
+    m_villagers.emplace_back("Radek", glm::vec2(100.0f, 120.0f));
+
+    // obiekty 
+    m_resourceNodes.emplace_back(ResourceNode::TREE, glm::vec2(200.0f, 200.0f), 100);
+    m_resourceNodes.emplace_back(ResourceNode::TREE, glm::vec2(250.0f, 210.0f), 100);
+    m_resourceNodes.emplace_back(ResourceNode::ROCK, glm::vec2(300.0f, 100.0f), 200);
 }
 
 void GameState::update(float deltaTime){
@@ -26,8 +34,8 @@ void GameState::update(float deltaTime){
         timeOfDay = 0.0f; // resetowanie zegara 
 
         // teoretyczne zuzywanie zasobow 
-        globalFood -= 50; 
-        std::cout << "\n--- Nowy dzien" << dayCounter << " ----" << std::endl; 
+        globalFood -= m_villagers.size() * 10;  // jeden mieszkaniec zjada 10 jednostek jedzenia dziennie 
+        std::cout << "\n--- Nowy dzien " << dayCounter << " ----" << std::endl; 
     }
 
 
@@ -38,6 +46,7 @@ void GameState::update(float deltaTime){
 
         std::cout << "Dzień: " << dayCounter 
                     << " | Godzina: " << (int)timeOfDay
+                    << " | Mieszkańcy: " << m_villagers.size()
                     << " | Jedzenie: " << globalFood
                     << " \r"; // czyszczenie starych znakow
         std::cout.flush(); // wypisywanie bufora 
