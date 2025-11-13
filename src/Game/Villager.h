@@ -8,14 +8,21 @@ struct Villager {
     std::string name; 
 
     // stany jejaja 
-    enum State { IDLE, WORKING, EATING }; 
+    enum State { IDLE, WORKING, EATING, MOVING}; 
     State currentState; 
+
+    // cel 
+    glm::vec2 targetPosition; 
 
     // statystyki
     int hunger; 
 
     // konstruktor ulatwiajacy tworzenie 
     Villager(const std::string& n, const glm::vec2& pos)
-        : name(n), position(pos), currentState(State::IDLE), hunger(100) {}
+        : name(n), 
+        position(pos), 
+        currentState(State::IDLE), 
+        targetPosition(pos), 
+        hunger(100) {}
 };
 

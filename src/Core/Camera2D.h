@@ -6,10 +6,11 @@
 class Camera2D {
     public: 
         Camera2D(float width, float height);
-
         void update(float deltaTime, const sf::Window& window); 
-
         const glm::mat4& getProjectionViewMatrix() const {return m_ProjectionViewMatrix;}
+
+        
+        glm::vec2 screenToWorld(const glm::vec2& screenCoords, const sf::Window& window); 
 
     private: 
         void recalculateViewMatrix();

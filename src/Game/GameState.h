@@ -23,8 +23,8 @@ class GameState {
         std::vector<ResourceNode> m_resourceNodes; 
 
         // gettery 
-        const std::vector<Villager>& getVillagers() const {return m_villagers; }
-        const std::vector<ResourceNode>& getResourceNodes() const {return m_resourceNodes; }
+        //const std::vector<Villager>& getVillagers() const {return m_villagers; }
+        //const std::vector<ResourceNode>& getResourceNodes() const {return m_resourceNodes; }
 
     private: 
         // liczenie czasu 

@@ -32,4 +32,7 @@ class Application{
 
 
         std::unique_ptr<GameState> m_GameState; 
+
+
+        Villager* m_selectedVillager; 
 };

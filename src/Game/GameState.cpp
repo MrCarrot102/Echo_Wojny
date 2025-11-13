@@ -27,6 +27,7 @@ void GameState::update(float deltaTime){
     float gameHoursPassed = deltaTime * 1.0f; 
     timeOfDay += gameHoursPassed; 
     m_TimeAccumulator += deltaTime; 
+    float speed = 50.00f; // ruch bardziej predkosc 
 
     // logika nowego dnia 
     if(timeOfDay >= 24.0f){
@@ -50,5 +51,25 @@ void GameState::update(float deltaTime){
                     << " | Jedzenie: " << globalFood
                     << " \r"; // czyszczenie starych znakow
         std::cout.flush(); // wypisywanie bufora 
+    }
+
+
+
+    for (Villager& villager : m_villagers){
+        if (villager.currentState == Villager::State::MOVING) {
+            // mieszkaniec sobie drepta 
+            // obliczanie wektora do celu 
+            glm::vec2 direction = villager.targetPosition - villager.position; 
+            // obliczanie dystansu 
+            float distance = glm::length(direction); 
+
+            if(distance > 1.0f){ 
+                villager.position += glm::normalize(direction) * speed * deltaTime; 
+            } else {
+                // dotarl 
+                villager.position = villager.targetPosition; 
+                villager.currentState = Villager::State::IDLE; 
+            }
+        }
     }
 }

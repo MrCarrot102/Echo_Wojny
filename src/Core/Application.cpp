@@ -2,7 +2,7 @@
 #include <iostream> 
 
 Application::Application()
-    : m_Window(), m_Running(true)
+    : m_Window(), m_Running(true), m_selectedVillager(nullptr)
 {
     init(); 
 }
@@ -65,6 +65,42 @@ void Application::pollEvents() {
             m_Running = false; 
         }
 
+        if (event.type == sf::Event::MouseButtonPressed) {
+            // pobbieranie funkcji myszy 
+            glm::vec2 screenMousePos = {(float)event.mouseButton.x, (float)event.mouseButton.y};
+            // konwersja na pozycje w swiecie 
+            glm::vec2 worldMousePos = m_Camera->screenToWorld(screenMousePos, m_Window); 
+
+            if (event.mouseButton.button == sf::Mouse::Left){
+                // zaznaczanie 
+                std::cout << "Kliknięto w świat: " << worldMousePos.x << ", " << worldMousePos.y << std::endl; 
+
+                // szukanie mieszkanca w tym miejscu 
+                // nie jest optymalna ta petla na razie 
+                m_selectedVillager = nullptr; 
+                for (Villager& v : m_GameState->m_villagers) {
+                    // test kolizjii 
+                    if (worldMousePos.x >= v.position.x && worldMousePos.x <= v.position.x + 10.0f &&
+                        worldMousePos.y >= v.position.y && worldMousePos.y <= v.position.y + 10.0f)
+                        {
+                            m_selectedVillager = &v; // zaznacz 
+                            std::cout << "Zaznaczono: " << v.name << std::endl; 
+                            break; // konczenie petli 
+                        }
+                    }
+            }
+
+            else if (event.mouseButton.button == sf::Mouse::Right){
+                // wydanie rozkazu prawy guzior 
+                if (m_selectedVillager != nullptr){
+                    // jak jest zaznaczony to kaze mu isc 
+                    m_selectedVillager->currentState = Villager::State::MOVING; 
+                    m_selectedVillager->targetPosition = worldMousePos; 
+                    std::cout << "Rozkaz ruchu dla " << m_selectedVillager->name << std::endl; 
+                }
+            }
+        }
+
         // dodac jakies inne eventy zmiana rozdzielczosci itd; 
     }
 }
@@ -84,7 +120,7 @@ void Application::render(){
     // renderowanie gry 
 
     // 1 renderowanie zasobow 
-    for (const auto& node : m_GameState->getResourceNodes()) { 
+    for (const auto& node : m_GameState->m_resourceNodes) { 
         glm::vec4 color; 
         if (node.resourceType == ResourceNode::TREE){
             color = {0.0f, 0.5f, 0.0f, 1.0f}; // ciemnozielony na drzewo 
@@ -95,17 +131,20 @@ void Application::render(){
     }
 
     // 2 renderowanie mieszkancow 
-    for (const auto& villager : m_GameState->getVillagers()) {
+    for (const auto& villager : m_GameState->m_villagers) {
         glm::vec4 color = {1.0f, 0.0f, 0.0f, 1.0f}; // czerwony 
+        
+        
+        // zmienianie koloru kiedy zaznaczymy go 
+        if (m_selectedVillager == &villager){
+            color = {1.0f, 1.0f, 0.0f, 1.0f}; // zolty (jak zaznaczony)
+        }
+        
+        
+        
+        
         m_Renderer->drawSquare(*m_Camera, villager.position, {10.0f, 10.0f}, color);
     }
-
-
-
-
-
-
-
 
     //m_Renderer->drawSquare(*m_Camera, {100.0f, 50.0f}, {30.0f, 30.0f}, {1.0f, 0.0f, 0.0f, 1.0f});
     //m_Renderer->drawSquare(*m_Camera, {200.0f, 150.0f}, {50.0f, 50.0f}, {0.0f, 1.0f, 0.0f, 1.0f});
