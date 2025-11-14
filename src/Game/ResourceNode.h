@@ -1,5 +1,7 @@
 #pragma once 
 #include <glm/glm.hpp> 
+#include "Game/Villager.h"
+
 
 struct ResourceNode {
     glm::vec2 position; 

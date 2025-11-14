@@ -93,10 +93,31 @@ void Application::pollEvents() {
             else if (event.mouseButton.button == sf::Mouse::Right){
                 // wydanie rozkazu prawy guzior 
                 if (m_selectedVillager != nullptr){
-                    // jak jest zaznaczony to kaze mu isc 
-                    m_selectedVillager->currentState = Villager::State::MOVING; 
-                    m_selectedVillager->targetPosition = worldMousePos; 
-                    std::cout << "Rozkaz ruchu dla " << m_selectedVillager->name << std::endl; 
+                    // sprawdzanie klikniecia na zasob 
+                    ResourceNode* clickedNode = nullptr; 
+                    for (ResourceNode& node : m_GameState->m_resourceNodes){
+                        // testowanie kolizji 
+                        if (worldMousePos.x >= node.position.x && worldMousePos.x <= node.position.x + 15.0f &&
+                            worldMousePos.y >= node.position.y && worldMousePos.y <= node.position.y + 15.0f)
+                        {
+                            clickedNode = &node; 
+                            break; 
+                        }
+                    }
+                    
+                    if (clickedNode != nullptr){
+                        // rozkazywanie pracy 
+                        std::cout << "Rozkaz pracy dla " << m_selectedVillager->name << " przy zasobie" << std::endl; 
+                        m_selectedVillager->targetNode = clickedNode; 
+                        m_selectedVillager->targetPosition = clickedNode->position; // ustawianie celu 
+                        m_selectedVillager->currentState = Villager::State::MOVING_TO_WORK; 
+                    } else {
+                        // dawanie rozkazu tylko do ruchu 
+                        std::cout << "Rozkaz ruchu dla " << m_selectedVillager->name << std::endl;
+                        m_selectedVillager->targetNode = nullptr; // zaznaczenie ze idzie w puste miejsce 
+                        m_selectedVillager->targetPosition = worldMousePos; 
+                        m_selectedVillager->currentState = Villager::State::MOVING_TO_POINT;
+                    }
                 }
             }
         }
