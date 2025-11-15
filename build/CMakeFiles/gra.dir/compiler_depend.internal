@@ -5,6 +5,7 @@ CMakeFiles/gra.dir/src/Core/Application.cpp.o
  /home/mateuszsierakowski/Documents/Echo_Wojny/src/Core/Application.cpp
  /home/mateuszsierakowski/Documents/Echo_Wojny/src/Core/Application.h
  /home/mateuszsierakowski/Documents/Echo_Wojny/src/Core/Camera2D.h
+ /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/Building.h
  /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/GameState.h
  /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/ResourceNode.h
  /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/Villager.h
@@ -949,6 +950,7 @@ CMakeFiles/gra.dir/src/Core/Camera2D.cpp.o
 
 CMakeFiles/gra.dir/src/Game/GameState.cpp.o
  /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/GameState.cpp
+ /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/Building.h
  /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/GameState.h
  /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/ResourceNode.h
  /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/Villager.h

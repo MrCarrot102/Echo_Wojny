@@ -360,5 +360,6 @@ CMakeFiles/gra.dir/src/main.cpp.o: \
  /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/GameState.h \
  /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/Villager.h \
  /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/ResourceNode.h \
+ /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/Building.h \
  /usr/include/c++/15/iostream /usr/include/c++/15/istream \
  /usr/include/c++/15/bits/istream.tcc

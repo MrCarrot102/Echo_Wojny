@@ -1,4 +1,7 @@
 #include "Game/GameState.h"
+#
+
+
 #include <iostream> 
 
 GameState::GameState() 
@@ -29,12 +32,35 @@ void GameState::update(float deltaTime){
     m_TimeAccumulator += deltaTime; 
     float speed = 50.00f; // ruch bardziej predkosc 
     const float GATHER_TIME = 3.0f; // czas zbierania czegos na razie 3s 
+    const float HUNGER_THRESHOLD = 30.0f; // moment kiedy robi sie glodny 
+    const float HUNGER_PRE_HOUR = 2.0f; // jak szybko postaci chce sie jesc 
+
+
 
     for (Villager& villager : m_villagers) {
+
+        // symulowanie glodu 
+        villager.hunger -= (gameHoursPassed * HUNGER_PRE_HOUR); 
+        if (villager.hunger < 0.0f) villager.hunger = 0.0f; 
+
+        // logika cos tam oparta na priorytetach bo jedzienie najwazniejsze kuzwa 
+        if (villager.hunger < HUNGER_THRESHOLD && 
+            villager.currentState != Villager::State::EATING && 
+            villager.currentState != Villager::State::MOVING_TO_EAT)
+        {
+            // szuka najblizeszj kuchni 
+            if (!m_buildings.empty()){ 
+                std::cout << "\n[AI] " << villager.name << " jest głodny! Idzie jeść.\n";
+                villager.currentState = Villager::State::MOVING_TO_EAT;
+                villager.targetPosition = m_buildings[0].position; // pierwsza dostepna kuchnia 
+            }
+        }
+
+
         //---------------
         // IDZIE TYLKO D PUNKU 
         //---------------
-        if(villager.currentState == Villager::State::MOVING_TO_POINT) {
+        else if (villager.currentState == Villager::State::MOVING_TO_POINT) {
             glm::vec2 direction = villager.targetPosition - villager.position; 
             float distance = glm::length(direction); 
 
@@ -116,8 +142,38 @@ void GameState::update(float deltaTime){
                 // Zasób jeszcze jest, resetuj zegar i pracuj dalej
                 villager.workTimer = GATHER_TIME;
             }
+            }
         }
-    }
+
+
+        // biegnie zrec 
+        else if (villager.currentState == Villager::State::MOVING_TO_EAT){
+            glm::vec2 direction = villager.targetPosition - villager.position; 
+            float distance = glm::length(direction); 
+            if (distance > 5.0f){
+                villager.position += glm::normalize(direction) * speed * deltaTime; 
+            } else {
+                // juz sobie w kuchni siedzie 
+                villager.currentState = Villager::State::EATING;
+                villager.workTimer = 2.0f; // ile je (2s)
+            }
+        }
+
+        else if (villager.currentState == Villager::State::EATING){
+            villager.workTimer -= deltaTime; 
+            if (villager.workTimer <= 0.0f){
+                if (globalFood >= 10){
+                    globalFood -= 10; // jeden zjada 10 jedzenia 
+                    villager.hunger = 100.0f; // jest najedzony
+                    villager.currentState = Villager::State::IDLE;
+                    std::cout << "\n[AI] " << villager.name << " zjadł. Zapasy: " << globalFood << std::endl; 
+                } else {
+                    // kiedy nie mamy jedzenia 
+                    std::cout << "\n[AI] " << villager.name << "chciał jeść, ale nie ma zapasów!\n";
+                    villager.currentState = Villager::State::IDLE; 
+                }
+            }
+        }
     }
 
 
@@ -128,7 +184,6 @@ void GameState::update(float deltaTime){
         timeOfDay = 0.0f; // resetowanie zegara 
 
         // teoretyczne zuzywanie zasobow 
-        globalFood -= m_villagers.size() * 10;  // jeden mieszkaniec zjada 10 jednostek jedzenia dziennie 
         std::cout << "\n--- Nowy dzien " << dayCounter << " ----" << std::endl; 
     }
 
@@ -145,4 +200,6 @@ void GameState::update(float deltaTime){
                     << " \r"; // czyszczenie starych znakow
         std::cout.flush(); // wypisywanie bufora 
     }
+
+    m_buildings.emplace_back(Building::KITCHEN, glm::vec2(150.0f, 150.0f));
 }

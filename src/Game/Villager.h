@@ -8,19 +8,23 @@ struct ResourceNode;
 struct Villager {
     glm::vec2 position; 
     std::string name; 
-    int hunger; 
+     
     // stany jejaja 
     enum State { 
         IDLE, // bezczynnosc 
         MOVING_TO_POINT, // idzie do jakiegos losowego punktu 
         MOVING_TO_WORK, // idzie to zasobu 
-        GATHERING // zbiera 
+        GATHERING, // zbiera
+        MOVING_TO_EAT, // chce mu sie zrec 
+        EATING // zre cos  
     }; 
     
     
     
     State currentState; 
+    
 
+    float hunger; 
     // cel 
     glm::vec2 targetPosition; 
 
@@ -36,6 +40,6 @@ struct Villager {
         targetPosition(pos), 
         targetNode(nullptr),
         workTimer(0.0f),
-        hunger(100){}
+        hunger(100.0f){}
 };
 

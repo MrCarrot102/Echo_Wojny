@@ -167,6 +167,16 @@ void Application::render(){
         m_Renderer->drawSquare(*m_Camera, villager.position, {10.0f, 10.0f}, color);
     }
 
+    // renderowanie budynkow 
+    for (const auto& b : m_GameState->m_buildings) {
+        glm::vec4 color = {0.5f, 0.3f, 0.0f, 1.0f}; // brazowy 
+
+        if (b.buildingType == Building::KITCHEN){
+            color = {0.8f, 0.8f, 0.8f, 1.0f}; // jasnoszary 
+        }
+        m_Renderer->drawSquare(*m_Camera, b.position, {20.0f, 20.0f}, color); 
+    }
+
     //m_Renderer->drawSquare(*m_Camera, {100.0f, 50.0f}, {30.0f, 30.0f}, {1.0f, 0.0f, 0.0f, 1.0f});
     //m_Renderer->drawSquare(*m_Camera, {200.0f, 150.0f}, {50.0f, 50.0f}, {0.0f, 1.0f, 0.0f, 1.0f});
 

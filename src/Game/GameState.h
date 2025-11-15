@@ -3,6 +3,8 @@
 
 #include "Game/Villager.h"
 #include "Game/ResourceNode.h"     
+#include "Game/Building.h"
+
 
 class GameState {
     public: 
@@ -21,6 +23,8 @@ class GameState {
         // npc 
         std::vector<Villager> m_villagers; 
         std::vector<ResourceNode> m_resourceNodes; 
+        std::vector<Building> m_buildings; 
+
 
         // gettery 
         //const std::vector<Villager>& getVillagers() const {return m_villagers; }

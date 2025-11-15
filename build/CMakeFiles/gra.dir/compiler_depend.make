@@ -4,6 +4,7 @@
 CMakeFiles/gra.dir/src/Core/Application.cpp.o: /home/mateuszsierakowski/Documents/Echo_Wojny/src/Core/Application.cpp \
   /home/mateuszsierakowski/Documents/Echo_Wojny/src/Core/Application.h \
   /home/mateuszsierakowski/Documents/Echo_Wojny/src/Core/Camera2D.h \
+  /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/Building.h \
   /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/GameState.h \
   /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/ResourceNode.h \
   /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/Villager.h \
@@ -946,6 +947,7 @@ CMakeFiles/gra.dir/src/Core/Camera2D.cpp.o: /home/mateuszsierakowski/Documents/E
   /usr/lib/gcc/x86_64-redhat-linux/15/include/syslimits.h
 
 CMakeFiles/gra.dir/src/Game/GameState.cpp.o: /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/GameState.cpp \
+  /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/Building.h \
   /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/GameState.h \
   /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/ResourceNode.h \
   /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/Villager.h \
@@ -2743,10 +2745,6 @@ gra: /lib64/ld-linux-x86-64.so.2 \
 
 CMakeFiles/gra.dir/src/Rendering/PrimitiveRenderer.cpp.o:
 
-/usr/include/c++/15/iosfwd:
-
-/home/mateuszsierakowski/Documents/Echo_Wojny/src/Rendering/Shader.cpp:
-
 /usr/include/c++/15/ext/alloc_traits.h:
 
 /usr/include/glm/ext/vector_uint2.hpp:
@@ -3019,6 +3017,12 @@ CMakeFiles/gra.dir/src/main.cpp.o:
 
 /usr/include/glm/ext/vector_bool4_precision.hpp:
 
+/usr/include/bits/types/struct_FILE.h:
+
+/usr/include/c++/15/bits/char_traits.h:
+
+/usr/include/c++/15/cctype:
+
 /usr/include/SFML/Window/Context.hpp:
 
 /usr/include/asm/posix_types_64.h:
@@ -3058,16 +3062,6 @@ CMakeFiles/gra.dir/src/main.cpp.o:
 /usr/include/SFML/System/ThreadLocalPtr.inl:
 
 /usr/include/c++/15/bits/streambuf_iterator.h:
-
-/usr/include/SFML/System/Vector3.inl:
-
-/usr/include/GL/gl.h:
-
-/usr/include/bits/long-double.h:
-
-/usr/include/c++/15/bits/uses_allocator_args.h:
-
-/usr/include/SFML/Window/Clipboard.hpp:
 
 /usr/include/c++/15/bits/postypes.h:
 
@@ -3111,9 +3105,33 @@ CMakeFiles/gra.dir/src/main.cpp.o:
 
 /usr/include/SFML/System/NonCopyable.hpp:
 
+/usr/include/c++/15/bits/uses_allocator_args.h:
+
+/usr/include/SFML/Window/Clipboard.hpp:
+
+/usr/include/SFML/System/Err.hpp:
+
+/home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/Building.h:
+
+/usr/include/c++/15/tr1/modified_bessel_func.tcc:
+
+/usr/include/GL/gl.h:
+
+/usr/include/bits/long-double.h:
+
+/usr/include/SFML/System/Vector3.inl:
+
 /usr/include/bits/libc-header-start.h:
 
 /usr/include/c++/15/iostream:
+
+/usr/include/bits/pthreadtypes.h:
+
+/usr/include/SFML/Window/Vulkan.hpp:
+
+/usr/include/SFML/Window/WindowStyle.hpp:
+
+/usr/include/glm/ext/vector_float2_precision.hpp:
 
 /home/mateuszsierakowski/Documents/Echo_Wojny/src/Core/Application.cpp:
 
@@ -3177,25 +3195,17 @@ CMakeFiles/gra.dir/src/main.cpp.o:
 
 /usr/include/glm/detail/type_mat2x2.hpp:
 
-/usr/include/c++/15/bits/char_traits.h:
+/usr/include/glm/ext/matrix_projection.inl:
 
-/usr/include/c++/15/cctype:
-
-/usr/include/bits/types/struct_FILE.h:
+/usr/lib64/libGLdispatch.so.0:
 
 /home/mateuszsierakowski/Documents/Echo_Wojny/src/Rendering/PrimitiveRenderer.h:
 
 /usr/include/bits/byteswap.h:
 
-/usr/include/glm/ext/matrix_projection.inl:
-
-/usr/lib64/libGLdispatch.so.0:
-
 /usr/include/bits/endianness.h:
 
 /usr/include/libintl.h:
-
-/usr/include/SFML/System/Err.hpp:
 
 /usr/include/bits/types/__sigset_t.h:
 
@@ -3291,14 +3301,6 @@ CMakeFiles/gra.dir/src/main.cpp.o:
 
 /usr/include/bits/pthread_stack_min-dynamic.h:
 
-/usr/include/SFML/Window/Vulkan.hpp:
-
-/usr/include/SFML/Window/WindowStyle.hpp:
-
-/usr/include/glm/ext/vector_float2_precision.hpp:
-
-/usr/include/bits/pthreadtypes.h:
-
 /usr/include/glm/detail/type_vec3.hpp:
 
 /usr/include/glm/ext/matrix_float4x2_precision.hpp:
@@ -3349,6 +3351,10 @@ CMakeFiles/gra.dir/src/main.cpp.o:
 
 /usr/include/bits/types/sigset_t.h:
 
+/usr/include/c++/15/iosfwd:
+
+/home/mateuszsierakowski/Documents/Echo_Wojny/src/Rendering/Shader.cpp:
+
 /usr/include/glm/ext/matrix_double4x2.hpp:
 
 /usr/include/c++/15/x86_64-redhat-linux/bits/ctype_base.h:
@@ -3361,9 +3367,9 @@ CMakeFiles/gra.dir/src/main.cpp.o:
 
 /usr/include/c++/15/locale:
 
-/usr/include/SFML/System/Vector2.hpp:
-
 /usr/include/SFML/Window/Cursor.hpp:
+
+/usr/include/SFML/System/Vector2.hpp:
 
 /usr/include/c++/15/memory:
 
@@ -3412,8 +3418,6 @@ CMakeFiles/gra.dir/src/main.cpp.o:
 /usr/include/glm/detail/type_mat2x2.inl:
 
 /usr/include/c++/15/tr1/legendre_function.tcc:
-
-/usr/include/c++/15/tr1/modified_bessel_func.tcc:
 
 /usr/include/c++/15/tuple:
 
@@ -3637,6 +3641,10 @@ CMakeFiles/gra.dir/src/Core/Application.cpp.o:
 
 /lib64/libgcc_s.so.1:
 
+CMakeFiles/gra.dir/src/Game/GameState.cpp.o:
+
+/usr/include/glm/ext/vector_double4_precision.hpp:
+
 /usr/include/glm/ext/vector_float2.hpp:
 
 /usr/include/glm/ext/vector_float3.hpp:
@@ -3754,10 +3762,6 @@ CMakeFiles/gra.dir/src/Rendering/Shader.cpp.o:
 /usr/include/c++/15/x86_64-redhat-linux/bits/c++io.h:
 
 /home/mateuszsierakowski/Documents/Echo_Wojny/src/main.cpp:
-
-/usr/include/glm/ext/vector_double4_precision.hpp:
-
-CMakeFiles/gra.dir/src/Game/GameState.cpp.o:
 
 /usr/include/c++/15/bits/istream.tcc:
 

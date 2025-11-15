@@ -246,6 +246,7 @@ CMakeFiles/gra.dir/src/Game/GameState.cpp.o: \
  /usr/include/bits/types/error_t.h /usr/include/c++/15/bits/charconv.h \
  /usr/include/c++/15/bits/basic_string.tcc \
  /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/ResourceNode.h \
+ /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/Building.h \
  /usr/include/c++/15/iostream /usr/include/c++/15/ostream \
  /usr/include/c++/15/bits/ostream.h /usr/include/c++/15/ios \
  /usr/include/c++/15/exception /usr/include/c++/15/bits/exception_ptr.h \
