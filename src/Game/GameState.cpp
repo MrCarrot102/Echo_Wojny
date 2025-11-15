@@ -49,7 +49,7 @@ void GameState::update(float deltaTime){
         //----------------
         // IDZIE SOBIE DO PRACY 
         //----------------
-        else if (villager.currentState = Villager::State::MOVING_TO_WORK){
+        else if (villager.currentState == Villager::State::MOVING_TO_WORK){
             if (villager.targetNode == nullptr){
                 // jak cel nie istnieje to sobie odpoczywamy 
                 villager.currentState = Villager::State::IDLE; 
@@ -72,38 +72,52 @@ void GameState::update(float deltaTime){
         //-----------------
         // ROBOTAJU
         //-----------------
-        else if (villager.currentState = Villager::State::GATHERING){
-            if (villager.targetNode == nullptr){
-                villager.currentState = Villager::State::IDLE;
-                continue;
+        else if (villager.currentState == Villager::State::GATHERING) {
+        if (villager.targetNode == nullptr) {
+            villager.currentState = Villager::State::IDLE;
+            continue;
+        }
+
+        // Możesz odkomentować tę linię, aby zobaczyć timer w akcji
+        // std::cout << "Postać " << villager.name << " pracuje... Timer: " << villager.workTimer << "\r";
+
+        // Odliczaj czas
+        villager.workTimer -= deltaTime;
+        
+        if (villager.workTimer <= 0.0f) {
+            
+            // --- PUNKT KONTROLNY 1 ---
+            std::cout << "\n[DEBUG] Timer zerowy! Sprawdzam typ zasobu... \n";
+
+            if (villager.targetNode->resourceType == ResourceNode::Type::TREE) {
+                // --- PUNKT KONTROLNY 2 (Sukces) ---
+                std::cout << "[DEBUG] Typ to DRZEWO. Dodaję drewno.\n";
+                globalWood += 10; 
+                std::cout << "[EVENT] Zebrano Drewno! Total: " << globalWood << std::endl;
+            
+            } else if (villager.targetNode->resourceType == ResourceNode::Type::ROCK) {
+                // --- PUNKT KONTROLNY 2 (Sukces) ---
+                std::cout << "[DEBUG] Typ to KAMIEŃ. Dodaję kamień.\n";
+                std::cout << "[EVENT] Zebrano Kamień!" << std::endl;
+            } else {
+                // --- PUNKT KONTROLNY 2 (BŁĄD) ---
+                std::cout << "[DEBUG] BŁĄD! Nie rozpoznano typu zasobu!\n";
             }
 
-            // obliczanie czasu 
-            villager.workTimer -= deltaTime;
-
-            if (villager.workTimer <= 0.0f){
-                // czas mina wiec sobie podnosimy zasob 
-                if (villager.targetNode->resourceType == ResourceNode::Type::TREE){
-                    globalWood += 10; 
-                    std::cout << "\n[EVENT] Zebrano Drewno! Total: " << globalWood << std::endl; 
-                } //else if (villager.targetNode->resourceType == ResourceNode::Type::Rock){
-                    //std::cout << "\n[EVENT] Zebrano Kamień!" << std::endl; 
-                //}
-
-                // zmniejszanie ilosci zasobu w miejscu 
-                villager.targetNode->amountLeft -= 10; 
-
-                if (villager.targetNode->amountLeft <= 0) {
-                    // zasoby sie wyczerpaly 
-                    std::cout << "[EVENT] Zasób wyczerpany!" << std::endl; 
-                    // dodac usuwanie go z wektora 
-                    villager.targetNode = nullptr; 
-                    villager.currentState = Villager::State::IDLE; 
-                } else {
-                    villager.workTimer = GATHER_TIME; 
-                }
+            // Zmniejsz ilość zasobu w miejscu
+            villager.targetNode->amountLeft -= 10;
+            
+            if (villager.targetNode->amountLeft <= 0) {
+                // Zasób się wyczerpał!
+                std::cout << "[EVENT] Zasób wyczerpany!" << std::endl;
+                villager.targetNode = nullptr; 
+                villager.currentState = Villager::State::IDLE;
+            } else {
+                // Zasób jeszcze jest, resetuj zegar i pracuj dalej
+                villager.workTimer = GATHER_TIME;
             }
         }
+    }
     }
 
 
