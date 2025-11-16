@@ -65,6 +65,17 @@ void Application::pollEvents() {
             m_Running = false; 
         }
 
+        if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::B){
+            if(m_currentBuildMode == BuildMode::NONE){
+                m_currentBuildMode = BuildMode::KITCHEN; 
+                std::cout << "Tryb budowana: KUCHNIA\n";
+                m_selectedVillager = nullptr; // odznaczanie mieszkanca 
+            } else {
+                m_currentBuildMode = BuildMode::NONE; // wylaczanie trybu budowania 
+                std::cout << "Wyłączono tryb budowania\n";
+            }
+        }
+
         if (event.type == sf::Event::MouseButtonPressed) {
             // pobbieranie funkcji myszy 
             glm::vec2 screenMousePos = {(float)event.mouseButton.x, (float)event.mouseButton.y};
@@ -72,24 +83,45 @@ void Application::pollEvents() {
             glm::vec2 worldMousePos = m_Camera->screenToWorld(screenMousePos, m_Window); 
 
             if (event.mouseButton.button == sf::Mouse::Left){
-                // zaznaczanie 
-                std::cout << "Kliknięto w świat: " << worldMousePos.x << ", " << worldMousePos.y << std::endl; 
 
-                // szukanie mieszkanca w tym miejscu 
-                // nie jest optymalna ta petla na razie 
-                m_selectedVillager = nullptr; 
-                for (Villager& v : m_GameState->m_villagers) {
-                    // test kolizjii 
-                    if (worldMousePos.x >= v.position.x && worldMousePos.x <= v.position.x + 10.0f &&
-                        worldMousePos.y >= v.position.y && worldMousePos.y <= v.position.y + 10.0f)
-                        {
-                            m_selectedVillager = &v; // zaznacz 
-                            std::cout << "Zaznaczono: " << v.name << std::endl; 
-                            break; // konczenie petli 
-                        }
+                if (m_currentBuildMode != BuildMode::NONE){
+                    // tryb budowania 
+                    int woodCost = 50; // kuchnia potrzebuje 50 drewna do zbudowania 
+
+                    // sprawdzanie odpowiedniej ilosci 
+                    if (m_GameState->globalWood >= woodCost){
+                        // jesli nas stac 
+                        m_GameState->globalWood -= woodCost; 
+
+                        // tworzenie budynku 
+                        m_GameState->m_buildings.emplace_back(Building::KITCHEN, m_ghostBuildingPos); 
+                        std::cout << "[BUDOWA] Zbudowano Kuchnię! Pozostało drewna: " << m_GameState->globalWood << std::endl; 
+
+                        // wylaczanie trybu budowania 
+                        m_currentBuildMode = BuildMode::NONE; 
+                    } else {
+                        // kiedy nie mamy odpowiedniej ilosci drewna moj panie 
+                        std::cout << "[BUDOWA] Potrzeba więcej drewna mój Panie, a dokładnie " << woodCost << std::endl; 
                     }
-            }
+                } else { 
+                    // zaznaczanie 
+                    std::cout << "Kliknięto w świat: " << worldMousePos.x << ", " << worldMousePos.y << std::endl; 
 
+                    // szukanie mieszkanca w tym miejscu 
+                    // nie jest optymalna ta petla na razie 
+                    m_selectedVillager = nullptr; 
+                    for (Villager& v : m_GameState->m_villagers) {
+                        // test kolizjii 
+                        if (worldMousePos.x >= v.position.x && worldMousePos.x <= v.position.x + 10.0f &&
+                            worldMousePos.y >= v.position.y && worldMousePos.y <= v.position.y + 10.0f)
+                            {
+                                m_selectedVillager = &v; // zaznacz 
+                                std::cout << "Zaznaczono: " << v.name << std::endl; 
+                                break; // konczenie petli 
+                            }
+                        }
+                }
+            }
             else if (event.mouseButton.button == sf::Mouse::Right){
                 // wydanie rozkazu prawy guzior 
                 if (m_selectedVillager != nullptr){
@@ -133,6 +165,13 @@ void Application::update(float deltaTime){
 
     // tick w symulacji 
     m_GameState->update(deltaTime); 
+
+    if (m_currentBuildMode != BuildMode::NONE){
+        // aktualizowanie pozycji ducha na podstawie myszki 
+        sf::Vector2i screenMousePos = sf::Mouse::getPosition(m_Window); 
+        m_ghostBuildingPos = m_Camera->screenToWorld({(float)screenMousePos.x, (float)screenMousePos.y}, m_Window);
+
+    }
 }
 
 void Application::render(){
@@ -177,6 +216,16 @@ void Application::render(){
         m_Renderer->drawSquare(*m_Camera, b.position, {20.0f, 20.0f}, color); 
     }
 
+
+    // renderowanie ducha budynku 
+    if (m_currentBuildMode == BuildMode::KITCHEN){
+        // rysowanie polprzezroczystego kwadrata 
+        glm::vec4 color = {0.8f, 0.8f, 0.8f, 0.5f}; 
+        m_Renderer->drawSquare(*m_Camera, m_ghostBuildingPos, {20.0f, 20.0f}, color);
+    }
+
+
+    
     //m_Renderer->drawSquare(*m_Camera, {100.0f, 50.0f}, {30.0f, 30.0f}, {1.0f, 0.0f, 0.0f, 1.0f});
     //m_Renderer->drawSquare(*m_Camera, {200.0f, 150.0f}, {50.0f, 50.0f}, {0.0f, 1.0f, 0.0f, 1.0f});
 

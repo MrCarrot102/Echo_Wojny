@@ -3,10 +3,12 @@
 #include "Core/Camera2D.h"
 #include "Rendering/PrimitiveRenderer.h"
 #include "Game/GameState.h"
+#include "Game/Villager.h"
 
 #include <SFML/Window.hpp>
 #include <memory> 
 #include <GL/glew.h> 
+#include <glm/glm.hpp> 
 
 class Application{
     public: 
@@ -22,6 +24,12 @@ class Application{
         void update(float deltaTime); 
         void render(); 
 
+        enum class BuildMode {
+            NONE, 
+            KITCHEN, 
+            WELL
+        };
+
         sf::Window m_Window; 
         sf::Clock m_DeltaClock; 
         bool m_Running; 
@@ -35,4 +43,11 @@ class Application{
 
 
         Villager* m_selectedVillager; 
-};
+
+        BuildMode m_currentBuildMode = BuildMode::NONE; 
+        glm::vec2 m_ghostBuildingPos; 
+
+
+    };
+
+
