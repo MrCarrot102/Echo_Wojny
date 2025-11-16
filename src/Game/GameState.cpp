@@ -1,5 +1,4 @@
 #include "Game/GameState.h"
-#
 
 
 #include <iostream> 
@@ -10,7 +9,9 @@ GameState::GameState()
       globalFood(100),
       globalWood(50),
       globalWater(50),
-      m_TimeAccumulator(0.0f)
+      m_TimeAccumulator(0.0f),
+      m_eventDay3Triggered(false), 
+      m_eventDay5Triggered(false)
 {
     // testowanie npc 
     m_villagers.emplace_back("Adam", glm::vec2(100.0f, 100.0f));
@@ -247,6 +248,8 @@ void GameState::update(float deltaTime){
 
         // teoretyczne zuzywanie zasobow 
         std::cout << "\n--- Nowy dzien " << dayCounter << " ----" << std::endl; 
+    
+        checkForDailyEvents(); 
     }
 
 
@@ -264,4 +267,41 @@ void GameState::update(float deltaTime){
     }
 
     m_buildings.emplace_back(Building::KITCHEN, glm::vec2(150.0f, 150.0f));
+}
+
+
+void GameState::checkForDailyEvents() {
+    
+    // wydarzenie 1: zrzuty zaopatrzenia 
+    if (dayCounter == 3 && !m_eventDay3Triggered) {
+        
+        m_eventDay3Triggered = true; 
+
+        // narracja na razie do konsoli 
+        std::cout << "\n=============== WYDARZENIE ===============\n";
+        std::cout << "W nocy nad wioska przeleciał samolot\n";
+        std::cout << "Słyszeliście huk, a rano znaleźliście zrzut na spadochronie!\n";
+        std::cout << "[EFEKT] +50 Jedzenia, +20 Wody\n";
+        std::cout << "==============================================\n";
+
+        globalFood += 50; 
+        globalWater += 20; 
+    }
+
+    if (dayCounter == 5 && !m_eventDay5Triggered){
+        
+        m_eventDay5Triggered = true; 
+
+        std::cout << "\n=============== WYDARZENIE ===============\n";
+        std::cout << "!!! ALARM !!!\n";
+        std::cout << "Grupa szabrowników napadła na wasze magazyny pod osłoną nocy!\n";
+        std::cout << "[EFEKT] -30 Jedzenia, -40 Drewna\n";
+        std::cout << "================================\n";
+
+        globalFood -= 30;
+        globalWood -= 40; 
+
+        if (globalFood < 0 ) globalFood = 0; 
+        if (globalWood < 0 ) globalWood = 0; 
+    }
 }

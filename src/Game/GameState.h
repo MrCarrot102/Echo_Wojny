@@ -12,7 +12,8 @@ class GameState {
 
         // glowna funkcja ticki symulacji 
         void update(float deltaTime); 
-
+        void checkForDailyEvents(); 
+        
         // dane gry 
         int dayCounter;  
         float timeOfDay;  
@@ -33,6 +34,10 @@ class GameState {
     private: 
         // liczenie czasu 
         float m_TimeAccumulator; 
+        
+        // wydarzenia
+        bool m_eventDay3Triggered; 
+        bool m_eventDay5Triggered; 
 
 };
 

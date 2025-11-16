@@ -24,6 +24,8 @@ class Application{
         void update(float deltaTime); 
         void render(); 
 
+
+
         enum class BuildMode {
             NONE, 
             KITCHEN, 
@@ -46,6 +48,11 @@ class Application{
 
         BuildMode m_currentBuildMode = BuildMode::NONE; 
         glm::vec2 m_ghostBuildingPos; 
+
+
+
+        
+
 
 
     };
