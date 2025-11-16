@@ -16,7 +16,9 @@ struct Villager {
         MOVING_TO_WORK, // idzie to zasobu 
         GATHERING, // zbiera
         MOVING_TO_EAT, // chce mu sie zrec 
-        EATING // zre cos  
+        EATING,  // zre cos
+        MOVING_TO_DRINK, 
+        DRINKING  
     }; 
     
     
@@ -25,6 +27,7 @@ struct Villager {
     
 
     float hunger; 
+    float thirst; 
     // cel 
     glm::vec2 targetPosition; 
 
@@ -40,6 +43,7 @@ struct Villager {
         targetPosition(pos), 
         targetNode(nullptr),
         workTimer(0.0f),
-        hunger(100.0f){}
+        hunger(100.0f),
+        thirst(100.0f){}
 };
 

@@ -76,59 +76,76 @@ void Application::pollEvents() {
             }
         }
 
+        if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::N){
+            if (m_currentBuildMode == BuildMode::NONE){
+                m_currentBuildMode = BuildMode::WELL;
+                std::cout << "Tryb budowania: STUDNIA\n";
+                m_selectedVillager = nullptr; 
+            } else {
+                m_currentBuildMode = BuildMode::NONE; 
+                std::cout << "Wyłączono tryb budowania\n";
+            }
+        }
+
         if (event.type == sf::Event::MouseButtonPressed) {
             // pobbieranie funkcji myszy 
             glm::vec2 screenMousePos = {(float)event.mouseButton.x, (float)event.mouseButton.y};
             // konwersja na pozycje w swiecie 
             glm::vec2 worldMousePos = m_Camera->screenToWorld(screenMousePos, m_Window); 
 
+            // --- POCZĄTEK POPRAWIONEJ LOGIKI ---
+
             if (event.mouseButton.button == sf::Mouse::Left){
-
+                
                 if (m_currentBuildMode != BuildMode::NONE){
-                    // tryb budowania 
-                    int woodCost = 50; // kuchnia potrzebuje 50 drewna do zbudowania 
-
-                    // sprawdzanie odpowiedniej ilosci 
-                    if (m_GameState->globalWood >= woodCost){
-                        // jesli nas stac 
-                        m_GameState->globalWood -= woodCost; 
-
-                        // tworzenie budynku 
-                        m_GameState->m_buildings.emplace_back(Building::KITCHEN, m_ghostBuildingPos); 
-                        std::cout << "[BUDOWA] Zbudowano Kuchnię! Pozostało drewna: " << m_GameState->globalWood << std::endl; 
-
-                        // wylaczanie trybu budowania 
-                        m_currentBuildMode = BuildMode::NONE; 
-                    } else {
-                        // kiedy nie mamy odpowiedniej ilosci drewna moj panie 
-                        std::cout << "[BUDOWA] Potrzeba więcej drewna mój Panie, a dokładnie " << woodCost << std::endl; 
-                    }
-                } else { 
-                    // zaznaczanie 
-                    std::cout << "Kliknięto w świat: " << worldMousePos.x << ", " << worldMousePos.y << std::endl; 
-
-                    // szukanie mieszkanca w tym miejscu 
-                    // nie jest optymalna ta petla na razie 
-                    m_selectedVillager = nullptr; 
-                    for (Villager& v : m_GameState->m_villagers) {
-                        // test kolizjii 
-                        if (worldMousePos.x >= v.position.x && worldMousePos.x <= v.position.x + 10.0f &&
-                            worldMousePos.y >= v.position.y && worldMousePos.y <= v.position.y + 10.0f)
-                            {
-                                m_selectedVillager = &v; // zaznacz 
-                                std::cout << "Zaznaczono: " << v.name << std::endl; 
-                                break; // konczenie petli 
-                            }
+                    // === JESTEŚMY W TRYBIE BUDOWANIA ===
+                    
+                    if (m_currentBuildMode == BuildMode::KITCHEN){
+                        int woodCost = 50;
+                        if (m_GameState->globalWood >= woodCost){
+                            m_GameState->globalWood -= woodCost;
+                            m_GameState->m_buildings.emplace_back(Building::KITCHEN, m_ghostBuildingPos); 
+                            std::cout << "[BUDOWA] Zbudowano Kuchnię! Pozostało drewna: " << m_GameState->globalWood << std::endl; 
+                            m_currentBuildMode = BuildMode::NONE; 
+                        } else {
+                            std::cout << "[BUDOWA] Potrzeba więcej drewna mój Panie, a dokładnie " << woodCost << std::endl; 
                         }
+                    }
+                    // BŁĄD LOGICZNY BYŁ TUTAJ: Ten 'else if' musi być W ŚRODKU
+                    else if (m_currentBuildMode == BuildMode::WELL){
+                        int woodCost = 25; 
+                        if (m_GameState->globalWood >= woodCost){
+                            m_GameState->globalWood -= woodCost; 
+                            m_GameState->m_buildings.emplace_back(Building::WELL, m_ghostBuildingPos); 
+                            std::cout << "[BUDOWA] Zbudowano Studnię! Pozostało drewna: " << m_GameState->globalWood << std::endl; 
+                            m_currentBuildMode = BuildMode::NONE; 
+                        } else {
+                            std::cout << "[BUDOWA] Za mało drewna! Potrzeba " << woodCost << std::endl; 
+                        }
+                    }
+
+                } else { 
+                    // === JESTEŚMY W TRYBIE ZAZNACZANIA (nie budowania) ===
+                    std::cout << "Kliknięto w świat: " << worldMousePos.x << ", " << worldMousePos.y << std::endl; 
+                    m_selectedVillager = nullptr; 
+                    for (Villager& v : m_GameState->m_villagers){
+                        if (worldMousePos.x >= v.position.x && worldMousePos.x <= v.position.x + 10.0f &&
+                             worldMousePos.y >= v.position.y && worldMousePos.y <= v.position.y + 10.0f)
+                        {   
+                            m_selectedVillager = &v; 
+                            std::cout << "Zaznaczono: " << v.name << std::endl; 
+                            break;
+                        }
+                    }
                 }
-            }
+            } 
+            // BŁĄD LOGICZNY BYŁ TUTAJ: 'else if (Right)' musi być tutaj,
+            // a nie po 'else' od 'if (Left)'
             else if (event.mouseButton.button == sf::Mouse::Right){
-                // wydanie rozkazu prawy guzior 
+                // === LOGIKA PRAWGO PRZYCISKU (ROZKAZY) ===
                 if (m_selectedVillager != nullptr){
-                    // sprawdzanie klikniecia na zasob 
                     ResourceNode* clickedNode = nullptr; 
                     for (ResourceNode& node : m_GameState->m_resourceNodes){
-                        // testowanie kolizji 
                         if (worldMousePos.x >= node.position.x && worldMousePos.x <= node.position.x + 15.0f &&
                             worldMousePos.y >= node.position.y && worldMousePos.y <= node.position.y + 15.0f)
                         {
@@ -138,15 +155,13 @@ void Application::pollEvents() {
                     }
                     
                     if (clickedNode != nullptr){
-                        // rozkazywanie pracy 
                         std::cout << "Rozkaz pracy dla " << m_selectedVillager->name << " przy zasobie" << std::endl; 
                         m_selectedVillager->targetNode = clickedNode; 
-                        m_selectedVillager->targetPosition = clickedNode->position; // ustawianie celu 
+                        m_selectedVillager->targetPosition = clickedNode->position; 
                         m_selectedVillager->currentState = Villager::State::MOVING_TO_WORK; 
                     } else {
-                        // dawanie rozkazu tylko do ruchu 
                         std::cout << "Rozkaz ruchu dla " << m_selectedVillager->name << std::endl;
-                        m_selectedVillager->targetNode = nullptr; // zaznaczenie ze idzie w puste miejsce 
+                        m_selectedVillager->targetNode = nullptr; 
                         m_selectedVillager->targetPosition = worldMousePos; 
                         m_selectedVillager->currentState = Villager::State::MOVING_TO_POINT;
                     }
@@ -222,6 +237,13 @@ void Application::render(){
         // rysowanie polprzezroczystego kwadrata 
         glm::vec4 color = {0.8f, 0.8f, 0.8f, 0.5f}; 
         m_Renderer->drawSquare(*m_Camera, m_ghostBuildingPos, {20.0f, 20.0f}, color);
+    }
+
+    // budowanie studnii 
+    else if (m_currentBuildMode == BuildMode::WELL){
+        // polprzezroczysty niebieski kwadrat 
+        glm::vec4 color = {0.0f, 0.5f, 1.0f, 0.5f}; 
+        m_Renderer->drawSquare(*m_Camera, m_ghostBuildingPos, {15.0f, 15.0f}, color); 
     }
 
 

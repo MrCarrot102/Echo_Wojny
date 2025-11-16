@@ -31,20 +31,55 @@ void GameState::update(float deltaTime){
     timeOfDay += gameHoursPassed; 
     m_TimeAccumulator += deltaTime; 
     float speed = 50.00f; // ruch bardziej predkosc 
+    
     const float GATHER_TIME = 3.0f; // czas zbierania czegos na razie 3s 
+    
     const float HUNGER_THRESHOLD = 30.0f; // moment kiedy robi sie glodny 
+    const float THIRST_THRESHOLD = 40.0f; // 
+    
     const float HUNGER_PRE_HOUR = 2.0f; // jak szybko postaci chce sie jesc 
-
+    const float THIRST_PER_HOUR = 3.0f; 
 
 
     for (Villager& villager : m_villagers) {
-
+        // symulowanie pragnienia i glodu 
+        // pragnienie 
+        villager.thirst -= (gameHoursPassed * THIRST_PER_HOUR); 
         // symulowanie glodu 
         villager.hunger -= (gameHoursPassed * HUNGER_PRE_HOUR); 
         if (villager.hunger < 0.0f) villager.hunger = 0.0f; 
+        if (villager.thirst < 0.0f) villager.thirst = 0.0f; 
+
+
 
         // logika cos tam oparta na priorytetach bo jedzienie najwazniejsze kuzwa 
-        if (villager.hunger < HUNGER_THRESHOLD && 
+        
+        if ( villager.thirst < THIRST_THRESHOLD && 
+            villager.currentState != Villager::State::DRINKING && 
+            villager.currentState != Villager::State::MOVING_TO_DRINK)
+        {
+            // szukanie najblizszej studnii 
+            Building* targetWell = nullptr; 
+            for (Building& b : m_buildings) {
+                if (b.buildingType == Building::WELL){
+                    targetWell = &b; 
+                    break; 
+                }
+            }
+
+            if (targetWell != nullptr) {
+                std::cout << "\b[AI] " << villager.name << " jest spragniony! Idzie do studni.\n";
+                villager.currentState = Villager::State::MOVING_TO_DRINK; 
+                villager.targetPosition = targetWell->position; 
+            } else {
+                std::cout << "\n[AI] " << villager.name << " jest spragniony, ALE NIE MA STUDNI!\n";
+            }
+        }
+        
+        
+        
+        
+        else if  (villager.hunger < HUNGER_THRESHOLD && 
             villager.currentState != Villager::State::EATING && 
             villager.currentState != Villager::State::MOVING_TO_EAT)
         {
@@ -170,6 +205,33 @@ void GameState::update(float deltaTime){
                 } else {
                     // kiedy nie mamy jedzenia 
                     std::cout << "\n[AI] " << villager.name << "chciał jeść, ale nie ma zapasów!\n";
+                    villager.currentState = Villager::State::IDLE; 
+                }
+            }
+        }
+
+        else if (villager.currentState == Villager::State::MOVING_TO_DRINK) {
+            glm::vec2 direction = villager.targetPosition - villager.position; 
+            float distance = glm::length(direction); 
+            if (distance > 5.0f) {
+                villager.position += glm::normalize(direction) * speed * deltaTime; 
+            } else {
+                villager.currentState = Villager::State::DRINKING; 
+                villager.workTimer = 2.0f; 
+            }
+        }
+
+        // stan picia 
+        else if (villager.currentState == Villager::State::DRINKING) { 
+            villager.workTimer -= deltaTime; 
+            if (villager.workTimer <= 0.0f) {
+                if (globalWater >= 10) {
+                    globalWater -= 10; 
+                    villager.thirst = 100.f; 
+                    villager.currentState = Villager::State::IDLE; 
+                    std::cout << "\n[AI] " << villager.name << " napił się. Zapasy wody: " << globalWater << std::endl; 
+                } else {
+                    std::cout << "\n[AI] " << villager.name << " chciał pić, ale nie ma wody!\n"; 
                     villager.currentState = Villager::State::IDLE; 
                 }
             }
