@@ -154,7 +154,22 @@ void GameState::update(float deltaTime){
             if (villager.targetNode->resourceType == ResourceNode::Type::TREE) {
                 // --- PUNKT KONTROLNY 2 (Sukces) ---
                 std::cout << "[DEBUG] Typ to DRZEWO. Dodaję drewno.\n";
-                globalWood += 10; 
+                villager.carryingResourceType = villager.targetNode->resourceType; 
+                villager.carryingAmount = 10; 
+                std::cout << "\n[AI] " << villager.name << " zebrał 10 drewna i szuka magazynu.\n";
+
+                // szukanie najblizszego magazynu 
+                Building* stockpile = findNearestStockpile(villager.position); 
+
+                if (stockpile != nullptr){
+                    // jak mamy magazyn idziemy do niego 
+                    villager.currentState = Villager::State::MOVING_TO_HAUL; 
+                    villager.targetPosition = stockpile->position; 
+                } else {
+                    std::cout << "[AI] " << villager.name << " nie ma gdzie odłożyć zasobów!\n";
+                    villager.currentState = Villager::State::IDLE; 
+                }
+                
                 std::cout << "[EVENT] Zebrano Drewno! Total: " << globalWood << std::endl;
             
             } else if (villager.targetNode->resourceType == ResourceNode::Type::ROCK) {
@@ -237,6 +252,33 @@ void GameState::update(float deltaTime){
                 }
             }
         }
+
+        else if (villager.currentState == Villager::State::MOVING_TO_HAUL){
+            glm::vec2 direction = villager.targetPosition - villager.position; 
+            float distance = glm::length(direction); 
+
+            if (distance > 5.0f) {
+                villager.position += glm::normalize(direction) * speed * deltaTime;
+            } else {
+                std::cout << "\n[AI] " << villager.name << " odłożył zasoby do magazyny.\n";
+
+                if (villager.carryingResourceType == ResourceNode::Type::TREE){
+                    globalWood += villager.carryingAmount; 
+                } else if (villager.carryingResourceType == ResourceNode::Type::ROCK){
+                    // dodanie cos kiedys moze nie wiem 
+                }
+
+                villager.carryingAmount = 0; 
+
+                // jesli cos jest to dobrze jakby do tegoo wrocil 
+                if (villager.targetNode != nullptr && villager.targetNode->amountLeft > 0){
+                    villager.currentState = Villager::State::MOVING_TO_WORK;
+                    villager.targetPosition = villager.targetNode->position; 
+                } else {
+                    villager.currentState = Villager::State::IDLE; 
+                }
+            }
+        }
     }
 
 
@@ -304,4 +346,25 @@ void GameState::checkForDailyEvents() {
         if (globalFood < 0 ) globalFood = 0; 
         if (globalWood < 0 ) globalWood = 0; 
     }
+}
+
+
+Building* GameState::findNearestStockpile(const glm::vec2& fromPos){
+    Building* closestStockpile = nullptr; 
+    float minDistanceSquared = 999999.0f * 999999.0f; 
+    
+    for(Building& b : m_buildings){
+        
+        if (b.buildingType == Building::Type::STOCKPILE){
+            
+            float distanceSquared = glm::length(b.position - fromPos);
+
+            if (distanceSquared < minDistanceSquared){
+                minDistanceSquared = distanceSquared; 
+                closestStockpile = &b; 
+            }
+        }
+    }
+
+    return closestStockpile;
 }

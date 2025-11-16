@@ -6,7 +6,11 @@
 struct ResourceNode {
     glm::vec2 position; 
 
-    enum Type { TREE, ROCK, FOOD_BUSH }; 
+    enum Type { NONE, 
+                TREE, 
+                ROCK, 
+                FOOD_BUSH }; 
+                
     Type resourceType; 
 
     int amountLeft; 

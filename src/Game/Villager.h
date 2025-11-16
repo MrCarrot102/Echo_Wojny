@@ -2,6 +2,8 @@
 #include <glm/glm.hpp>
 #include <string> 
 
+#include "Game/ResourceNode.h"
+
 struct ResourceNode; 
 
 // szkielet mieszkanca to tylko kontener na dane (chwilowo) 
@@ -18,23 +20,27 @@ struct Villager {
         MOVING_TO_EAT, // chce mu sie zrec 
         EATING,  // zre cos
         MOVING_TO_DRINK, 
-        DRINKING  
+        DRINKING,
+        MOVING_TO_HAUL, 
+        HAULING  
     }; 
     
     
     
     State currentState; 
     
-
+    float workTimer; // zegar odliczania pracy 
     float hunger; 
     float thirst; 
     // cel 
     glm::vec2 targetPosition; 
 
+    ResourceNode::Type carryingResourceType; 
+    int carryingAmount; 
+
     // statystyki
     ResourceNode* targetNode; // wskaznik na zasob, przy ktorym sie pracuje 
-    float workTimer; // zegar odliczania pracy 
-
+    
     // konstruktor ulatwiajacy tworzenie 
     Villager(const std::string& n, const glm::vec2& pos)
         : name(n), 
@@ -44,6 +50,8 @@ struct Villager {
         targetNode(nullptr),
         workTimer(0.0f),
         hunger(100.0f),
-        thirst(100.0f){}
+        thirst(100.0f),
+        carryingResourceType(ResourceNode::Type::NONE),
+        carryingAmount(0){}
 };
 

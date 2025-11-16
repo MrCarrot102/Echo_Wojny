@@ -13,7 +13,10 @@ class GameState {
         // glowna funkcja ticki symulacji 
         void update(float deltaTime); 
         void checkForDailyEvents(); 
-        
+        Building* findNearestStockpile(const glm::vec2& fromPos); 
+
+
+
         // dane gry 
         int dayCounter;  
         float timeOfDay;  

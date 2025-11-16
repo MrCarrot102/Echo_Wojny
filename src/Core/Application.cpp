@@ -87,6 +87,17 @@ void Application::pollEvents() {
             }
         }
 
+        if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::P){
+            if (m_currentBuildMode == BuildMode::NONE){
+                m_currentBuildMode = BuildMode::STOCKPILE; 
+                std::cout << "Tryb budowania: MAGAZYN\n";
+                m_selectedVillager = nullptr; 
+            } else {
+                m_currentBuildMode = BuildMode::NONE; 
+                std::cout << "Wyłączono tryb budowania\n";
+            }
+        }
+
         if (event.type == sf::Event::MouseButtonPressed) {
             // pobbieranie funkcji myszy 
             glm::vec2 screenMousePos = {(float)event.mouseButton.x, (float)event.mouseButton.y};
@@ -111,7 +122,7 @@ void Application::pollEvents() {
                             std::cout << "[BUDOWA] Potrzeba więcej drewna mój Panie, a dokładnie " << woodCost << std::endl; 
                         }
                     }
-                    // BŁĄD LOGICZNY BYŁ TUTAJ: Ten 'else if' musi być W ŚRODKU
+                    
                     else if (m_currentBuildMode == BuildMode::WELL){
                         int woodCost = 25; 
                         if (m_GameState->globalWood >= woodCost){
@@ -124,7 +135,19 @@ void Application::pollEvents() {
                         }
                     }
 
-                } else { 
+                    else if (m_currentBuildMode == BuildMode::STOCKPILE){
+                        int woodCost = 10; 
+                        if (m_GameState->globalWood >= woodCost){
+                            m_GameState->globalWood -= woodCost; 
+                            m_GameState->m_buildings.emplace_back(Building::STOCKPILE, m_ghostBuildingPos); 
+                            std::cout << "[BUDOWA] Wyznaczono Magazyn! Pozostało drewna: " << m_GameState->globalWood << std::endl; 
+                            m_currentBuildMode = BuildMode::NONE; 
+                        } else {
+                            std::cout << "[BUDOWA] Za mało drewna na magazyn! Potrzeba " << woodCost << std::endl; 
+                        }
+                    }
+
+                } else { // BŁĄD LOGICZNY BYŁ TUTAJ: Ten 'else if' musi być W ŚRODKU
                     // === JESTEŚMY W TRYBIE ZAZNACZANIA (nie budowania) ===
                     std::cout << "Kliknięto w świat: " << worldMousePos.x << ", " << worldMousePos.y << std::endl; 
                     m_selectedVillager = nullptr; 
@@ -228,6 +251,13 @@ void Application::render(){
         if (b.buildingType == Building::KITCHEN){
             color = {0.8f, 0.8f, 0.8f, 1.0f}; // jasnoszary 
         }
+
+        else if (b.buildingType == Building::WELL){
+            color = {0.0f, 0.5f, 1.0f, 1.0f}; // ciemnoniebieski 
+        }
+        else if (b.buildingType == Building::Type::STOCKPILE){
+            color = {0.9f, 0.9f, 0.8f, 1.0f}; 
+        }
         m_Renderer->drawSquare(*m_Camera, b.position, {20.0f, 20.0f}, color); 
     }
 
@@ -239,11 +269,17 @@ void Application::render(){
         m_Renderer->drawSquare(*m_Camera, m_ghostBuildingPos, {20.0f, 20.0f}, color);
     }
 
-    // budowanie studnii 
+    // budowanie studni
     else if (m_currentBuildMode == BuildMode::WELL){
         // polprzezroczysty niebieski kwadrat 
         glm::vec4 color = {0.0f, 0.5f, 1.0f, 0.5f}; 
         m_Renderer->drawSquare(*m_Camera, m_ghostBuildingPos, {15.0f, 15.0f}, color); 
+    }
+
+    // budowanie magazynu 
+    else if (m_currentBuildMode == BuildMode::STOCKPILE){
+        glm::vec4 color = {0.9f, 0.9f, 0.8f, 0.5f}; 
+        m_Renderer->drawSquare(*m_Camera, m_ghostBuildingPos, {25.0f, 25.0f}, color);
     }
 
 

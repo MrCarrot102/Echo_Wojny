@@ -29,7 +29,8 @@ class Application{
         enum class BuildMode {
             NONE, 
             KITCHEN, 
-            WELL
+            WELL, 
+            STOCKPILE
         };
 
         sf::Window m_Window; 
