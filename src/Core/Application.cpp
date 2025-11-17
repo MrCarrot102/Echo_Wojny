@@ -61,43 +61,56 @@ void Application::pollEvents() {
         if (event.type == sf::Event::Closed){
             m_Running = false; 
         }
-        if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape){
-            m_Running = false; 
-        }
+        
+        if( event.type == sf::Event::KeyPressed) {
+            if (m_GameState->getMode() == GameState::Mode::EVENT_PAUSED){
 
-        if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::B){
-            if(m_currentBuildMode == BuildMode::NONE){
-                m_currentBuildMode = BuildMode::KITCHEN; 
-                std::cout << "Tryb budowana: KUCHNIA\n";
-                m_selectedVillager = nullptr; // odznaczanie mieszkanca 
+                if (event.key.code == sf::Keyboard::T){
+                    m_GameState->resolveRegugeeEvent(true); 
+                } else if (event.key.code == sf::Keyboard::N){
+                    m_GameState->resolveRegugeeEvent(false); 
+                }
             } else {
-                m_currentBuildMode = BuildMode::NONE; // wylaczanie trybu budowania 
-                std::cout << "Wyłączono tryb budowania\n";
+
+                if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape){
+                    m_Running = false; 
+                }
+
+                if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::B){
+                    if(m_currentBuildMode == BuildMode::NONE){
+                        m_currentBuildMode = BuildMode::KITCHEN; 
+                        std::cout << "Tryb budowana: KUCHNIA\n";
+                        m_selectedVillager = nullptr; // odznaczanie mieszkanca 
+                    } else {
+                        m_currentBuildMode = BuildMode::NONE; // wylaczanie trybu budowania 
+                        std::cout << "Wyłączono tryb budowania\n";
+                    }
+                }
+
+                if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::N){
+                    if (m_currentBuildMode == BuildMode::NONE){
+                        m_currentBuildMode = BuildMode::WELL;
+                        std::cout << "Tryb budowania: STUDNIA\n";
+                        m_selectedVillager = nullptr; 
+                    } else {
+                        m_currentBuildMode = BuildMode::NONE; 
+                        std::cout << "Wyłączono tryb budowania\n";
+                    }
+                }
+
+                if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::P){
+                    if (m_currentBuildMode == BuildMode::NONE){
+                        m_currentBuildMode = BuildMode::STOCKPILE; 
+                        std::cout << "Tryb budowania: MAGAZYN\n";
+                        m_selectedVillager = nullptr; 
+                    } else {
+                        m_currentBuildMode = BuildMode::NONE; 
+                        std::cout << "Wyłączono tryb budowania\n";
+                    }
+                }
             }
         }
-
-        if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::N){
-            if (m_currentBuildMode == BuildMode::NONE){
-                m_currentBuildMode = BuildMode::WELL;
-                std::cout << "Tryb budowania: STUDNIA\n";
-                m_selectedVillager = nullptr; 
-            } else {
-                m_currentBuildMode = BuildMode::NONE; 
-                std::cout << "Wyłączono tryb budowania\n";
-            }
-        }
-
-        if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::P){
-            if (m_currentBuildMode == BuildMode::NONE){
-                m_currentBuildMode = BuildMode::STOCKPILE; 
-                std::cout << "Tryb budowania: MAGAZYN\n";
-                m_selectedVillager = nullptr; 
-            } else {
-                m_currentBuildMode = BuildMode::NONE; 
-                std::cout << "Wyłączono tryb budowania\n";
-            }
-        }
-
+        
         if (event.type == sf::Event::MouseButtonPressed) {
             // pobbieranie funkcji myszy 
             glm::vec2 screenMousePos = {(float)event.mouseButton.x, (float)event.mouseButton.y};

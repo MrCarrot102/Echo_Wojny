@@ -10,12 +10,17 @@ class GameState {
     public: 
         GameState(); 
 
+        enum class Mode { PLAYING, EVENT_PAUSED }; 
+
+
+
         // glowna funkcja ticki symulacji 
         void update(float deltaTime); 
         void checkForDailyEvents(); 
         Building* findNearestStockpile(const glm::vec2& fromPos); 
-
-
+        void setMode(Mode newMode); 
+        Mode getMode() const { return m_currentMode; }
+        void resolveRegugeeEvent(bool accepted); 
 
         // dane gry 
         int dayCounter;  
@@ -23,6 +28,7 @@ class GameState {
         int globalFood; 
         int globalWood; 
         int globalWater; 
+        Mode m_currentMode; 
 
         // npc 
         std::vector<Villager> m_villagers; 
@@ -41,6 +47,7 @@ class GameState {
         // wydarzenia
         bool m_eventDay3Triggered; 
         bool m_eventDay5Triggered; 
+        bool m_eventRefugeesTriggered; 
 
 };
 
