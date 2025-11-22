@@ -8,6 +8,7 @@ Application::Application()
 }
 
 Application::~Application() {
+    ImGui::SFML::Shutdown(); 
     // i teraz magia bo smart pointery same sie sprzataja ez 
 }
 
@@ -18,13 +19,20 @@ void Application::init() {
     settings.stencilBits = 8; 
     settings.majorVersion = 3; 
     settings.minorVersion = 3; 
-    settings.attributeFlags = sf::ContextSettings::Core; 
-
+    //settings.attributeFlags = sf::ContextSettings::Core; 
+    settings.attributeFlags = sf::ContextSettings::Default; 
     unsigned int windowWidth = 800; 
     unsigned int widnowHeight = 600; 
 
     m_Window.create(sf::VideoMode(windowWidth, widnowHeight), "Echo Wojny", sf::Style::Default, settings); 
     m_Window.setVerticalSyncEnabled(true); 
+
+    // --- INICJALIZACJA IMGUI --- 
+    // Rzutujemy rozmiar na Vector2f
+    if (!ImGui::SFML::Init(m_Window, static_cast<sf::Vector2f>(m_Window.getSize()))){
+        std::cerr << "Nie udało się zainicjować ImGui!\n";
+    }
+
 
     // inicjiowanie glew 
     if (glewInit() != GLEW_OK){
@@ -58,9 +66,25 @@ void Application::run() {
 void Application::pollEvents() {
     sf::Event event; 
     while (m_Window.pollEvent(event)) {
+        
+        ImGui::SFML::ProcessEvent(m_Window, event);         
+
+
         if (event.type == sf::Event::Closed){
             m_Running = false; 
         }
+
+        auto& io = ImGui::GetIO(); 
+
+        if (io.WantCaptureMouse && (event.type == sf::Event::MouseButtonPressed || event.type == sf::Event::MouseWheelScrolled)){
+            continue;
+        }
+
+        if (io.WantCaptureKeyboard && event.type == sf::Event::KeyPressed) {
+            continue;
+        }
+
+        
         
         if( event.type == sf::Event::KeyPressed) {
             if (m_GameState->getMode() == GameState::Mode::EVENT_PAUSED){
@@ -203,14 +227,16 @@ void Application::pollEvents() {
                     }
                 }
             }
-        }
-
-        // dodac jakies inne eventy zmiana rozdzielczosci itd; 
+        }   
     }
 }
 
 
 void Application::update(float deltaTime){
+    // --- imgui update ---
+    ImGui::SFML::Update(sf::Mouse::getPosition(m_Window), static_cast<sf::Vector2f>(m_Window.getSize()), sf::seconds(deltaTime));
+    // -------------------- 
+
     // aktualizacja logiki gry 
     m_Camera->update(deltaTime, m_Window); 
 
@@ -295,12 +321,23 @@ void Application::render(){
         m_Renderer->drawSquare(*m_Camera, m_ghostBuildingPos, {25.0f, 25.0f}, color);
     }
 
-
+    // rysowanie ui 
+    // definiowanie okna 
+    ImGui::Begin("Panel Zarzadzania"); 
     
-    //m_Renderer->drawSquare(*m_Camera, {100.0f, 50.0f}, {30.0f, 30.0f}, {1.0f, 0.0f, 0.0f, 1.0f});
-    //m_Renderer->drawSquare(*m_Camera, {200.0f, 150.0f}, {50.0f, 50.0f}, {0.0f, 1.0f, 0.0f, 1.0f});
-
-    // koniec renderowania 
+    // wyswietlanie statystyk 
+    ImGui::Text("Dzien: %d", m_GameState->dayCounter);
+    ImGui::Text("Godzina: %d:00", (int)m_GameState->timeOfDay);
+    ImGui::Separator();
+    ImGui::Text("Drewno: %d", m_GameState->globalWood);
+    ImGui::Text("Woda: %d", m_GameState->globalWater);
+    ImGui::Text("Jedzenie: %d", m_GameState->globalFood);
+    ImGui::Separator();
+    ImGui::Text("Mieszkancy: %zu", m_GameState->m_villagers.size());
+    
+    ImGui::End(); 
+    // ------------------------------
+    ImGui::SFML::Render();
 
     m_Window.display(); 
 }

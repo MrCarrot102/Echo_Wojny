@@ -273,6 +273,150 @@ src/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/gra.dir/build.make CMakeFiles/gra.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
+vendor/imgui-sfml/imgui-SFML.o: vendor/imgui-sfml/imgui-SFML.cpp.o
+.PHONY : vendor/imgui-sfml/imgui-SFML.o
+
+# target to build an object file
+vendor/imgui-sfml/imgui-SFML.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gra.dir/build.make CMakeFiles/gra.dir/vendor/imgui-sfml/imgui-SFML.cpp.o
+.PHONY : vendor/imgui-sfml/imgui-SFML.cpp.o
+
+vendor/imgui-sfml/imgui-SFML.i: vendor/imgui-sfml/imgui-SFML.cpp.i
+.PHONY : vendor/imgui-sfml/imgui-SFML.i
+
+# target to preprocess a source file
+vendor/imgui-sfml/imgui-SFML.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gra.dir/build.make CMakeFiles/gra.dir/vendor/imgui-sfml/imgui-SFML.cpp.i
+.PHONY : vendor/imgui-sfml/imgui-SFML.cpp.i
+
+vendor/imgui-sfml/imgui-SFML.s: vendor/imgui-sfml/imgui-SFML.cpp.s
+.PHONY : vendor/imgui-sfml/imgui-SFML.s
+
+# target to generate assembly for a file
+vendor/imgui-sfml/imgui-SFML.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gra.dir/build.make CMakeFiles/gra.dir/vendor/imgui-sfml/imgui-SFML.cpp.s
+.PHONY : vendor/imgui-sfml/imgui-SFML.cpp.s
+
+vendor/imgui/imgui.o: vendor/imgui/imgui.cpp.o
+.PHONY : vendor/imgui/imgui.o
+
+# target to build an object file
+vendor/imgui/imgui.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gra.dir/build.make CMakeFiles/gra.dir/vendor/imgui/imgui.cpp.o
+.PHONY : vendor/imgui/imgui.cpp.o
+
+vendor/imgui/imgui.i: vendor/imgui/imgui.cpp.i
+.PHONY : vendor/imgui/imgui.i
+
+# target to preprocess a source file
+vendor/imgui/imgui.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gra.dir/build.make CMakeFiles/gra.dir/vendor/imgui/imgui.cpp.i
+.PHONY : vendor/imgui/imgui.cpp.i
+
+vendor/imgui/imgui.s: vendor/imgui/imgui.cpp.s
+.PHONY : vendor/imgui/imgui.s
+
+# target to generate assembly for a file
+vendor/imgui/imgui.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gra.dir/build.make CMakeFiles/gra.dir/vendor/imgui/imgui.cpp.s
+.PHONY : vendor/imgui/imgui.cpp.s
+
+vendor/imgui/imgui_demo.o: vendor/imgui/imgui_demo.cpp.o
+.PHONY : vendor/imgui/imgui_demo.o
+
+# target to build an object file
+vendor/imgui/imgui_demo.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gra.dir/build.make CMakeFiles/gra.dir/vendor/imgui/imgui_demo.cpp.o
+.PHONY : vendor/imgui/imgui_demo.cpp.o
+
+vendor/imgui/imgui_demo.i: vendor/imgui/imgui_demo.cpp.i
+.PHONY : vendor/imgui/imgui_demo.i
+
+# target to preprocess a source file
+vendor/imgui/imgui_demo.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gra.dir/build.make CMakeFiles/gra.dir/vendor/imgui/imgui_demo.cpp.i
+.PHONY : vendor/imgui/imgui_demo.cpp.i
+
+vendor/imgui/imgui_demo.s: vendor/imgui/imgui_demo.cpp.s
+.PHONY : vendor/imgui/imgui_demo.s
+
+# target to generate assembly for a file
+vendor/imgui/imgui_demo.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gra.dir/build.make CMakeFiles/gra.dir/vendor/imgui/imgui_demo.cpp.s
+.PHONY : vendor/imgui/imgui_demo.cpp.s
+
+vendor/imgui/imgui_draw.o: vendor/imgui/imgui_draw.cpp.o
+.PHONY : vendor/imgui/imgui_draw.o
+
+# target to build an object file
+vendor/imgui/imgui_draw.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gra.dir/build.make CMakeFiles/gra.dir/vendor/imgui/imgui_draw.cpp.o
+.PHONY : vendor/imgui/imgui_draw.cpp.o
+
+vendor/imgui/imgui_draw.i: vendor/imgui/imgui_draw.cpp.i
+.PHONY : vendor/imgui/imgui_draw.i
+
+# target to preprocess a source file
+vendor/imgui/imgui_draw.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gra.dir/build.make CMakeFiles/gra.dir/vendor/imgui/imgui_draw.cpp.i
+.PHONY : vendor/imgui/imgui_draw.cpp.i
+
+vendor/imgui/imgui_draw.s: vendor/imgui/imgui_draw.cpp.s
+.PHONY : vendor/imgui/imgui_draw.s
+
+# target to generate assembly for a file
+vendor/imgui/imgui_draw.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gra.dir/build.make CMakeFiles/gra.dir/vendor/imgui/imgui_draw.cpp.s
+.PHONY : vendor/imgui/imgui_draw.cpp.s
+
+vendor/imgui/imgui_tables.o: vendor/imgui/imgui_tables.cpp.o
+.PHONY : vendor/imgui/imgui_tables.o
+
+# target to build an object file
+vendor/imgui/imgui_tables.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gra.dir/build.make CMakeFiles/gra.dir/vendor/imgui/imgui_tables.cpp.o
+.PHONY : vendor/imgui/imgui_tables.cpp.o
+
+vendor/imgui/imgui_tables.i: vendor/imgui/imgui_tables.cpp.i
+.PHONY : vendor/imgui/imgui_tables.i
+
+# target to preprocess a source file
+vendor/imgui/imgui_tables.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gra.dir/build.make CMakeFiles/gra.dir/vendor/imgui/imgui_tables.cpp.i
+.PHONY : vendor/imgui/imgui_tables.cpp.i
+
+vendor/imgui/imgui_tables.s: vendor/imgui/imgui_tables.cpp.s
+.PHONY : vendor/imgui/imgui_tables.s
+
+# target to generate assembly for a file
+vendor/imgui/imgui_tables.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gra.dir/build.make CMakeFiles/gra.dir/vendor/imgui/imgui_tables.cpp.s
+.PHONY : vendor/imgui/imgui_tables.cpp.s
+
+vendor/imgui/imgui_widgets.o: vendor/imgui/imgui_widgets.cpp.o
+.PHONY : vendor/imgui/imgui_widgets.o
+
+# target to build an object file
+vendor/imgui/imgui_widgets.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gra.dir/build.make CMakeFiles/gra.dir/vendor/imgui/imgui_widgets.cpp.o
+.PHONY : vendor/imgui/imgui_widgets.cpp.o
+
+vendor/imgui/imgui_widgets.i: vendor/imgui/imgui_widgets.cpp.i
+.PHONY : vendor/imgui/imgui_widgets.i
+
+# target to preprocess a source file
+vendor/imgui/imgui_widgets.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gra.dir/build.make CMakeFiles/gra.dir/vendor/imgui/imgui_widgets.cpp.i
+.PHONY : vendor/imgui/imgui_widgets.cpp.i
+
+vendor/imgui/imgui_widgets.s: vendor/imgui/imgui_widgets.cpp.s
+.PHONY : vendor/imgui/imgui_widgets.s
+
+# target to generate assembly for a file
+vendor/imgui/imgui_widgets.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gra.dir/build.make CMakeFiles/gra.dir/vendor/imgui/imgui_widgets.cpp.s
+.PHONY : vendor/imgui/imgui_widgets.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -300,6 +444,24 @@ help:
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
+	@echo "... vendor/imgui-sfml/imgui-SFML.o"
+	@echo "... vendor/imgui-sfml/imgui-SFML.i"
+	@echo "... vendor/imgui-sfml/imgui-SFML.s"
+	@echo "... vendor/imgui/imgui.o"
+	@echo "... vendor/imgui/imgui.i"
+	@echo "... vendor/imgui/imgui.s"
+	@echo "... vendor/imgui/imgui_demo.o"
+	@echo "... vendor/imgui/imgui_demo.i"
+	@echo "... vendor/imgui/imgui_demo.s"
+	@echo "... vendor/imgui/imgui_draw.o"
+	@echo "... vendor/imgui/imgui_draw.i"
+	@echo "... vendor/imgui/imgui_draw.s"
+	@echo "... vendor/imgui/imgui_tables.o"
+	@echo "... vendor/imgui/imgui_tables.i"
+	@echo "... vendor/imgui/imgui_tables.s"
+	@echo "... vendor/imgui/imgui_widgets.o"
+	@echo "... vendor/imgui/imgui_widgets.i"
+	@echo "... vendor/imgui/imgui_widgets.s"
 .PHONY : help
 
 

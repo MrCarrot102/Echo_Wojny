@@ -14,6 +14,12 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/mateuszsierakowski/Documents/Echo_Wojny/src/Rendering/PrimitiveRenderer.cpp" "CMakeFiles/gra.dir/src/Rendering/PrimitiveRenderer.cpp.o" "gcc" "CMakeFiles/gra.dir/src/Rendering/PrimitiveRenderer.cpp.o.d"
   "/home/mateuszsierakowski/Documents/Echo_Wojny/src/Rendering/Shader.cpp" "CMakeFiles/gra.dir/src/Rendering/Shader.cpp.o" "gcc" "CMakeFiles/gra.dir/src/Rendering/Shader.cpp.o.d"
   "/home/mateuszsierakowski/Documents/Echo_Wojny/src/main.cpp" "CMakeFiles/gra.dir/src/main.cpp.o" "gcc" "CMakeFiles/gra.dir/src/main.cpp.o.d"
+  "/home/mateuszsierakowski/Documents/Echo_Wojny/vendor/imgui-sfml/imgui-SFML.cpp" "CMakeFiles/gra.dir/vendor/imgui-sfml/imgui-SFML.cpp.o" "gcc" "CMakeFiles/gra.dir/vendor/imgui-sfml/imgui-SFML.cpp.o.d"
+  "/home/mateuszsierakowski/Documents/Echo_Wojny/vendor/imgui/imgui.cpp" "CMakeFiles/gra.dir/vendor/imgui/imgui.cpp.o" "gcc" "CMakeFiles/gra.dir/vendor/imgui/imgui.cpp.o.d"
+  "/home/mateuszsierakowski/Documents/Echo_Wojny/vendor/imgui/imgui_demo.cpp" "CMakeFiles/gra.dir/vendor/imgui/imgui_demo.cpp.o" "gcc" "CMakeFiles/gra.dir/vendor/imgui/imgui_demo.cpp.o.d"
+  "/home/mateuszsierakowski/Documents/Echo_Wojny/vendor/imgui/imgui_draw.cpp" "CMakeFiles/gra.dir/vendor/imgui/imgui_draw.cpp.o" "gcc" "CMakeFiles/gra.dir/vendor/imgui/imgui_draw.cpp.o.d"
+  "/home/mateuszsierakowski/Documents/Echo_Wojny/vendor/imgui/imgui_tables.cpp" "CMakeFiles/gra.dir/vendor/imgui/imgui_tables.cpp.o" "gcc" "CMakeFiles/gra.dir/vendor/imgui/imgui_tables.cpp.o.d"
+  "/home/mateuszsierakowski/Documents/Echo_Wojny/vendor/imgui/imgui_widgets.cpp" "CMakeFiles/gra.dir/vendor/imgui/imgui_widgets.cpp.o" "gcc" "CMakeFiles/gra.dir/vendor/imgui/imgui_widgets.cpp.o.d"
   "" "gra" "gcc" "CMakeFiles/gra.dir/link.d"
   )
 

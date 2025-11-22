@@ -361,5 +361,13 @@ CMakeFiles/gra.dir/src/main.cpp.o: \
  /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/Villager.h \
  /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/ResourceNode.h \
  /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/Building.h \
+ /home/mateuszsierakowski/Documents/Echo_Wojny/vendor/imgui-sfml/imgui-SFML.h \
+ /usr/include/SFML/Graphics/Color.hpp \
+ /usr/include/SFML/Graphics/Export.hpp \
+ /usr/include/SFML/Graphics/Rect.hpp /usr/include/SFML/Graphics/Rect.inl \
+ /home/mateuszsierakowski/Documents/Echo_Wojny/vendor/imgui-sfml/imgui-SFML_export.h \
+ /home/mateuszsierakowski/Documents/Echo_Wojny/vendor/imgui/imgui.h \
+ /home/mateuszsierakowski/Documents/Echo_Wojny/vendor/imgui/imconfig.h \
+ /usr/include/string.h /usr/include/strings.h \
  /usr/include/c++/15/iostream /usr/include/c++/15/istream \
  /usr/include/c++/15/bits/istream.tcc

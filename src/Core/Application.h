@@ -4,6 +4,8 @@
 #include "Rendering/PrimitiveRenderer.h"
 #include "Game/GameState.h"
 #include "Game/Villager.h"
+#include "imgui-SFML.h"
+#include "imgui.h" 
 
 #include <SFML/Window.hpp>
 #include <memory> 

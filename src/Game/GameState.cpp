@@ -323,11 +323,8 @@ void GameState::checkForDailyEvents() {
         m_eventDay3Triggered = true; 
 
         // narracja na razie do konsoli 
-        std::cout << "\n=============== WYDARZENIE ===============\n";
-        std::cout << "W nocy nad wioska przeleciał samolot\n";
-        std::cout << "Słyszeliście huk, a rano znaleźliście zrzut na spadochronie!\n";
-        std::cout << "[EFEKT] +50 Jedzenia, +20 Wody\n";
-        std::cout << "==============================================\n";
+        currentEventTitle = "Zrzut zapasow";
+        currentEventDescription = "W nocy nad nasza wioska przelecial przyjacielski samolot i zrzucil troche zapasow.\nZysk: +50 Jedzenie, +20 Woda.\n";
 
         globalFood += 50; 
         globalWater += 20; 
@@ -337,12 +334,8 @@ void GameState::checkForDailyEvents() {
         
         m_eventDay5Triggered = true; 
 
-        std::cout << "\n=============== WYDARZENIE ===============\n";
-        std::cout << "!!! ALARM !!!\n";
-        std::cout << "Grupa szabrowników napadła na wasze magazyny pod osłoną nocy!\n";
-        std::cout << "[EFEKT] -30 Jedzenia, -40 Drewna\n";
-        std::cout << "================================\n";
-
+        currentEventTitle = "Najazd na bazę";
+        currentEventDescription = "W nocy banda wrogiego wojska napadla na nasza wioske i ukradla nasze zapasy.\n\nStracilismy: -30 Jedzenia, -40 Drewna";
         globalFood -= 30;
         globalWood -= 40; 
 
@@ -353,13 +346,8 @@ void GameState::checkForDailyEvents() {
     if (dayCounter == 2 && !m_eventRefugeesTriggered) {
         m_eventRefugeesTriggered = true; 
         
-
-        std::cout << "\n\n\n================= PILNE WYDARZENIE =================\n";
-        std::cout << "Do bram wioski podchodzi mała grupka uchodźców.\n";
-        std::cout << "Są wygłodzeni i wystraszeni. Proszą o schronienie.\n";
-        std::cout << "Mamy ledwo wystarczająco dla siebie. Co robimy?\n";
-        std::cout << "[DECYZJA] Przyjąć ich? (T = Tak / N = Nie)\n";
-        std::cout << "======================================================\n\n\n";
+        currentEventTitle = "Uchodzcy u bram";
+        currentEventDescription = "Do wioski zbliza sie grupa wyglodnialych cywilow.\n Prosza o schornienie i jedzenie.\n\nKoszt: -30 Jedzenia\nZysk: +2 Mieszkancow";
 
         setMode(Mode::EVENT_PAUSED); 
         

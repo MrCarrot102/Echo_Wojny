@@ -1,5 +1,6 @@
 #pragma once 
 #include <vector> 
+#include <string>
 
 #include "Game/Villager.h"
 #include "Game/ResourceNode.h"     
@@ -29,6 +30,9 @@ class GameState {
         int globalWood; 
         int globalWater; 
         Mode m_currentMode; 
+        std::string currentEventTitle; 
+        std::string currentEventDescription; 
+
 
         // npc 
         std::vector<Villager> m_villagers; 
