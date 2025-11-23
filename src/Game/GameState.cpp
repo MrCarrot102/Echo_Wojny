@@ -380,7 +380,7 @@ void GameState::setMode(Mode newMode){
 }
 
 
-void GameState::resolveRegugeeEvent(bool accepted) {
+void GameState::resolveRefugeeEvent(bool accepted) {
     if (accepted) {
 
         std::cout << "\n[DECYZJA] 'Nie możemy ich tak zostawić.' Wpuściliście ich.\n";

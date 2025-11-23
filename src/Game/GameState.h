@@ -21,7 +21,7 @@ class GameState {
         Building* findNearestStockpile(const glm::vec2& fromPos); 
         void setMode(Mode newMode); 
         Mode getMode() const { return m_currentMode; }
-        void resolveRegugeeEvent(bool accepted); 
+        void resolveRefugeeEvent(bool accepted); 
 
         // dane gry 
         int dayCounter;  

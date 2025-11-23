@@ -90,9 +90,9 @@ void Application::pollEvents() {
             if (m_GameState->getMode() == GameState::Mode::EVENT_PAUSED){
 
                 if (event.key.code == sf::Keyboard::T){
-                    m_GameState->resolveRegugeeEvent(true); 
+                    m_GameState->resolveRefugeeEvent(true); 
                 } else if (event.key.code == sf::Keyboard::N){
-                    m_GameState->resolveRegugeeEvent(false); 
+                    m_GameState->resolveRefugeeEvent(false); 
                 }
             } else {
 
@@ -323,19 +323,85 @@ void Application::render(){
 
     // rysowanie ui 
     // definiowanie okna 
-    ImGui::Begin("Panel Zarzadzania"); 
+   ImGui::Begin("Panel Zarzadzania"); 
     
-    // wyswietlanie statystyk 
-    ImGui::Text("Dzien: %d", m_GameState->dayCounter);
-    ImGui::Text("Godzina: %d:00", (int)m_GameState->timeOfDay);
-    ImGui::Separator();
-    ImGui::Text("Drewno: %d", m_GameState->globalWood);
-    ImGui::Text("Woda: %d", m_GameState->globalWater);
-    ImGui::Text("Jedzenie: %d", m_GameState->globalFood);
-    ImGui::Separator();
-    ImGui::Text("Mieszkancy: %zu", m_GameState->m_villagers.size());
+    // ... (Statystyki: Dzień, Drewno itp. - bez zmian) ...
+    ImGui::Text("Mieszkancy: %lu", m_GameState->m_villagers.size());
     
-    ImGui::End(); 
+    ImGui::Separator();
+    ImGui::Text("BUDOWANIE:");
+
+    // Przycisk KUCHNIA
+    // Zmieniamy kolor przycisku, jeśli jest aktywny
+    if (m_currentBuildMode == BuildMode::KITCHEN) ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 0.5f, 0.0f, 1.0f));
+    if (ImGui::Button("Kuchnia (50 Drewna)")) {
+        // Logika przełączania trybu
+        if (m_currentBuildMode == BuildMode::KITCHEN) m_currentBuildMode = BuildMode::NONE;
+        else {
+            m_currentBuildMode = BuildMode::KITCHEN;
+            m_selectedVillager = nullptr;
+        }
+    }
+    if (m_currentBuildMode == BuildMode::KITCHEN) ImGui::PopStyleColor(); // Przywróć kolor
+
+    // Przycisk STUDNIA
+    if (m_currentBuildMode == BuildMode::WELL) ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 0.5f, 0.0f, 1.0f));
+    if (ImGui::Button("Studnia (25 Drewna)")) {
+        if (m_currentBuildMode == BuildMode::WELL) m_currentBuildMode = BuildMode::NONE;
+        else {
+            m_currentBuildMode = BuildMode::WELL;
+            m_selectedVillager = nullptr;
+        }
+    }
+    if (m_currentBuildMode == BuildMode::WELL) ImGui::PopStyleColor();
+
+    // Przycisk MAGAZYN
+    if (m_currentBuildMode == BuildMode::STOCKPILE) ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 0.5f, 0.0f, 1.0f));
+    if (ImGui::Button("Magazyn (10 Drewna)")) {
+        if (m_currentBuildMode == BuildMode::STOCKPILE) m_currentBuildMode = BuildMode::NONE;
+        else {
+            m_currentBuildMode = BuildMode::STOCKPILE;
+            m_selectedVillager = nullptr;
+        }
+    }
+    if (m_currentBuildMode == BuildMode::STOCKPILE) ImGui::PopStyleColor();
+
+    ImGui::End();
+    // rysowanie okna eventu 
+    if (m_GameState->getMode() == GameState::Mode::EVENT_PAUSED){
+        // ustawianie okna na srodku 
+        ImGui::SetNextWindowPos(ImVec2(400, 300), ImGuiCond_Always, ImVec2(0.5f, 0.5f));
+        ImGui::SetNextWindowSize(ImVec2(400, 250)); 
+
+        // rozpoczynanie okna 
+        ImGui::Begin("WYDARZENIE", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
+
+        // tytul i opis 
+        ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "%s", m_GameState->currentEventTitle.c_str()); // Czerwony tytuł
+        ImGui::Separator();
+        ImGui::TextWrapped("%s", m_GameState->currentEventDescription.c_str());
+        
+        ImGui::Spacing();
+        ImGui::Spacing();
+
+        // --- PRZYCISKI DECYZJI ---
+        // Button zwraca 'true' jeśli został kliknięty w tej klatce
+        
+        if (ImGui::Button("PRZYJMIJ (Tak)", ImVec2(120, 30))) {
+            m_GameState->resolveRefugeeEvent(true); // Logika z GameState
+        }
+        
+        ImGui::SameLine(); // Rysuj następny element w tej samej linii
+        
+        if (ImGui::Button("ODRZUĆ (Nie)", ImVec2(120, 30))) {
+            m_GameState->resolveRefugeeEvent(false);
+        }
+
+        ImGui::End(); 
+    }
+
+
+    
     // ------------------------------
     ImGui::SFML::Render();
 
