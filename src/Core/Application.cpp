@@ -323,50 +323,68 @@ void Application::render(){
 
     // rysowanie ui 
     // definiowanie okna 
-   ImGui::Begin("Panel Zarzadzania"); 
+    ImGui::Begin("Panel Zarzadzania");
     
-    // ... (Statystyki: Dzień, Drewno itp. - bez zmian) ...
+    ImGui::Text("Dzien: %d", m_GameState->dayCounter); 
+    ImGui::Text("Godzina: %d:00", (int)m_GameState->timeOfDay); 
+    ImGui::Separator();
+    ImGui::Text("Drewno: %d", m_GameState->globalWood);
+    ImGui::Text("Woda: %d", m_GameState->globalWater);
+    ImGui::Text("Jedzenie: %d", m_GameState->globalFood);
+    ImGui::Separator();
     ImGui::Text("Mieszkancy: %lu", m_GameState->m_villagers.size());
     
     ImGui::Separator();
     ImGui::Text("BUDOWANIE:");
 
-    // Przycisk KUCHNIA
-    // Zmieniamy kolor przycisku, jeśli jest aktywny
-    if (m_currentBuildMode == BuildMode::KITCHEN) ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 0.5f, 0.0f, 1.0f));
-    if (ImGui::Button("Kuchnia (50 Drewna)")) {
-        // Logika przełączania trybu
-        if (m_currentBuildMode == BuildMode::KITCHEN) m_currentBuildMode = BuildMode::NONE;
-        else {
-            m_currentBuildMode = BuildMode::KITCHEN;
-            m_selectedVillager = nullptr;
+    // logika przyciskow 
+    bool isKitchenActive = (m_currentBuildMode == BuildMode::KITCHEN); 
+    if (isKitchenActive) ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 0.5f, 0.0f, 1.0f)); 
+
+    // przycisk odpowiedzialny za kuchnie 
+    if(ImGui::Button("Kuchnia (50 Drewna)")){
+        if (isKitchenActive){
+            m_currentBuildMode = BuildMode::NONE; 
+        } else {
+            m_currentBuildMode = BuildMode::KITCHEN; 
+            m_selectedVillager = nullptr; 
         }
     }
-    if (m_currentBuildMode == BuildMode::KITCHEN) ImGui::PopStyleColor(); // Przywróć kolor
 
-    // Przycisk STUDNIA
-    if (m_currentBuildMode == BuildMode::WELL) ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 0.5f, 0.0f, 1.0f));
-    if (ImGui::Button("Studnia (25 Drewna)")) {
-        if (m_currentBuildMode == BuildMode::WELL) m_currentBuildMode = BuildMode::NONE;
-        else {
-            m_currentBuildMode = BuildMode::WELL;
-            m_selectedVillager = nullptr;
+    if (isKitchenActive) ImGui::PopStyleColor(); 
+
+    // przycisk odpowiedzialny za studnie 
+    bool isWellActivate = (m_currentBuildMode == BuildMode::WELL); 
+    if (isWellActivate) ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 0.5f, 0.0f, 1.0f)); 
+
+    if (ImGui::Button("Studnia (25 Drewna)")){
+        if (isWellActivate){
+            m_currentBuildMode = BuildMode::NONE; 
+        } else {
+            m_currentBuildMode = BuildMode::WELL; 
+            m_selectedVillager = nullptr; 
         }
     }
-    if (m_currentBuildMode == BuildMode::WELL) ImGui::PopStyleColor();
 
-    // Przycisk MAGAZYN
-    if (m_currentBuildMode == BuildMode::STOCKPILE) ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 0.5f, 0.0f, 1.0f));
-    if (ImGui::Button("Magazyn (10 Drewna)")) {
-        if (m_currentBuildMode == BuildMode::STOCKPILE) m_currentBuildMode = BuildMode::NONE;
-        else {
-            m_currentBuildMode = BuildMode::STOCKPILE;
-            m_selectedVillager = nullptr;
+    if (isWellActivate) ImGui::PopStyleColor(); 
+
+    // przycisk odpowiedzialny za magazyn 
+    bool isStockpileActive = (m_currentBuildMode == BuildMode::STOCKPILE);
+    if (isStockpileActive) ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 0.5f, 0.0f, 1.0f));
+
+    if (ImGui::Button("Magazyn (10 Drewna)")){
+        if (isStockpileActive){
+            m_currentBuildMode = BuildMode::NONE; 
+        } else {
+            m_currentBuildMode = BuildMode::STOCKPILE; 
+            m_selectedVillager = nullptr; 
         }
     }
-    if (m_currentBuildMode == BuildMode::STOCKPILE) ImGui::PopStyleColor();
+    if (isStockpileActive) ImGui::PopStyleColor(); 
 
-    ImGui::End();
+    ImGui::End(); 
+
+
     // rysowanie okna eventu 
     if (m_GameState->getMode() == GameState::Mode::EVENT_PAUSED){
         // ustawianie okna na srodku 
