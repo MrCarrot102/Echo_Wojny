@@ -147,38 +147,65 @@ void Application::pollEvents() {
                 
                 if (m_currentBuildMode != BuildMode::NONE){
                     // === JESTEŚMY W TRYBIE BUDOWANIA ===
-                    
+                    // budowanie kuchni 
                     if (m_currentBuildMode == BuildMode::KITCHEN){
                         int woodCost = 50;
                         if (m_GameState->globalWood >= woodCost){
                             m_GameState->globalWood -= woodCost;
-                            m_GameState->m_buildings.emplace_back(Building::KITCHEN, m_ghostBuildingPos); 
-                            std::cout << "[BUDOWA] Zbudowano Kuchnię! Pozostało drewna: " << m_GameState->globalWood << std::endl; 
-                            m_currentBuildMode = BuildMode::NONE; 
+
+                            m_GameState->m_buildings.emplace_back(Building::KITCHEN, m_ghostBuildingPos);
+
+                            glm::ivec2 gridPos = m_GameState->m_worldMap->worldToGrid(m_ghostBuildingPos);
+
+
+                            m_GameState->m_worldMap->setObstacle(gridPos.x, gridPos.y, true);
+
+                            std::cout << "[MAPA] Zablokowano kratkę: " << gridPos.x << ", " << gridPos.y << "\n";
+                            // ----------------------------------------
+
+                            m_currentBuildMode = BuildMode::NONE;
                         } else {
                             std::cout << "[BUDOWA] Potrzeba więcej drewna mój Panie, a dokładnie " << woodCost << std::endl; 
                         }
                     }
                     
+                    // budowanie studni 
                     else if (m_currentBuildMode == BuildMode::WELL){
                         int woodCost = 25; 
-                        if (m_GameState->globalWood >= woodCost){
+                        if(m_GameState->globalWood >= woodCost){
                             m_GameState->globalWood -= woodCost; 
+
                             m_GameState->m_buildings.emplace_back(Building::WELL, m_ghostBuildingPos); 
-                            std::cout << "[BUDOWA] Zbudowano Studnię! Pozostało drewna: " << m_GameState->globalWood << std::endl; 
-                            m_currentBuildMode = BuildMode::NONE; 
+
+                            glm::ivec2 gridPos = m_GameState->m_worldMap->worldToGrid(m_ghostBuildingPos); 
+
+                            m_GameState->m_worldMap->setObstacle(gridPos.x, gridPos.y, true); 
+
+                            std::cout << "[MAPA] Zbudowano kratkę: " << gridPos.x << ", " << gridPos.y << "\n";
+
+                            m_currentBuildMode = BuildMode::NONE;
+
                         } else {
                             std::cout << "[BUDOWA] Za mało drewna! Potrzeba " << woodCost << std::endl; 
                         }
                     }
-
+                    
+                    // budowanie magazynu 
                     else if (m_currentBuildMode == BuildMode::STOCKPILE){
                         int woodCost = 10; 
                         if (m_GameState->globalWood >= woodCost){
                             m_GameState->globalWood -= woodCost; 
+                            
                             m_GameState->m_buildings.emplace_back(Building::STOCKPILE, m_ghostBuildingPos); 
-                            std::cout << "[BUDOWA] Wyznaczono Magazyn! Pozostało drewna: " << m_GameState->globalWood << std::endl; 
-                            m_currentBuildMode = BuildMode::NONE; 
+
+                            glm::ivec2 gridPos = m_GameState->m_worldMap->worldToGrid(m_ghostBuildingPos); 
+
+                            m_GameState->m_worldMap->setObstacle(gridPos.x, gridPos.y, true); 
+
+                            std::cout << "[MAPA] Zbudowano kartkę: " << gridPos.x << ", " << gridPos.y << "\n";
+
+                            m_currentBuildMode = BuildMode::NONE;
+
                         } else {
                             std::cout << "[BUDOWA] Za mało drewna na magazyn! Potrzeba " << woodCost << std::endl; 
                         }
@@ -266,6 +293,26 @@ void Application::render(){
         }
         m_Renderer->drawSquare(*m_Camera, node.position, {10.0f, 10.0f}, color);
     }
+
+    // dodanie debuga start 
+    int width = m_GameState->m_worldMap->getWidth(); 
+    int height = m_GameState->m_worldMap->getHeight(); 
+    float tileSize = m_GameState->m_worldMap->getTileSize();
+    
+    for (int y = 0; y < height; y++){
+        for (int x = 0; x < width; x++){
+            if (m_GameState->m_worldMap->isBlocked(x, y)){
+                // obliczanie pozycji w swiecie 
+                glm::vec2 pos = m_GameState->m_worldMap->gridToWorld({x, y});
+
+                // rysowanie czerwonego polprzezroczystego kwadratu 
+                glm::vec4 color = {1.0f, 0.0f, 0.0f, 0.3f}; 
+                m_Renderer->drawSquare(*m_Camera, pos, {tileSize, tileSize}, color);
+            }
+        }
+    }
+    // debug stop 
+
 
     // 2 renderowanie mieszkancow 
     for (const auto& villager : m_GameState->m_villagers) {

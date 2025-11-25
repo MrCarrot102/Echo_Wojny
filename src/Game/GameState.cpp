@@ -13,7 +13,9 @@ GameState::GameState()
       m_eventDay3Triggered(false), 
       m_eventDay5Triggered(false),
       m_currentMode(Mode::PLAYING),
-      m_eventRefugeesTriggered(false)
+      m_eventRefugeesTriggered(false),
+      m_worldMap(std::make_unique<WorldMap>(100, 100, 20.0f))
+
 {
     // testowanie npc 
     m_villagers.emplace_back("Adam", glm::vec2(100.0f, 100.0f));

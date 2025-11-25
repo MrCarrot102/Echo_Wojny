@@ -26,6 +26,7 @@ set(APP_SOURCES
     src/Rendering/Shader.cpp
     src/Rendering/PrimitiveRenderer.cpp
     src/Game/GameState.cpp
+    src/Game/WorldMap.cpp
     ${IMGUI_SOURCES}
 )
 

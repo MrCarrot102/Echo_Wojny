@@ -201,6 +201,30 @@ src/Game/GameState.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/gra.dir/build.make CMakeFiles/gra.dir/src/Game/GameState.cpp.s
 .PHONY : src/Game/GameState.cpp.s
 
+src/Game/WorldMap.o: src/Game/WorldMap.cpp.o
+.PHONY : src/Game/WorldMap.o
+
+# target to build an object file
+src/Game/WorldMap.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gra.dir/build.make CMakeFiles/gra.dir/src/Game/WorldMap.cpp.o
+.PHONY : src/Game/WorldMap.cpp.o
+
+src/Game/WorldMap.i: src/Game/WorldMap.cpp.i
+.PHONY : src/Game/WorldMap.i
+
+# target to preprocess a source file
+src/Game/WorldMap.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gra.dir/build.make CMakeFiles/gra.dir/src/Game/WorldMap.cpp.i
+.PHONY : src/Game/WorldMap.cpp.i
+
+src/Game/WorldMap.s: src/Game/WorldMap.cpp.s
+.PHONY : src/Game/WorldMap.s
+
+# target to generate assembly for a file
+src/Game/WorldMap.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gra.dir/build.make CMakeFiles/gra.dir/src/Game/WorldMap.cpp.s
+.PHONY : src/Game/WorldMap.cpp.s
+
 src/Rendering/PrimitiveRenderer.o: src/Rendering/PrimitiveRenderer.cpp.o
 .PHONY : src/Rendering/PrimitiveRenderer.o
 
@@ -435,6 +459,9 @@ help:
 	@echo "... src/Game/GameState.o"
 	@echo "... src/Game/GameState.i"
 	@echo "... src/Game/GameState.s"
+	@echo "... src/Game/WorldMap.o"
+	@echo "... src/Game/WorldMap.i"
+	@echo "... src/Game/WorldMap.s"
 	@echo "... src/Rendering/PrimitiveRenderer.o"
 	@echo "... src/Rendering/PrimitiveRenderer.i"
 	@echo "... src/Rendering/PrimitiveRenderer.s"

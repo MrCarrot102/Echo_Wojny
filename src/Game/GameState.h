@@ -1,11 +1,13 @@
 #pragma once 
 #include <vector> 
 #include <string>
+#include <memory> 
+
 
 #include "Game/Villager.h"
 #include "Game/ResourceNode.h"     
 #include "Game/Building.h"
-
+#include "Game/WorldMap.h"
 
 class GameState {
     public: 
@@ -40,9 +42,7 @@ class GameState {
         std::vector<Building> m_buildings; 
 
 
-        // gettery 
-        //const std::vector<Villager>& getVillagers() const {return m_villagers; }
-        //const std::vector<ResourceNode>& getResourceNodes() const {return m_resourceNodes; }
+        std::unique_ptr<WorldMap> m_worldMap;
 
     private: 
         // liczenie czasu 

@@ -6,6 +6,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/gra.dir/src/Core/Camera2D.cpp.o.d"
   "CMakeFiles/gra.dir/src/Game/GameState.cpp.o"
   "CMakeFiles/gra.dir/src/Game/GameState.cpp.o.d"
+  "CMakeFiles/gra.dir/src/Game/WorldMap.cpp.o"
+  "CMakeFiles/gra.dir/src/Game/WorldMap.cpp.o.d"
   "CMakeFiles/gra.dir/src/Rendering/PrimitiveRenderer.cpp.o"
   "CMakeFiles/gra.dir/src/Rendering/PrimitiveRenderer.cpp.o.d"
   "CMakeFiles/gra.dir/src/Rendering/Shader.cpp.o"
