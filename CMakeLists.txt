@@ -27,6 +27,7 @@ set(APP_SOURCES
     src/Rendering/PrimitiveRenderer.cpp
     src/Game/GameState.cpp
     src/Game/WorldMap.cpp
+    src/Game/Pathfinder.cpp
     ${IMGUI_SOURCES}
 )
 

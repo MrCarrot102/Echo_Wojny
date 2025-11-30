@@ -18,5 +18,5 @@ struct Node {
 class Pathfinder {
     public: 
     // zwracanie wektorow punktow w swiecie do omijania 
-    static std::vector<glm::vec2> findPath(const glm::vec2& startWorld, const glm::vec2& endWorld, const WorldMap& map)
+    static std::vector<glm::vec2> findPath(const glm::vec2& startWorld, const glm::vec2& endWorld, const WorldMap& map);
 };

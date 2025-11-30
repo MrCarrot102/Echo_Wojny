@@ -170,10 +170,24 @@ CMakeFiles/gra.dir/src/Game/WorldMap.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/gra.dir/src/Game/WorldMap.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/WorldMap.cpp -o CMakeFiles/gra.dir/src/Game/WorldMap.cpp.s
 
+CMakeFiles/gra.dir/src/Game/Pathfinder.cpp.o: CMakeFiles/gra.dir/flags.make
+CMakeFiles/gra.dir/src/Game/Pathfinder.cpp.o: /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/Pathfinder.cpp
+CMakeFiles/gra.dir/src/Game/Pathfinder.cpp.o: CMakeFiles/gra.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/mateuszsierakowski/Documents/Echo_Wojny/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/gra.dir/src/Game/Pathfinder.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/gra.dir/src/Game/Pathfinder.cpp.o -MF CMakeFiles/gra.dir/src/Game/Pathfinder.cpp.o.d -o CMakeFiles/gra.dir/src/Game/Pathfinder.cpp.o -c /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/Pathfinder.cpp
+
+CMakeFiles/gra.dir/src/Game/Pathfinder.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/gra.dir/src/Game/Pathfinder.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/Pathfinder.cpp > CMakeFiles/gra.dir/src/Game/Pathfinder.cpp.i
+
+CMakeFiles/gra.dir/src/Game/Pathfinder.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/gra.dir/src/Game/Pathfinder.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/Pathfinder.cpp -o CMakeFiles/gra.dir/src/Game/Pathfinder.cpp.s
+
 CMakeFiles/gra.dir/vendor/imgui/imgui.cpp.o: CMakeFiles/gra.dir/flags.make
 CMakeFiles/gra.dir/vendor/imgui/imgui.cpp.o: /home/mateuszsierakowski/Documents/Echo_Wojny/vendor/imgui/imgui.cpp
 CMakeFiles/gra.dir/vendor/imgui/imgui.cpp.o: CMakeFiles/gra.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/mateuszsierakowski/Documents/Echo_Wojny/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/gra.dir/vendor/imgui/imgui.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/mateuszsierakowski/Documents/Echo_Wojny/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/gra.dir/vendor/imgui/imgui.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/gra.dir/vendor/imgui/imgui.cpp.o -MF CMakeFiles/gra.dir/vendor/imgui/imgui.cpp.o.d -o CMakeFiles/gra.dir/vendor/imgui/imgui.cpp.o -c /home/mateuszsierakowski/Documents/Echo_Wojny/vendor/imgui/imgui.cpp
 
 CMakeFiles/gra.dir/vendor/imgui/imgui.cpp.i: cmake_force
@@ -187,7 +201,7 @@ CMakeFiles/gra.dir/vendor/imgui/imgui.cpp.s: cmake_force
 CMakeFiles/gra.dir/vendor/imgui/imgui_draw.cpp.o: CMakeFiles/gra.dir/flags.make
 CMakeFiles/gra.dir/vendor/imgui/imgui_draw.cpp.o: /home/mateuszsierakowski/Documents/Echo_Wojny/vendor/imgui/imgui_draw.cpp
 CMakeFiles/gra.dir/vendor/imgui/imgui_draw.cpp.o: CMakeFiles/gra.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/mateuszsierakowski/Documents/Echo_Wojny/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/gra.dir/vendor/imgui/imgui_draw.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/mateuszsierakowski/Documents/Echo_Wojny/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/gra.dir/vendor/imgui/imgui_draw.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/gra.dir/vendor/imgui/imgui_draw.cpp.o -MF CMakeFiles/gra.dir/vendor/imgui/imgui_draw.cpp.o.d -o CMakeFiles/gra.dir/vendor/imgui/imgui_draw.cpp.o -c /home/mateuszsierakowski/Documents/Echo_Wojny/vendor/imgui/imgui_draw.cpp
 
 CMakeFiles/gra.dir/vendor/imgui/imgui_draw.cpp.i: cmake_force
@@ -201,7 +215,7 @@ CMakeFiles/gra.dir/vendor/imgui/imgui_draw.cpp.s: cmake_force
 CMakeFiles/gra.dir/vendor/imgui/imgui_tables.cpp.o: CMakeFiles/gra.dir/flags.make
 CMakeFiles/gra.dir/vendor/imgui/imgui_tables.cpp.o: /home/mateuszsierakowski/Documents/Echo_Wojny/vendor/imgui/imgui_tables.cpp
 CMakeFiles/gra.dir/vendor/imgui/imgui_tables.cpp.o: CMakeFiles/gra.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/mateuszsierakowski/Documents/Echo_Wojny/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/gra.dir/vendor/imgui/imgui_tables.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/mateuszsierakowski/Documents/Echo_Wojny/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/gra.dir/vendor/imgui/imgui_tables.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/gra.dir/vendor/imgui/imgui_tables.cpp.o -MF CMakeFiles/gra.dir/vendor/imgui/imgui_tables.cpp.o.d -o CMakeFiles/gra.dir/vendor/imgui/imgui_tables.cpp.o -c /home/mateuszsierakowski/Documents/Echo_Wojny/vendor/imgui/imgui_tables.cpp
 
 CMakeFiles/gra.dir/vendor/imgui/imgui_tables.cpp.i: cmake_force
@@ -215,7 +229,7 @@ CMakeFiles/gra.dir/vendor/imgui/imgui_tables.cpp.s: cmake_force
 CMakeFiles/gra.dir/vendor/imgui/imgui_widgets.cpp.o: CMakeFiles/gra.dir/flags.make
 CMakeFiles/gra.dir/vendor/imgui/imgui_widgets.cpp.o: /home/mateuszsierakowski/Documents/Echo_Wojny/vendor/imgui/imgui_widgets.cpp
 CMakeFiles/gra.dir/vendor/imgui/imgui_widgets.cpp.o: CMakeFiles/gra.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/mateuszsierakowski/Documents/Echo_Wojny/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/gra.dir/vendor/imgui/imgui_widgets.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/mateuszsierakowski/Documents/Echo_Wojny/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/gra.dir/vendor/imgui/imgui_widgets.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/gra.dir/vendor/imgui/imgui_widgets.cpp.o -MF CMakeFiles/gra.dir/vendor/imgui/imgui_widgets.cpp.o.d -o CMakeFiles/gra.dir/vendor/imgui/imgui_widgets.cpp.o -c /home/mateuszsierakowski/Documents/Echo_Wojny/vendor/imgui/imgui_widgets.cpp
 
 CMakeFiles/gra.dir/vendor/imgui/imgui_widgets.cpp.i: cmake_force
@@ -229,7 +243,7 @@ CMakeFiles/gra.dir/vendor/imgui/imgui_widgets.cpp.s: cmake_force
 CMakeFiles/gra.dir/vendor/imgui/imgui_demo.cpp.o: CMakeFiles/gra.dir/flags.make
 CMakeFiles/gra.dir/vendor/imgui/imgui_demo.cpp.o: /home/mateuszsierakowski/Documents/Echo_Wojny/vendor/imgui/imgui_demo.cpp
 CMakeFiles/gra.dir/vendor/imgui/imgui_demo.cpp.o: CMakeFiles/gra.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/mateuszsierakowski/Documents/Echo_Wojny/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/gra.dir/vendor/imgui/imgui_demo.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/mateuszsierakowski/Documents/Echo_Wojny/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/gra.dir/vendor/imgui/imgui_demo.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/gra.dir/vendor/imgui/imgui_demo.cpp.o -MF CMakeFiles/gra.dir/vendor/imgui/imgui_demo.cpp.o.d -o CMakeFiles/gra.dir/vendor/imgui/imgui_demo.cpp.o -c /home/mateuszsierakowski/Documents/Echo_Wojny/vendor/imgui/imgui_demo.cpp
 
 CMakeFiles/gra.dir/vendor/imgui/imgui_demo.cpp.i: cmake_force
@@ -243,7 +257,7 @@ CMakeFiles/gra.dir/vendor/imgui/imgui_demo.cpp.s: cmake_force
 CMakeFiles/gra.dir/vendor/imgui-sfml/imgui-SFML.cpp.o: CMakeFiles/gra.dir/flags.make
 CMakeFiles/gra.dir/vendor/imgui-sfml/imgui-SFML.cpp.o: /home/mateuszsierakowski/Documents/Echo_Wojny/vendor/imgui-sfml/imgui-SFML.cpp
 CMakeFiles/gra.dir/vendor/imgui-sfml/imgui-SFML.cpp.o: CMakeFiles/gra.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/mateuszsierakowski/Documents/Echo_Wojny/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/gra.dir/vendor/imgui-sfml/imgui-SFML.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/mateuszsierakowski/Documents/Echo_Wojny/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/gra.dir/vendor/imgui-sfml/imgui-SFML.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/gra.dir/vendor/imgui-sfml/imgui-SFML.cpp.o -MF CMakeFiles/gra.dir/vendor/imgui-sfml/imgui-SFML.cpp.o.d -o CMakeFiles/gra.dir/vendor/imgui-sfml/imgui-SFML.cpp.o -c /home/mateuszsierakowski/Documents/Echo_Wojny/vendor/imgui-sfml/imgui-SFML.cpp
 
 CMakeFiles/gra.dir/vendor/imgui-sfml/imgui-SFML.cpp.i: cmake_force
@@ -263,6 +277,7 @@ gra_OBJECTS = \
 "CMakeFiles/gra.dir/src/Rendering/PrimitiveRenderer.cpp.o" \
 "CMakeFiles/gra.dir/src/Game/GameState.cpp.o" \
 "CMakeFiles/gra.dir/src/Game/WorldMap.cpp.o" \
+"CMakeFiles/gra.dir/src/Game/Pathfinder.cpp.o" \
 "CMakeFiles/gra.dir/vendor/imgui/imgui.cpp.o" \
 "CMakeFiles/gra.dir/vendor/imgui/imgui_draw.cpp.o" \
 "CMakeFiles/gra.dir/vendor/imgui/imgui_tables.cpp.o" \
@@ -280,6 +295,7 @@ gra: CMakeFiles/gra.dir/src/Rendering/Shader.cpp.o
 gra: CMakeFiles/gra.dir/src/Rendering/PrimitiveRenderer.cpp.o
 gra: CMakeFiles/gra.dir/src/Game/GameState.cpp.o
 gra: CMakeFiles/gra.dir/src/Game/WorldMap.cpp.o
+gra: CMakeFiles/gra.dir/src/Game/Pathfinder.cpp.o
 gra: CMakeFiles/gra.dir/vendor/imgui/imgui.cpp.o
 gra: CMakeFiles/gra.dir/vendor/imgui/imgui_draw.cpp.o
 gra: CMakeFiles/gra.dir/vendor/imgui/imgui_tables.cpp.o
@@ -291,7 +307,7 @@ gra: CMakeFiles/gra.dir/compiler_depend.ts
 gra: /usr/lib64/libGL.so
 gra: /usr/lib64/libGLEW.so
 gra: CMakeFiles/gra.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/mateuszsierakowski/Documents/Echo_Wojny/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Linking CXX executable gra"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/mateuszsierakowski/Documents/Echo_Wojny/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Linking CXX executable gra"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/gra.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

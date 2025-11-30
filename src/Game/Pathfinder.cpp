@@ -8,7 +8,7 @@
 
 // pomocnicze do obliczania dystansu (heurystyka mangattan) 
 int getDistance(glm::ivec2 a, glm::ivec2 b){
-    return std::aabs(a.x - b.x) + std::abs(a.y - b.y); 
+    return std::abs(a.x - b.x) + std::abs(a.y - b.y); 
 }
 
 std::vector<glm::vec2> Pathfinder::findPath(const glm::vec2& startWorld, const glm::vec2& endWorld, const WorldMap& map) {
@@ -19,9 +19,11 @@ std::vector<glm::vec2> Pathfinder::findPath(const glm::vec2& startWorld, const g
     glm::ivec2 endNodePos = map.worldToGrid(endWorld); 
 
     // ochrona jak jest w scianie 
-    if (map.isBlocked(endNodePos.x, endNodePos.y)){
+    /*
+    if (map.isBlocked(endNodePos.x, endNodePos.y)) {
         return path; 
     }
+    */
 
     std::vector<Node*> openSet; 
     std::vector<Node*> closedSet; 
@@ -53,14 +55,14 @@ std::vector<glm::vec2> Pathfinder::findPath(const glm::vec2& startWorld, const g
             break; 
         }
 
-        glm::ivec2 neghbors[4] = { {0, 1}, {0, -1}, {1, 0}, {-1, 0} }; 
+        glm::ivec2 neighbors[4] = { {0, 1}, {0, -1}, {1, 0}, {-1, 0} }; 
 
 
         for (const auto& offset : neighbors){ 
             glm::ivec2 neighborPos = currentNode->pos + offset; 
             
             // jesli sciana lub juz w closedset pomijamy 
-            if (map.isBlocked(neighborPos.x, neighborPos.y)) continue;
+            if (map.isBlocked(neighborPos.x, neighborPos.y) && neighborPos != endNodePos) continue;
 
             bool inClosed = false; 
             for (Node* n : closedSet) { if (n->pos == neighborPos) { inClosed = true; break; }}
@@ -73,9 +75,9 @@ std::vector<glm::vec2> Pathfinder::findPath(const glm::vec2& startWorld, const g
             Node* neighborNode = nullptr; 
             for (Node* n : openSet) { if (n->pos == neighborPos) { neighborNode = n; break; }}
 
-            if (newMovementCostToNeightbor < (neighborNode ? neighborNode->gCost : 999999) || neighborNode == nullptr) { 
+            if (newMovementCostToNeighbor < (neighborNode ? neighborNode->gCost : 999999) || neighborNode == nullptr) { 
                 if (neighborNode == nullptr){ 
-                    neighborNode = new Node(neighborNode); 
+                    neighborNode = new Node(neighborPos); 
                     openSet.push_back(neighborNode); 
                 }
 
@@ -102,5 +104,3 @@ std::vector<glm::vec2> Pathfinder::findPath(const glm::vec2& startWorld, const g
     return path; 
 
 }
-
-

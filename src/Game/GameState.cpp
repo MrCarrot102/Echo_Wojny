@@ -1,5 +1,5 @@
 #include "Game/GameState.h"
-
+#include "Game/Pathfinder.h"
 
 #include <iostream> 
 
@@ -15,8 +15,9 @@ GameState::GameState()
       m_currentMode(Mode::PLAYING),
       m_eventRefugeesTriggered(false),
       m_worldMap(std::make_unique<WorldMap>(100, 100, 20.0f))
-
+      
 {
+    
     // testowanie npc 
     m_villagers.emplace_back("Adam", glm::vec2(100.0f, 100.0f));
     m_villagers.emplace_back("Ewa", glm::vec2(120.0f, 100.0f));
@@ -101,15 +102,38 @@ void GameState::update(float deltaTime){
             // IDZIE TYLKO D PUNKU 
             //---------------
             else if (villager.currentState == Villager::State::MOVING_TO_POINT) {
-                glm::vec2 direction = villager.targetPosition - villager.position; 
+                // obliczanie sciezki jesli jej nie ma 
+                if (villager.currentPath.empty()) {
+                    villager.currentPath = Pathfinder::findPath(villager.position, villager.targetPosition, *m_worldMap);
+                    villager.currentPathIndex = 0;
+
+                    // jesli sciezka jest nadal pusta to oznacza ze nie da sie tam dojsc 
+                    if (villager.currentPath.empty()) {
+                        villager.currentState = Villager::State::IDLE; 
+                        continue;
+                    }
+                }
+
+                // pobieranie celu czastkowego tego waypointa 
+                glm::vec2 nextPoint = villager.currentPath[villager.currentPathIndex]; 
+                glm::vec2 direction = nextPoint - villager.position; 
                 float distance = glm::length(direction); 
 
-                if (distance > 1.0f){
+                // wypierdzielaj do waypointa 
+                if (distance > 2.0f) {
                     villager.position += glm::normalize(direction) * speed * deltaTime; 
                 } else {
-                    villager.position = villager.targetPosition; 
-                    villager.currentState = Villager::State::IDLE; // jak dotarl to sobie odpoczywa 
+                    // jak juz jest sobie w tym punkcie swoim 
+                    villager.currentPathIndex++; 
+
+                    // sprawdzanie czy to juz ostatni punkt 
+                    if (villager.currentPathIndex >= villager.currentPath.size()) {
+                        villager.position = villager.targetPosition; // dochodzenie (ha ha) do celu 
+                        villager.currentState = Villager::State::IDLE; 
+                        villager.currentPath.clear(); // czyszczenie na pozniej 
+                    }
                 }
+                
             }
 
             //----------------
@@ -121,17 +145,30 @@ void GameState::update(float deltaTime){
                     villager.currentState = Villager::State::IDLE; 
                     continue; // pomijanie reszty logiki
                 }
+                
+                if (villager.currentPath.empty()) {
+                    villager.currentPath = Pathfinder::findPath(villager.position, villager.targetPosition, *m_worldMap); 
+                    villager.currentPathIndex = 0; 
+                    if (villager.currentPath.empty()) {
+                        villager.currentState = Villager::State::IDLE; 
+                        continue; 
+                    }
 
-                glm::vec2 direction = villager.targetPosition - villager.position; 
-                float distance = glm::length(direction); 
+                    glm::vec2 nextPoint = villager.currentPath[villager.currentPathIndex]; 
+                    glm::vec2 direction = nextPoint - villager.position; 
+                    float distance = glm::length(direction); 
 
-                // zasieg na 5.0f zeby sie nie nachodzilo 
-                if (distance > 5.0f){
-                    villager.position += glm::normalize(direction) * speed * deltaTime; 
-                } else {
-                    // musi pracowac bo dotarl 
-                    villager.currentState = Villager::State::GATHERING; 
-                    villager.workTimer = GATHER_TIME; 
+                    if (distance > 2.0f) {
+                        villager.position += glm::normalize(direction) * speed * deltaTime; 
+                    } else {
+                        villager.currentPathIndex++; 
+                        if (villager.currentPathIndex >= villager.currentPath.size()) {
+                            // jest juz w miejscu robotaju 
+                            villager.currentState = Villager::State::GATHERING; 
+                            villager.workTimer = GATHER_TIME;
+                            villager.currentPath.clear(); 
+                        }
+                    }
                 }
             }
 
@@ -144,19 +181,15 @@ void GameState::update(float deltaTime){
                 continue;
             }
 
-            // Możesz odkomentować tę linię, aby zobaczyć timer w akcji
-            // std::cout << "Postać " << villager.name << " pracuje... Timer: " << villager.workTimer << "\r";
-
-            // Odliczaj czas
             villager.workTimer -= deltaTime;
 
             if (villager.workTimer <= 0.0f) {
 
-                // --- PUNKT KONTROLNY 1 ---
+                
                 std::cout << "\n[DEBUG] Timer zerowy! Sprawdzam typ zasobu... \n";
 
                 if (villager.targetNode->resourceType == ResourceNode::Type::TREE) {
-                    // --- PUNKT KONTROLNY 2 (Sukces) ---
+                    
                     std::cout << "[DEBUG] Typ to DRZEWO. Dodaję drewno.\n";
                     villager.carryingResourceType = villager.targetNode->resourceType; 
                     villager.carryingAmount = 10; 
@@ -177,24 +210,24 @@ void GameState::update(float deltaTime){
                     std::cout << "[EVENT] Zebrano Drewno! Total: " << globalWood << std::endl;
                 
                 } else if (villager.targetNode->resourceType == ResourceNode::Type::ROCK) {
-                    // --- PUNKT KONTROLNY 2 (Sukces) ---
+                    
                     std::cout << "[DEBUG] Typ to KAMIEŃ. Dodaję kamień.\n";
                     std::cout << "[EVENT] Zebrano Kamień!" << std::endl;
                 } else {
-                    // --- PUNKT KONTROLNY 2 (BŁĄD) ---
+                    
                     std::cout << "[DEBUG] BŁĄD! Nie rozpoznano typu zasobu!\n";
                 }
 
-                // Zmniejsz ilość zasobu w miejscu
+                
                 villager.targetNode->amountLeft -= 10;
 
                 if (villager.targetNode->amountLeft <= 0) {
-                    // Zasób się wyczerpał!
+                    
                     std::cout << "[EVENT] Zasób wyczerpany!" << std::endl;
                     villager.targetNode = nullptr; 
                     villager.currentState = Villager::State::IDLE;
                 } else {
-                    // Zasób jeszcze jest, resetuj zegar i pracuj dalej
+                    
                     villager.workTimer = GATHER_TIME;
                 }
                 }
@@ -203,17 +236,32 @@ void GameState::update(float deltaTime){
 
             // biegnie zrec 
             else if (villager.currentState == Villager::State::MOVING_TO_EAT){
-                glm::vec2 direction = villager.targetPosition - villager.position; 
+                if (villager.currentPath.empty()) { 
+                    villager.currentPath = Pathfinder::findPath(villager.position, villager.targetPosition, *m_worldMap); 
+                    villager.currentPathIndex = 0; 
+                    if (villager.currentPath.empty()) {
+                        villager.currentState = Villager::State::IDLE;
+                        continue; 
+                    }
+                }
+
+                glm::vec2 nextPoint = villager.currentPath[villager.currentPathIndex];
+                glm::vec2 direction = nextPoint - villager.position; 
                 float distance = glm::length(direction); 
-                if (distance > 5.0f){
+
+                if (distance > 2.0f) {
                     villager.position += glm::normalize(direction) * speed * deltaTime; 
                 } else {
-                    // juz sobie w kuchni siedzie 
-                    villager.currentState = Villager::State::EATING;
-                    villager.workTimer = 2.0f; // ile je (2s)
+                    villager.currentPathIndex++;
+                    if (villager.currentPathIndex >= villager.currentPath.size()) {
+                        villager.currentState = Villager::State::EATING; 
+                        villager.workTimer = 2.0f; 
+                        villager.currentPath.clear(); 
+                    }
                 }
             }
-
+            
+            // robi am am (je)
             else if (villager.currentState == Villager::State::EATING){
                 villager.workTimer -= deltaTime; 
                 if (villager.workTimer <= 0.0f){
@@ -230,14 +278,30 @@ void GameState::update(float deltaTime){
                 }
             }
 
+            // idzie chlać 
             else if (villager.currentState == Villager::State::MOVING_TO_DRINK) {
-                glm::vec2 direction = villager.targetPosition - villager.position; 
-                float distance = glm::length(direction); 
-                if (distance > 5.0f) {
-                    villager.position += glm::normalize(direction) * speed * deltaTime; 
-                } else {
-                    villager.currentState = Villager::State::DRINKING; 
-                    villager.workTimer = 2.0f; 
+                if (villager.currentPath.empty()) {
+                    villager.currentPath = Pathfinder::findPath(villager.position, villager.targetPosition, *m_worldMap); 
+                    villager.currentPathIndex = 0;
+                    if (villager.currentPath.empty()) {
+                        villager.currentState = Villager::State::IDLE; 
+                        continue; 
+                    }
+
+                    glm::vec2 nextPoint = villager.currentPath[villager.currentPathIndex]; 
+                    glm::vec2 direction = nextPoint - villager.position; 
+                    float distance = glm::length(direction); 
+
+                    if (distance > 2.0f) {
+                        villager.position += glm::normalize(direction) * speed * deltaTime; 
+                    } else {
+                        villager.currentPathIndex++; 
+                        if (villager.currentPathIndex >= villager.currentPath.size()) {
+                            villager.currentState = Villager::State::DRINKING; 
+                            villager.workTimer = 2.0f; 
+                            villager.currentPath.clear(); 
+                        }
+                    }
                 }
             }
 
@@ -257,29 +321,44 @@ void GameState::update(float deltaTime){
                 }
             }
 
+            // idzie do magazynu cos zaniesc 
             else if (villager.currentState == Villager::State::MOVING_TO_HAUL){
-                glm::vec2 direction = villager.targetPosition - villager.position; 
+                if (villager.currentPath.empty()) {
+                    villager.currentPath = Pathfinder::findPath(villager.position, villager.targetPosition, *m_worldMap); 
+                    villager.currentPathIndex = 0;
+                    if (villager.currentPath.empty()) {
+                        villager.currentState = Villager::State::IDLE; 
+                        continue; 
+                    }
+                }
+
+                glm::vec2 nextPoint = villager.currentPath[villager.currentPathIndex]; 
+                glm::vec2 direction = nextPoint - villager.position; 
                 float distance = glm::length(direction); 
 
-                if (distance > 5.0f) {
-                    villager.position += glm::normalize(direction) * speed * deltaTime;
+                if (distance > 2.0f){
+                    villager.position += glm::normalize(direction) * speed * deltaTime; 
                 } else {
-                    std::cout << "\n[AI] " << villager.name << " odłożył zasoby do magazyny.\n";
+                    villager.currentPathIndex++; 
+                    if (villager.currentPathIndex >= villager.currentPath.size()) {
+                        // jest w magazynie 
+                        std::cout << "\n[AI] " << villager.name << " odłożył zasoby.\n";
 
-                    if (villager.carryingResourceType == ResourceNode::Type::TREE){
-                        globalWood += villager.carryingAmount; 
-                    } else if (villager.carryingResourceType == ResourceNode::Type::ROCK){
-                        // dodanie cos kiedys moze nie wiem 
-                    }
+                        if (villager.carryingResourceType == ResourceNode::Type::TREE){
+                            globalWood += villager.carryingAmount; 
+                        }
 
-                    villager.carryingAmount = 0; 
+                        villager.carryingAmount = 0; 
+                        villager.currentPath.clear(); 
 
-                    // jesli cos jest to dobrze jakby do tegoo wrocil 
-                    if (villager.targetNode != nullptr && villager.targetNode->amountLeft > 0){
-                        villager.currentState = Villager::State::MOVING_TO_WORK;
-                        villager.targetPosition = villager.targetNode->position; 
-                    } else {
-                        villager.currentState = Villager::State::IDLE; 
+                        // wracaj pracowac niewolniku 
+                        if (villager.targetNode != nullptr && villager.targetNode->amountLeft > 0) {
+                            villager.currentState = Villager::State::MOVING_TO_WORK; 
+                            villager.targetPosition = villager.targetNode->position; 
+                            villager.currentPath.clear(); // musi byc reset aby boliczyl sobie trase powrotna 
+                        } else {
+                            villager.currentState = Villager::State::IDLE; 
+                        }
                     }
                 }
             }

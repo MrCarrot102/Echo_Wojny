@@ -201,6 +201,30 @@ src/Game/GameState.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/gra.dir/build.make CMakeFiles/gra.dir/src/Game/GameState.cpp.s
 .PHONY : src/Game/GameState.cpp.s
 
+src/Game/Pathfinder.o: src/Game/Pathfinder.cpp.o
+.PHONY : src/Game/Pathfinder.o
+
+# target to build an object file
+src/Game/Pathfinder.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gra.dir/build.make CMakeFiles/gra.dir/src/Game/Pathfinder.cpp.o
+.PHONY : src/Game/Pathfinder.cpp.o
+
+src/Game/Pathfinder.i: src/Game/Pathfinder.cpp.i
+.PHONY : src/Game/Pathfinder.i
+
+# target to preprocess a source file
+src/Game/Pathfinder.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gra.dir/build.make CMakeFiles/gra.dir/src/Game/Pathfinder.cpp.i
+.PHONY : src/Game/Pathfinder.cpp.i
+
+src/Game/Pathfinder.s: src/Game/Pathfinder.cpp.s
+.PHONY : src/Game/Pathfinder.s
+
+# target to generate assembly for a file
+src/Game/Pathfinder.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gra.dir/build.make CMakeFiles/gra.dir/src/Game/Pathfinder.cpp.s
+.PHONY : src/Game/Pathfinder.cpp.s
+
 src/Game/WorldMap.o: src/Game/WorldMap.cpp.o
 .PHONY : src/Game/WorldMap.o
 
@@ -459,6 +483,9 @@ help:
 	@echo "... src/Game/GameState.o"
 	@echo "... src/Game/GameState.i"
 	@echo "... src/Game/GameState.s"
+	@echo "... src/Game/Pathfinder.o"
+	@echo "... src/Game/Pathfinder.i"
+	@echo "... src/Game/Pathfinder.s"
 	@echo "... src/Game/WorldMap.o"
 	@echo "... src/Game/WorldMap.i"
 	@echo "... src/Game/WorldMap.s"

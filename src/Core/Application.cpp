@@ -244,8 +244,10 @@ void Application::pollEvents() {
                     if (clickedNode != nullptr){
                         std::cout << "Rozkaz pracy dla " << m_selectedVillager->name << " przy zasobie" << std::endl; 
                         m_selectedVillager->targetNode = clickedNode; 
-                        m_selectedVillager->targetPosition = clickedNode->position; 
                         m_selectedVillager->currentState = Villager::State::MOVING_TO_WORK; 
+                        m_selectedVillager->targetPosition = clickedNode->position; 
+                        
+                        m_selectedVillager->currentPath.clear(); 
                     } else {
                         std::cout << "Rozkaz ruchu dla " << m_selectedVillager->name << std::endl;
                         m_selectedVillager->targetNode = nullptr; 

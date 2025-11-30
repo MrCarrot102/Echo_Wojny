@@ -1,6 +1,8 @@
 #pragma once 
 #include <glm/glm.hpp>
 #include <string> 
+#include <vector> 
+
 
 #include "Game/ResourceNode.h"
 
@@ -34,6 +36,8 @@ struct Villager {
     float thirst; 
     // cel 
     glm::vec2 targetPosition; 
+    std::vector<glm::vec2> currentPath; 
+    int currentPathIndex;  
 
     ResourceNode::Type carryingResourceType; 
     int carryingAmount; 
@@ -52,6 +56,8 @@ struct Villager {
         hunger(100.0f),
         thirst(100.0f),
         carryingResourceType(ResourceNode::Type::NONE),
-        carryingAmount(0){}
+        carryingAmount(0),
+        currentPathIndex(0)
+        {}
 };
 
