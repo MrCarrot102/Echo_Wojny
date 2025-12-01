@@ -244,8 +244,12 @@ void Application::pollEvents() {
                     if (clickedNode != nullptr){
                         std::cout << "Rozkaz pracy dla " << m_selectedVillager->name << " przy zasobie" << std::endl; 
                         m_selectedVillager->targetNode = clickedNode; 
-                        m_selectedVillager->currentState = Villager::State::MOVING_TO_WORK; 
                         m_selectedVillager->targetPosition = clickedNode->position; 
+                        m_selectedVillager->currentState = Villager::State::MOVING_TO_WORK; 
+
+                        m_selectedVillager->currentPath.clear(); 
+                        m_selectedVillager->currentPathIndex = 0; 
+                        
                         
                         m_selectedVillager->currentPath.clear(); 
                     } else {
@@ -253,6 +257,9 @@ void Application::pollEvents() {
                         m_selectedVillager->targetNode = nullptr; 
                         m_selectedVillager->targetPosition = worldMousePos; 
                         m_selectedVillager->currentState = Villager::State::MOVING_TO_POINT;
+                        
+                        m_selectedVillager->currentPath.clear(); 
+                        m_selectedVillager->currentPathIndex = 0; 
                     }
                 }
             }

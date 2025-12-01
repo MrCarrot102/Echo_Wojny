@@ -6,5 +6,5 @@ CXX_DEFINES = -DIMGUI_SFML_USE_DEFAULT_CONFIG
 
 CXX_INCLUDES = -I/home/mateuszsierakowski/Documents/Echo_Wojny/src -I/home/mateuszsierakowski/Documents/Echo_Wojny/vendor -I/home/mateuszsierakowski/Documents/Echo_Wojny/vendor/imgui -I/home/mateuszsierakowski/Documents/Echo_Wojny/vendor/imgui-sfml
 
-CXX_FLAGS = -std=gnu++17
+CXX_FLAGS = -g -std=gnu++17
 

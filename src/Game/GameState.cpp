@@ -29,370 +29,228 @@ GameState::GameState()
     m_resourceNodes.emplace_back(ResourceNode::ROCK, glm::vec2(300.0f, 100.0f), 200);
 }
 
-void GameState::update(float deltaTime){
+void GameState::update(float deltaTime) {
 
-    // Symulacja uplywu czasu 
-    // skala 1 sekunda 1 godzina 
+    if (m_currentMode != Mode::PLAYING) return;
+
+    // --- 1. Parametry Symulacji ---
     float gameHoursPassed = deltaTime * 1.0f; 
     timeOfDay += gameHoursPassed; 
     m_TimeAccumulator += deltaTime; 
-    float speed = 50.00f; // ruch bardziej predkosc 
     
-    const float GATHER_TIME = 3.0f; // czas zbierania czegos na razie 3s 
+    float speed = 60.0f; 
+    const float GATHER_TIME = 3.0f; 
     
-    const float HUNGER_THRESHOLD = 30.0f; // moment kiedy robi sie glodny 
-    const float THIRST_THRESHOLD = 40.0f; // 
-    
-    const float HUNGER_PRE_HOUR = 2.0f; // jak szybko postaci chce sie jesc 
-    const float THIRST_PER_HOUR = 3.0f; 
+    const float HUNGER_RATE = 2.0f; 
+    const float THIRST_RATE = 3.0f; 
+    const float CRITICAL_THIRST = 40.0f;
+    const float CRITICAL_HUNGER = 30.0f;
 
-    if (m_currentMode == Mode::PLAYING){
-        for (Villager& villager : m_villagers) {
-            // symulowanie pragnienia i glodu 
-            // pragnienie 
-            villager.thirst -= (gameHoursPassed * THIRST_PER_HOUR); 
-            // symulowanie glodu 
-            villager.hunger -= (gameHoursPassed * HUNGER_PRE_HOUR); 
-            if (villager.hunger < 0.0f) villager.hunger = 0.0f; 
-            if (villager.thirst < 0.0f) villager.thirst = 0.0f; 
+    // --- 2. Pętla Mieszkańców ---
+    for (Villager& villager : m_villagers) {
+        
+        // Symulacja potrzeb
+        villager.hunger -= (gameHoursPassed * HUNGER_RATE);
+        villager.thirst -= (gameHoursPassed * THIRST_RATE);
+        if (villager.hunger < 0.0f) villager.hunger = 0.0f;
+        if (villager.thirst < 0.0f) villager.thirst = 0.0f;
 
+        // --- PRIORYTETY ---
 
-
-            // logika cos tam oparta na priorytetach bo jedzienie najwazniejsze kuzwa 
-
-            if ( villager.thirst < THIRST_THRESHOLD && 
-                villager.currentState != Villager::State::DRINKING && 
-                villager.currentState != Villager::State::MOVING_TO_DRINK)
-            {
-                // szukanie najblizszej studnii 
-                Building* targetWell = nullptr; 
-                for (Building& b : m_buildings) {
-                    if (b.buildingType == Building::WELL){
-                        targetWell = &b; 
-                        break; 
-                    }
-                }
-
-                if (targetWell != nullptr) {
-                    std::cout << "\b[AI] " << villager.name << " jest spragniony! Idzie do studni.\n";
-                    villager.currentState = Villager::State::MOVING_TO_DRINK; 
-                    villager.targetPosition = targetWell->position; 
-                } else {
-                    std::cout << "\n[AI] " << villager.name << " jest spragniony, ALE NIE MA STUDNI!\n";
-                }
-            }
-
-
-
-
-            else if  (villager.hunger < HUNGER_THRESHOLD && 
-                villager.currentState != Villager::State::EATING && 
-                villager.currentState != Villager::State::MOVING_TO_EAT)
-            {
-                // szuka najblizeszj kuchni 
-                if (!m_buildings.empty()){ 
-                    std::cout << "\n[AI] " << villager.name << " jest głodny! Idzie jeść.\n";
-                    villager.currentState = Villager::State::MOVING_TO_EAT;
-                    villager.targetPosition = m_buildings[0].position; // pierwsza dostepna kuchnia 
-                }
-            }
-
-
-            //---------------
-            // IDZIE TYLKO D PUNKU 
-            //---------------
-            else if (villager.currentState == Villager::State::MOVING_TO_POINT) {
-                // obliczanie sciezki jesli jej nie ma 
-                if (villager.currentPath.empty()) {
-                    villager.currentPath = Pathfinder::findPath(villager.position, villager.targetPosition, *m_worldMap);
-                    villager.currentPathIndex = 0;
-
-                    // jesli sciezka jest nadal pusta to oznacza ze nie da sie tam dojsc 
-                    if (villager.currentPath.empty()) {
-                        villager.currentState = Villager::State::IDLE; 
-                        continue;
-                    }
-                }
-
-                // pobieranie celu czastkowego tego waypointa 
-                glm::vec2 nextPoint = villager.currentPath[villager.currentPathIndex]; 
-                glm::vec2 direction = nextPoint - villager.position; 
-                float distance = glm::length(direction); 
-
-                // wypierdzielaj do waypointa 
-                if (distance > 2.0f) {
-                    villager.position += glm::normalize(direction) * speed * deltaTime; 
-                } else {
-                    // jak juz jest sobie w tym punkcie swoim 
-                    villager.currentPathIndex++; 
-
-                    // sprawdzanie czy to juz ostatni punkt 
-                    if (villager.currentPathIndex >= villager.currentPath.size()) {
-                        villager.position = villager.targetPosition; // dochodzenie (ha ha) do celu 
-                        villager.currentState = Villager::State::IDLE; 
-                        villager.currentPath.clear(); // czyszczenie na pozniej 
-                    }
-                }
-                
-            }
-
-            //----------------
-            // IDZIE SOBIE DO PRACY 
-            //----------------
-            else if (villager.currentState == Villager::State::MOVING_TO_WORK){
-                if (villager.targetNode == nullptr){
-                    // jak cel nie istnieje to sobie odpoczywamy 
-                    villager.currentState = Villager::State::IDLE; 
-                    continue; // pomijanie reszty logiki
-                }
-                
-                if (villager.currentPath.empty()) {
-                    villager.currentPath = Pathfinder::findPath(villager.position, villager.targetPosition, *m_worldMap); 
-                    villager.currentPathIndex = 0; 
-                    if (villager.currentPath.empty()) {
-                        villager.currentState = Villager::State::IDLE; 
-                        continue; 
-                    }
-
-                    glm::vec2 nextPoint = villager.currentPath[villager.currentPathIndex]; 
-                    glm::vec2 direction = nextPoint - villager.position; 
-                    float distance = glm::length(direction); 
-
-                    if (distance > 2.0f) {
-                        villager.position += glm::normalize(direction) * speed * deltaTime; 
-                    } else {
-                        villager.currentPathIndex++; 
-                        if (villager.currentPathIndex >= villager.currentPath.size()) {
-                            // jest juz w miejscu robotaju 
-                            villager.currentState = Villager::State::GATHERING; 
-                            villager.workTimer = GATHER_TIME;
-                            villager.currentPath.clear(); 
-                        }
-                    }
-                }
-            }
-
-            //-----------------
-            // ROBOTAJU
-            //-----------------
-            else if (villager.currentState == Villager::State::GATHERING) {
-            if (villager.targetNode == nullptr) {
-                villager.currentState = Villager::State::IDLE;
-                continue;
-            }
-
-            villager.workTimer -= deltaTime;
-
-            if (villager.workTimer <= 0.0f) {
-
-                
-                std::cout << "\n[DEBUG] Timer zerowy! Sprawdzam typ zasobu... \n";
-
-                if (villager.targetNode->resourceType == ResourceNode::Type::TREE) {
-                    
-                    std::cout << "[DEBUG] Typ to DRZEWO. Dodaję drewno.\n";
-                    villager.carryingResourceType = villager.targetNode->resourceType; 
-                    villager.carryingAmount = 10; 
-                    std::cout << "\n[AI] " << villager.name << " zebrał 10 drewna i szuka magazynu.\n";
-
-                    // szukanie najblizszego magazynu 
-                    Building* stockpile = findNearestStockpile(villager.position); 
-
-                    if (stockpile != nullptr){
-                        // jak mamy magazyn idziemy do niego 
-                        villager.currentState = Villager::State::MOVING_TO_HAUL; 
-                        villager.targetPosition = stockpile->position; 
-                    } else {
-                        std::cout << "[AI] " << villager.name << " nie ma gdzie odłożyć zasobów!\n";
-                        villager.currentState = Villager::State::IDLE; 
-                    }
-
-                    std::cout << "[EVENT] Zebrano Drewno! Total: " << globalWood << std::endl;
-                
-                } else if (villager.targetNode->resourceType == ResourceNode::Type::ROCK) {
-                    
-                    std::cout << "[DEBUG] Typ to KAMIEŃ. Dodaję kamień.\n";
-                    std::cout << "[EVENT] Zebrano Kamień!" << std::endl;
-                } else {
-                    
-                    std::cout << "[DEBUG] BŁĄD! Nie rozpoznano typu zasobu!\n";
-                }
-
-                
-                villager.targetNode->amountLeft -= 10;
-
-                if (villager.targetNode->amountLeft <= 0) {
-                    
-                    std::cout << "[EVENT] Zasób wyczerpany!" << std::endl;
-                    villager.targetNode = nullptr; 
-                    villager.currentState = Villager::State::IDLE;
-                } else {
-                    
-                    villager.workTimer = GATHER_TIME;
-                }
-                }
-            }
-
-
-            // biegnie zrec 
-            else if (villager.currentState == Villager::State::MOVING_TO_EAT){
-                if (villager.currentPath.empty()) { 
-                    villager.currentPath = Pathfinder::findPath(villager.position, villager.targetPosition, *m_worldMap); 
-                    villager.currentPathIndex = 0; 
-                    if (villager.currentPath.empty()) {
-                        villager.currentState = Villager::State::IDLE;
-                        continue; 
-                    }
-                }
-
-                glm::vec2 nextPoint = villager.currentPath[villager.currentPathIndex];
-                glm::vec2 direction = nextPoint - villager.position; 
-                float distance = glm::length(direction); 
-
-                if (distance > 2.0f) {
-                    villager.position += glm::normalize(direction) * speed * deltaTime; 
-                } else {
-                    villager.currentPathIndex++;
-                    if (villager.currentPathIndex >= villager.currentPath.size()) {
-                        villager.currentState = Villager::State::EATING; 
-                        villager.workTimer = 2.0f; 
-                        villager.currentPath.clear(); 
-                    }
-                }
+        // 1. WODA
+        if (villager.thirst < CRITICAL_THIRST && 
+            villager.currentState != Villager::State::DRINKING && 
+            villager.currentState != Villager::State::MOVING_TO_DRINK) 
+        {
+            Building* targetWell = nullptr;
+            for (Building& b : m_buildings) {
+                if (b.buildingType == Building::WELL) { targetWell = &b; break; }
             }
             
-            // robi am am (je)
-            else if (villager.currentState == Villager::State::EATING){
-                villager.workTimer -= deltaTime; 
-                if (villager.workTimer <= 0.0f){
-                    if (globalFood >= 10){
-                        globalFood -= 10; // jeden zjada 10 jedzenia 
-                        villager.hunger = 100.0f; // jest najedzony
-                        villager.currentState = Villager::State::IDLE;
-                        std::cout << "\n[AI] " << villager.name << " zjadł. Zapasy: " << globalFood << std::endl; 
-                    } else {
-                        // kiedy nie mamy jedzenia 
-                        std::cout << "\n[AI] " << villager.name << "chciał jeść, ale nie ma zapasów!\n";
-                        villager.currentState = Villager::State::IDLE; 
-                    }
-                }
+            if (targetWell) {
+                std::cout << "\n[AI] " << villager.name << " idzie pić.\n";
+                villager.currentState = Villager::State::MOVING_TO_DRINK;
+                villager.targetPosition = targetWell->position;
+                villager.currentPath.clear();
+            }
+        }
+        // 2. GŁÓD
+        else if (villager.hunger < CRITICAL_HUNGER && 
+                 villager.currentState != Villager::State::EATING && 
+                 villager.currentState != Villager::State::MOVING_TO_EAT)
+        {
+            Building* targetKitchen = nullptr;
+            for (Building& b : m_buildings) {
+                if (b.buildingType == Building::KITCHEN) { targetKitchen = &b; break; }
             }
 
-            // idzie chlać 
-            else if (villager.currentState == Villager::State::MOVING_TO_DRINK) {
+            if (targetKitchen) {
+                std::cout << "\n[AI] " << villager.name << " idzie jeść.\n";
+                villager.currentState = Villager::State::MOVING_TO_EAT;
+                villager.targetPosition = targetKitchen->position;
+                villager.currentPath.clear();
+            }
+        }
+
+        // --- Funkcja Pomocnicza Ruchu (Lambda) ---
+        auto moveOnPath = [&](float reachDistance) -> bool {
+            
+            // A. Jeśli brak ścieżki - oblicz
+            if (villager.currentPath.empty()) {
+                // Optymalizacja: Jeśli blisko, idź prosto
+                float directDist = glm::distance(villager.position, villager.targetPosition);
+                if (directDist < 20.0f) {
+                    glm::vec2 dir = villager.targetPosition - villager.position;
+                    if (glm::length(dir) > 0.1f) 
+                        villager.position += glm::normalize(dir) * speed * deltaTime;
+                    
+                    if (directDist <= reachDistance) return true;
+                    return false;
+                }
+
+                // A* Pathfinder
+                villager.currentPath = Pathfinder::findPath(villager.position, villager.targetPosition, *m_worldMap);
+                villager.currentPathIndex = 0;
+                
                 if (villager.currentPath.empty()) {
-                    villager.currentPath = Pathfinder::findPath(villager.position, villager.targetPosition, *m_worldMap); 
-                    villager.currentPathIndex = 0;
-                    if (villager.currentPath.empty()) {
-                        villager.currentState = Villager::State::IDLE; 
-                        continue; 
-                    }
-
-                    glm::vec2 nextPoint = villager.currentPath[villager.currentPathIndex]; 
-                    glm::vec2 direction = nextPoint - villager.position; 
-                    float distance = glm::length(direction); 
-
-                    if (distance > 2.0f) {
-                        villager.position += glm::normalize(direction) * speed * deltaTime; 
-                    } else {
-                        villager.currentPathIndex++; 
-                        if (villager.currentPathIndex >= villager.currentPath.size()) {
-                            villager.currentState = Villager::State::DRINKING; 
-                            villager.workTimer = 2.0f; 
-                            villager.currentPath.clear(); 
-                        }
-                    }
+                    villager.currentState = Villager::State::IDLE;
+                    return false;
                 }
             }
 
-            // stan picia 
-            else if (villager.currentState == Villager::State::DRINKING) { 
-                villager.workTimer -= deltaTime; 
-                if (villager.workTimer <= 0.0f) {
-                    if (globalWater >= 10) {
-                        globalWater -= 10; 
-                        villager.thirst = 100.f; 
-                        villager.currentState = Villager::State::IDLE; 
-                        std::cout << "\n[AI] " << villager.name << " napił się. Zapasy wody: " << globalWater << std::endl; 
-                    } else {
-                        std::cout << "\n[AI] " << villager.name << " chciał pić, ale nie ma wody!\n"; 
-                        villager.currentState = Villager::State::IDLE; 
-                    }
-                }
-            }
+            // B. Poruszanie po ścieżce
+            if (villager.currentPathIndex < villager.currentPath.size()) {
+                glm::vec2 nextWaypoint = villager.currentPath[villager.currentPathIndex];
+                glm::vec2 direction = nextWaypoint - villager.position;
+                float distToWaypoint = glm::length(direction);
 
-            // idzie do magazynu cos zaniesc 
-            else if (villager.currentState == Villager::State::MOVING_TO_HAUL){
-                if (villager.currentPath.empty()) {
-                    villager.currentPath = Pathfinder::findPath(villager.position, villager.targetPosition, *m_worldMap); 
-                    villager.currentPathIndex = 0;
-                    if (villager.currentPath.empty()) {
-                        villager.currentState = Villager::State::IDLE; 
-                        continue; 
-                    }
-                }
-
-                glm::vec2 nextPoint = villager.currentPath[villager.currentPathIndex]; 
-                glm::vec2 direction = nextPoint - villager.position; 
-                float distance = glm::length(direction); 
-
-                if (distance > 2.0f){
-                    villager.position += glm::normalize(direction) * speed * deltaTime; 
+                if (distToWaypoint > 2.0f) {
+                    villager.position += glm::normalize(direction) * speed * deltaTime;
                 } else {
-                    villager.currentPathIndex++; 
-                    if (villager.currentPathIndex >= villager.currentPath.size()) {
-                        // jest w magazynie 
-                        std::cout << "\n[AI] " << villager.name << " odłożył zasoby.\n";
+                    villager.currentPathIndex++;
+                }
+                return false; 
+            } else {
+                // C. Końcówka trasy
+                glm::vec2 direction = villager.targetPosition - villager.position;
+                float distToTarget = glm::length(direction);
 
-                        if (villager.carryingResourceType == ResourceNode::Type::TREE){
-                            globalWood += villager.carryingAmount; 
-                        }
+                if (distToTarget > reachDistance) {
+                    villager.position += glm::normalize(direction) * speed * deltaTime;
+                    return false;
+                } else {
+                    villager.currentPath.clear();
+                    villager.currentPathIndex = 0;
+                    return true; // Dotarł!
+                }
+            }
+            return false; // Bezpiecznik
+        }; 
 
-                        villager.carryingAmount = 0; 
-                        villager.currentPath.clear(); 
 
-                        // wracaj pracowac niewolniku 
-                        if (villager.targetNode != nullptr && villager.targetNode->amountLeft > 0) {
-                            villager.currentState = Villager::State::MOVING_TO_WORK; 
-                            villager.targetPosition = villager.targetNode->position; 
-                            villager.currentPath.clear(); // musi byc reset aby boliczyl sobie trase powrotna 
-                        } else {
-                            villager.currentState = Villager::State::IDLE; 
-                        }
-                    }
+        // --- Maszyna Stanów ---
+
+        if (villager.currentState == Villager::State::MOVING_TO_POINT) {
+            if (moveOnPath(1.0f)) {
+                villager.currentState = Villager::State::IDLE;
+            }
+        }
+        else if (villager.currentState == Villager::State::MOVING_TO_WORK) {
+            if (!villager.targetNode) { 
+                villager.currentState = Villager::State::IDLE; continue; 
+            }
+            if (moveOnPath(10.0f)) {
+                villager.currentState = Villager::State::GATHERING;
+                villager.workTimer = GATHER_TIME;
+            }
+        }
+        else if (villager.currentState == Villager::State::MOVING_TO_EAT) {
+            if (moveOnPath(10.0f)) {
+                villager.currentState = Villager::State::EATING;
+                villager.workTimer = 2.0f;
+            }
+        }
+        else if (villager.currentState == Villager::State::MOVING_TO_DRINK) {
+            if (moveOnPath(10.0f)) {
+                villager.currentState = Villager::State::DRINKING;
+                villager.workTimer = 2.0f;
+            }
+        }
+        else if (villager.currentState == Villager::State::MOVING_TO_HAUL) {
+            if (moveOnPath(10.0f)) {
+                std::cout << "\n[AI] " << villager.name << " zrzucił zasoby.\n";
+                if (villager.carryingResourceType == ResourceNode::Type::TREE) globalWood += villager.carryingAmount;
+                
+                villager.carryingAmount = 0;
+                villager.carryingResourceType = ResourceNode::Type::NONE; // Reset typu
+
+                if (villager.targetNode && villager.targetNode->amountLeft > 0) {
+                    villager.currentState = Villager::State::MOVING_TO_WORK;
+                    villager.targetPosition = villager.targetNode->position;
+                    villager.currentPath.clear();
+                } else {
+                    villager.currentState = Villager::State::IDLE;
                 }
             }
         }
-    
-
-
-        // logika nowego dnia 
-        if(timeOfDay >= 24.0f){
-            dayCounter++; 
-            timeOfDay = 0.0f; // resetowanie zegara 
-
-            // teoretyczne zuzywanie zasobow 
-            std::cout << "\n--- Nowy dzien " << dayCounter << " ----" << std::endl; 
         
-            checkForDailyEvents(); 
+        // --- Stany Akcji ---
+        
+        else if (villager.currentState == Villager::State::GATHERING) {
+            if (!villager.targetNode) { villager.currentState = Villager::State::IDLE; continue; }
+            villager.workTimer -= deltaTime;
+            
+            if (villager.workTimer <= 0.0f) {
+                villager.carryingAmount = 10;
+                villager.carryingResourceType = villager.targetNode->resourceType;
+                villager.targetNode->amountLeft -= 10;
+                if (villager.targetNode->amountLeft <= 0) villager.targetNode = nullptr;
+
+                Building* stockpile = findNearestStockpile(villager.position);
+                if (stockpile) {
+                    villager.currentState = Villager::State::MOVING_TO_HAUL;
+                    villager.targetPosition = stockpile->position;
+                    villager.currentPath.clear();
+                } else {
+                    villager.carryingAmount = 0;
+                    villager.currentState = Villager::State::IDLE;
+                }
+            }
+        }
+        else if (villager.currentState == Villager::State::EATING) {
+            villager.workTimer -= deltaTime;
+            if (villager.workTimer <= 0.0f) {
+                if (globalFood >= 10) { globalFood -= 10; villager.hunger = 100.0f; }
+                villager.currentState = Villager::State::IDLE;
+            }
+        }
+        else if (villager.currentState == Villager::State::DRINKING) {
+            villager.workTimer -= deltaTime;
+            if (villager.workTimer <= 0.0f) {
+                if (globalWater >= 10) { globalWater -= 10; villager.thirst = 100.0f; }
+                villager.currentState = Villager::State::IDLE;
+            }
         }
 
+    } // Koniec pętli for
 
-        // debugowanie w konsoli 
-        // drukowanie co jakis czas zeby nie bylo co klatke dla czytelnosci 
-        if (m_TimeAccumulator > 0.5f) {
-            m_TimeAccumulator = 0.0f; 
-
-            std::cout << "Dzień: " << dayCounter 
-                        << " | Godzina: " << (int)timeOfDay
-                        << " | Mieszkańcy: " << m_villagers.size()
-                        << " | Jedzenie: " << globalFood
-                        << " \r"; // czyszczenie starych znakow
-            std::cout.flush(); // wypisywanie bufora 
-        }
+    // --- Logika Dnia ---
+    if(timeOfDay >= 24.0f){
+        dayCounter++; 
+        timeOfDay = 0.0f; 
+        std::cout << "\n--- Dzien " << dayCounter << " ---\n"; 
+        checkForDailyEvents(); 
     }
 
-    m_buildings.emplace_back(Building::KITCHEN, glm::vec2(150.0f, 150.0f));
+    // --- Debug ---
+    if (m_TimeAccumulator > 0.5f) {
+        m_TimeAccumulator = 0.0f; 
+        std::cout << "D: " << dayCounter 
+                  << " | Drewno: " << globalWood
+                  << " | Populacja: " << m_villagers.size() 
+                  << " \r";
+        std::cout.flush(); 
+    }
 }
 
 
