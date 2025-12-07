@@ -3,9 +3,10 @@
 #include <string> 
 #include <vector> 
 
-
 #include "Game/ResourceNode.h"
 
+
+class GameState; 
 struct ResourceNode; 
 
 // szkielet mieszkanca to tylko kontener na dane (chwilowo) 
@@ -25,39 +26,38 @@ struct Villager {
         DRINKING,
         MOVING_TO_HAUL, 
         HAULING  
-    }; 
-    
-    
-    
+    };  
     State currentState; 
     
-    float workTimer; // zegar odliczania pracy 
-    float hunger; 
-    float thirst; 
     // cel 
     glm::vec2 targetPosition; 
     std::vector<glm::vec2> currentPath; 
-    int currentPathIndex;  
+    int currentPathIndex; 
+
+    // statystyki
+    ResourceNode* targetNode; // wskaznik na zasob, przy ktorym sie pracuje 
+    float workTimer; // zegar odliczania pracy 
+    float hunger; 
+    float thirst; 
+   
 
     ResourceNode::Type carryingResourceType; 
     int carryingAmount; 
 
-    // statystyki
-    ResourceNode* targetNode; // wskaznik na zasob, przy ktorym sie pracuje 
     
     // konstruktor ulatwiajacy tworzenie 
-    Villager(const std::string& n, const glm::vec2& pos)
-        : name(n), 
-        position(pos), 
-        currentState(State::IDLE), 
-        targetPosition(pos), 
-        targetNode(nullptr),
-        workTimer(0.0f),
-        hunger(100.0f),
-        thirst(100.0f),
-        carryingResourceType(ResourceNode::Type::NONE),
-        carryingAmount(0),
-        currentPathIndex(0)
-        {}
+    Villager(const std::string& n, const glm::vec2& pos);
+
+
+    void update(float deltaTime, GameState& world); 
+
+private: 
+    // funkcje pomocnicze (mozg) 
+    void updateNeeds(float deltaTime); 
+    void think(GameState& world);  
+    void act(float deltaTime, GameState& world); 
+
+    bool moveOnPath(float deltaTime, float reachDistance, float speed, GameState& world); 
+
 };
 

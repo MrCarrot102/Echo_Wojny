@@ -28,6 +28,7 @@ set(APP_SOURCES
     src/Game/GameState.cpp
     src/Game/WorldMap.cpp
     src/Game/Pathfinder.cpp
+    src/Game/Villager.cpp
     ${IMGUI_SOURCES}
 )
 

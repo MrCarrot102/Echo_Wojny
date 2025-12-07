@@ -225,6 +225,30 @@ src/Game/Pathfinder.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/gra.dir/build.make CMakeFiles/gra.dir/src/Game/Pathfinder.cpp.s
 .PHONY : src/Game/Pathfinder.cpp.s
 
+src/Game/Villager.o: src/Game/Villager.cpp.o
+.PHONY : src/Game/Villager.o
+
+# target to build an object file
+src/Game/Villager.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gra.dir/build.make CMakeFiles/gra.dir/src/Game/Villager.cpp.o
+.PHONY : src/Game/Villager.cpp.o
+
+src/Game/Villager.i: src/Game/Villager.cpp.i
+.PHONY : src/Game/Villager.i
+
+# target to preprocess a source file
+src/Game/Villager.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gra.dir/build.make CMakeFiles/gra.dir/src/Game/Villager.cpp.i
+.PHONY : src/Game/Villager.cpp.i
+
+src/Game/Villager.s: src/Game/Villager.cpp.s
+.PHONY : src/Game/Villager.s
+
+# target to generate assembly for a file
+src/Game/Villager.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gra.dir/build.make CMakeFiles/gra.dir/src/Game/Villager.cpp.s
+.PHONY : src/Game/Villager.cpp.s
+
 src/Game/WorldMap.o: src/Game/WorldMap.cpp.o
 .PHONY : src/Game/WorldMap.o
 
@@ -486,6 +510,9 @@ help:
 	@echo "... src/Game/Pathfinder.o"
 	@echo "... src/Game/Pathfinder.i"
 	@echo "... src/Game/Pathfinder.s"
+	@echo "... src/Game/Villager.o"
+	@echo "... src/Game/Villager.i"
+	@echo "... src/Game/Villager.s"
 	@echo "... src/Game/WorldMap.o"
 	@echo "... src/Game/WorldMap.i"
 	@echo "... src/Game/WorldMap.s"

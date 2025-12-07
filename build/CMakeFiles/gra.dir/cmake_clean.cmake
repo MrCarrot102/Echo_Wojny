@@ -8,6 +8,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/gra.dir/src/Game/GameState.cpp.o.d"
   "CMakeFiles/gra.dir/src/Game/Pathfinder.cpp.o"
   "CMakeFiles/gra.dir/src/Game/Pathfinder.cpp.o.d"
+  "CMakeFiles/gra.dir/src/Game/Villager.cpp.o"
+  "CMakeFiles/gra.dir/src/Game/Villager.cpp.o.d"
   "CMakeFiles/gra.dir/src/Game/WorldMap.cpp.o"
   "CMakeFiles/gra.dir/src/Game/WorldMap.cpp.o.d"
   "CMakeFiles/gra.dir/src/Rendering/PrimitiveRenderer.cpp.o"

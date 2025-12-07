@@ -10,6 +10,7 @@ gra: \
   CMakeFiles/gra.dir/src/Game/GameState.cpp.o \
   CMakeFiles/gra.dir/src/Game/WorldMap.cpp.o \
   CMakeFiles/gra.dir/src/Game/Pathfinder.cpp.o \
+  CMakeFiles/gra.dir/src/Game/Villager.cpp.o \
   CMakeFiles/gra.dir/vendor/imgui/imgui.cpp.o \
   CMakeFiles/gra.dir/vendor/imgui/imgui_draw.cpp.o \
   CMakeFiles/gra.dir/vendor/imgui/imgui_tables.cpp.o \
@@ -92,6 +93,8 @@ CMakeFiles/gra.dir/src/Game/GameState.cpp.o:
 CMakeFiles/gra.dir/src/Game/WorldMap.cpp.o:
 
 CMakeFiles/gra.dir/src/Game/Pathfinder.cpp.o:
+
+CMakeFiles/gra.dir/src/Game/Villager.cpp.o:
 
 CMakeFiles/gra.dir/vendor/imgui/imgui.cpp.o:
 
