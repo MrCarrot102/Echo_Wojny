@@ -358,6 +358,11 @@ CMakeFiles/gra.dir/src/Core/Application.cpp.o: \
  /usr/include/c++/15/backward/auto_ptr.h \
  /usr/include/c++/15/pstl/glue_memory_defs.h \
  /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/GameState.h \
+ /usr/include/c++/15/fstream /usr/include/c++/15/istream \
+ /usr/include/c++/15/bits/istream.tcc \
+ /usr/include/c++/15/x86_64-redhat-linux/bits/basic_file.h \
+ /usr/include/c++/15/x86_64-redhat-linux/bits/c++io.h \
+ /usr/include/c++/15/bits/fstream.tcc \
  /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/Villager.h \
  /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/ResourceNode.h \
  /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/Building.h \
@@ -370,5 +375,4 @@ CMakeFiles/gra.dir/src/Core/Application.cpp.o: \
  /home/mateuszsierakowski/Documents/Echo_Wojny/vendor/imgui/imgui.h \
  /home/mateuszsierakowski/Documents/Echo_Wojny/vendor/imgui/imconfig.h \
  /usr/include/string.h /usr/include/strings.h \
- /usr/include/c++/15/iostream /usr/include/c++/15/istream \
- /usr/include/c++/15/bits/istream.tcc
+ /usr/include/c++/15/iostream

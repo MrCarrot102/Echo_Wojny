@@ -132,7 +132,28 @@ CMakeFiles/gra.dir/src/Game/GameState.cpp.o: \
  /usr/include/c++/15/bits/atomic_lockfree_defines.h \
  /usr/include/c++/15/backward/auto_ptr.h \
  /usr/include/c++/15/pstl/glue_memory_defs.h \
- /usr/include/c++/15/pstl/execution_defs.h \
+ /usr/include/c++/15/pstl/execution_defs.h /usr/include/c++/15/fstream \
+ /usr/include/c++/15/istream /usr/include/c++/15/ios \
+ /usr/include/c++/15/bits/ios_base.h \
+ /usr/include/c++/15/bits/locale_classes.h \
+ /usr/include/c++/15/bits/locale_classes.tcc \
+ /usr/include/c++/15/system_error \
+ /usr/include/c++/15/x86_64-redhat-linux/bits/error_constants.h \
+ /usr/include/c++/15/stdexcept /usr/include/c++/15/streambuf \
+ /usr/include/c++/15/bits/streambuf.tcc \
+ /usr/include/c++/15/bits/basic_ios.h \
+ /usr/include/c++/15/bits/locale_facets.h /usr/include/c++/15/cwctype \
+ /usr/include/wctype.h /usr/include/bits/wctype-wchar.h \
+ /usr/include/c++/15/x86_64-redhat-linux/bits/ctype_base.h \
+ /usr/include/c++/15/bits/streambuf_iterator.h \
+ /usr/include/c++/15/x86_64-redhat-linux/bits/ctype_inline.h \
+ /usr/include/c++/15/bits/locale_facets.tcc \
+ /usr/include/c++/15/bits/basic_ios.tcc /usr/include/c++/15/ostream \
+ /usr/include/c++/15/bits/ostream.h /usr/include/c++/15/bits/ostream.tcc \
+ /usr/include/c++/15/bits/istream.tcc /usr/include/c++/15/bits/codecvt.h \
+ /usr/include/c++/15/x86_64-redhat-linux/bits/basic_file.h \
+ /usr/include/c++/15/x86_64-redhat-linux/bits/c++io.h \
+ /usr/include/c++/15/bits/fstream.tcc \
  /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/Villager.h \
  /usr/include/glm/glm.hpp /usr/include/glm/detail/_fixes.hpp \
  /usr/include/c++/15/cmath /usr/include/math.h \
@@ -282,22 +303,4 @@ CMakeFiles/gra.dir/src/Game/GameState.cpp.o: \
  /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/Building.h \
  /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/WorldMap.h \
  /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/Pathfinder.h \
- /usr/include/c++/15/iostream /usr/include/c++/15/ostream \
- /usr/include/c++/15/bits/ostream.h /usr/include/c++/15/ios \
- /usr/include/c++/15/bits/ios_base.h \
- /usr/include/c++/15/bits/locale_classes.h \
- /usr/include/c++/15/bits/locale_classes.tcc \
- /usr/include/c++/15/system_error \
- /usr/include/c++/15/x86_64-redhat-linux/bits/error_constants.h \
- /usr/include/c++/15/stdexcept /usr/include/c++/15/streambuf \
- /usr/include/c++/15/bits/streambuf.tcc \
- /usr/include/c++/15/bits/basic_ios.h \
- /usr/include/c++/15/bits/locale_facets.h /usr/include/c++/15/cwctype \
- /usr/include/wctype.h /usr/include/bits/wctype-wchar.h \
- /usr/include/c++/15/x86_64-redhat-linux/bits/ctype_base.h \
- /usr/include/c++/15/bits/streambuf_iterator.h \
- /usr/include/c++/15/x86_64-redhat-linux/bits/ctype_inline.h \
- /usr/include/c++/15/bits/locale_facets.tcc \
- /usr/include/c++/15/bits/basic_ios.tcc \
- /usr/include/c++/15/bits/ostream.tcc /usr/include/c++/15/istream \
- /usr/include/c++/15/bits/istream.tcc
+ /usr/include/c++/15/iostream

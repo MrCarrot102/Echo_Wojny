@@ -8,7 +8,7 @@ GameState::GameState()
       timeOfDay(6.0f), // zaczynanie dnia od 6 :( 
       globalFood(100),
       currentSeason(Season::SUMMER),
-      gloablTemperature(25.0f), 
+      globalTemperature(25.0f), 
       seasonTimer(0.0f), 
       heatingTimer(0.0f), 
       globalWood(50),
@@ -58,12 +58,12 @@ void GameState::update(float deltaTime) {
     if (seasonCycle % 2 == 0) 
     { 
         currentSeason = Season::SUMMER; 
-        gloablTemperature = 25.0f; 
+        globalTemperature = 25.0f; 
     }
     else 
     {
         currentSeason = Season::WINTER; 
-        gloablTemperature = -10.0f; 
+        globalTemperature = -10.0f; 
     }
 
     // mechanika wplywu temperatury na zycie 
@@ -413,4 +413,113 @@ void GameState::resolveRefugeeEvent(bool accepted) {
     }
 
     setMode(Mode::PLAYING); 
+}
+
+// --- obsluga zapisu i odczytu gry ---
+void GameState::saveGame(const std::string& filename)
+{
+    std::ofstream file(filename); 
+
+    if (!file.is_open())
+    {
+        std::cerr<< "Nie mozna otworzyc pliku do zapisu!\n";
+        return; 
+    }
+
+    // 1. zapisywanie zmiennych lokalnych 
+    // kolejnosc: dzien, czas, drewno, woda, jedzenie, temperatura, pora roku
+    file << "GLOBAL " 
+        << dayCounter << " " 
+        << timeOfDay << " " 
+        << globalWood << " " 
+        << globalWater << " " 
+        << globalFood << " "
+        << globalTemperature << " " 
+        << (int)currentSeason << "\n";
+
+    // 2. zapisywanie mieszkancow 
+    for (const auto& v : m_villagers) 
+    {
+        file << "VILLAGER " 
+        << v.name << " " 
+        << v.position.x << " " << v.position.y << " " 
+        << v.hunger << " " << v.thirst << "\n";
+    }
+
+    // 3. zapisywanie budynkow 
+    for (const auto& b : m_buildings) 
+    {
+        file << "BUILDING " 
+        <<(int)b.buildingType << " " 
+        << b.position.x << " " << b.position.y << "\n";
+    }
+
+    file.close(); 
+}
+
+// odczyt gry 
+void GameState::loadGame(const std::string& filename)
+{
+    std::ifstream file(filename); // otwieranie pliku do odczytu 
+
+    if (!file.is_open()) 
+    {
+        std::cerr << "Nie mozna otworzyc pliku do wczytania!\n";
+        return; 
+    }
+
+    // oczyszczanie obecnego stanu bardzo wazne 
+    m_villagers.clear(); 
+    m_buildings.clear(); 
+
+    std::string lineType; 
+    int globalLinesRead = 0; 
+
+    while (file >> lineType) 
+    {
+        if (lineType == "GLOBAL")
+        {
+            int seasonInt;
+            // Wczytujemy do zmiennych tymczasowych, żeby sprawdzić czy się udało
+            int d; float t; int wood, water, food; float temp;
+            
+            file >> d >> t >> wood >> water >> food >> temp >> seasonInt;
+
+            // Przypisujemy do stanu gry
+            dayCounter = d;
+            timeOfDay = t;
+            globalWood = wood;
+            globalWater = water;
+            globalFood = food;
+            globalTemperature = temp;
+            currentSeason = (Season)seasonInt;
+
+            globalLinesRead++;
+            std::cout << "[DEBUG] Wczytano GLOBAL: Dzien " << dayCounter << ", Czas " << timeOfDay << "\n";
+        }
+        else if (lineType == "VILLAGER")
+        {
+            std::string name; 
+            float x, y, hunger, thirst; 
+            file >> name >> x >> y >> hunger >> thirst; 
+
+            // tworzenie nowego mieszkanca 
+            m_villagers.emplace_back(name, glm::vec2(x, y));
+            // ustawianie mu statystyk 
+            m_villagers.back().hunger = hunger; 
+            m_villagers.back().thirst = thirst; 
+        }
+        else if (lineType == "BUILDING")
+        {
+            int typeInt; 
+            float x, y; 
+            file >> typeInt >> x >> y; 
+            m_buildings.emplace_back((Building::Type)typeInt, glm::vec2(x, y)); 
+        }
+    }
+
+    file.close(); 
+
+    // resetowanie timerow
+    heatingTimer = 0.0f; 
 }

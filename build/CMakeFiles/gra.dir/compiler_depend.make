@@ -181,6 +181,7 @@ CMakeFiles/gra.dir/src/Core/Application.cpp.o: /home/mateuszsierakowski/Document
   /usr/include/c++/15/bits/exception.h \
   /usr/include/c++/15/bits/exception_defines.h \
   /usr/include/c++/15/bits/exception_ptr.h \
+  /usr/include/c++/15/bits/fstream.tcc \
   /usr/include/c++/15/bits/functexcept.h \
   /usr/include/c++/15/bits/functional_hash.h \
   /usr/include/c++/15/bits/hash_bytes.h \
@@ -265,6 +266,7 @@ CMakeFiles/gra.dir/src/Core/Application.cpp.o: /home/mateuszsierakowski/Document
   /usr/include/c++/15/ext/numeric_traits.h \
   /usr/include/c++/15/ext/string_conversions.h \
   /usr/include/c++/15/ext/type_traits.h \
+  /usr/include/c++/15/fstream \
   /usr/include/c++/15/initializer_list \
   /usr/include/c++/15/ios \
   /usr/include/c++/15/iosfwd \
@@ -302,8 +304,10 @@ CMakeFiles/gra.dir/src/Core/Application.cpp.o: /home/mateuszsierakowski/Document
   /usr/include/c++/15/typeinfo \
   /usr/include/c++/15/vector \
   /usr/include/c++/15/x86_64-redhat-linux/bits/atomic_word.h \
+  /usr/include/c++/15/x86_64-redhat-linux/bits/basic_file.h \
   /usr/include/c++/15/x86_64-redhat-linux/bits/c++allocator.h \
   /usr/include/c++/15/x86_64-redhat-linux/bits/c++config.h \
+  /usr/include/c++/15/x86_64-redhat-linux/bits/c++io.h \
   /usr/include/c++/15/x86_64-redhat-linux/bits/c++locale.h \
   /usr/include/c++/15/x86_64-redhat-linux/bits/cpu_defines.h \
   /usr/include/c++/15/x86_64-redhat-linux/bits/ctype_base.h \
@@ -1068,6 +1072,7 @@ CMakeFiles/gra.dir/src/Game/GameState.cpp.o: /home/mateuszsierakowski/Documents/
   /usr/include/c++/15/bits/basic_string.tcc \
   /usr/include/c++/15/bits/char_traits.h \
   /usr/include/c++/15/bits/charconv.h \
+  /usr/include/c++/15/bits/codecvt.h \
   /usr/include/c++/15/bits/concept_check.h \
   /usr/include/c++/15/bits/cpp_type_traits.h \
   /usr/include/c++/15/bits/cxxabi_forced.h \
@@ -1075,6 +1080,7 @@ CMakeFiles/gra.dir/src/Game/GameState.cpp.o: /home/mateuszsierakowski/Documents/
   /usr/include/c++/15/bits/exception.h \
   /usr/include/c++/15/bits/exception_defines.h \
   /usr/include/c++/15/bits/exception_ptr.h \
+  /usr/include/c++/15/bits/fstream.tcc \
   /usr/include/c++/15/bits/functexcept.h \
   /usr/include/c++/15/bits/functional_hash.h \
   /usr/include/c++/15/bits/hash_bytes.h \
@@ -1151,6 +1157,7 @@ CMakeFiles/gra.dir/src/Game/GameState.cpp.o: /home/mateuszsierakowski/Documents/
   /usr/include/c++/15/ext/numeric_traits.h \
   /usr/include/c++/15/ext/string_conversions.h \
   /usr/include/c++/15/ext/type_traits.h \
+  /usr/include/c++/15/fstream \
   /usr/include/c++/15/initializer_list \
   /usr/include/c++/15/ios \
   /usr/include/c++/15/iosfwd \
@@ -1185,8 +1192,10 @@ CMakeFiles/gra.dir/src/Game/GameState.cpp.o: /home/mateuszsierakowski/Documents/
   /usr/include/c++/15/typeinfo \
   /usr/include/c++/15/vector \
   /usr/include/c++/15/x86_64-redhat-linux/bits/atomic_word.h \
+  /usr/include/c++/15/x86_64-redhat-linux/bits/basic_file.h \
   /usr/include/c++/15/x86_64-redhat-linux/bits/c++allocator.h \
   /usr/include/c++/15/x86_64-redhat-linux/bits/c++config.h \
+  /usr/include/c++/15/x86_64-redhat-linux/bits/c++io.h \
   /usr/include/c++/15/x86_64-redhat-linux/bits/c++locale.h \
   /usr/include/c++/15/x86_64-redhat-linux/bits/cpu_defines.h \
   /usr/include/c++/15/x86_64-redhat-linux/bits/ctype_base.h \
@@ -2999,6 +3008,7 @@ CMakeFiles/gra.dir/src/main.cpp.o: /home/mateuszsierakowski/Documents/Echo_Wojny
   /usr/include/c++/15/bits/exception.h \
   /usr/include/c++/15/bits/exception_defines.h \
   /usr/include/c++/15/bits/exception_ptr.h \
+  /usr/include/c++/15/bits/fstream.tcc \
   /usr/include/c++/15/bits/functexcept.h \
   /usr/include/c++/15/bits/functional_hash.h \
   /usr/include/c++/15/bits/hash_bytes.h \
@@ -3083,6 +3093,7 @@ CMakeFiles/gra.dir/src/main.cpp.o: /home/mateuszsierakowski/Documents/Echo_Wojny
   /usr/include/c++/15/ext/numeric_traits.h \
   /usr/include/c++/15/ext/string_conversions.h \
   /usr/include/c++/15/ext/type_traits.h \
+  /usr/include/c++/15/fstream \
   /usr/include/c++/15/initializer_list \
   /usr/include/c++/15/ios \
   /usr/include/c++/15/iosfwd \
@@ -3120,8 +3131,10 @@ CMakeFiles/gra.dir/src/main.cpp.o: /home/mateuszsierakowski/Documents/Echo_Wojny
   /usr/include/c++/15/typeinfo \
   /usr/include/c++/15/vector \
   /usr/include/c++/15/x86_64-redhat-linux/bits/atomic_word.h \
+  /usr/include/c++/15/x86_64-redhat-linux/bits/basic_file.h \
   /usr/include/c++/15/x86_64-redhat-linux/bits/c++allocator.h \
   /usr/include/c++/15/x86_64-redhat-linux/bits/c++config.h \
+  /usr/include/c++/15/x86_64-redhat-linux/bits/c++io.h \
   /usr/include/c++/15/x86_64-redhat-linux/bits/c++locale.h \
   /usr/include/c++/15/x86_64-redhat-linux/bits/cpu_defines.h \
   /usr/include/c++/15/x86_64-redhat-linux/bits/ctype_base.h \
@@ -5077,10 +5090,6 @@ CMakeFiles/gra.dir/src/main.cpp.o:
 
 /usr/include/linux/sched/types.h:
 
-/usr/include/c++/15/backward/binders.h:
-
-/usr/include/c++/15/exception:
-
 CMakeFiles/gra.dir/src/Game/Pathfinder.cpp.o:
 
 /usr/include/c++/15/cstdlib:
@@ -5377,6 +5386,12 @@ CMakeFiles/gra.dir/src/Game/WorldMap.cpp.o:
 
 /usr/include/SFML/Config.hpp:
 
+/usr/include/c++/15/bits/fstream.tcc:
+
+/usr/include/c++/15/bits/nested_exception.h:
+
+/usr/include/c++/15/bits/memoryfwd.h:
+
 /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/Villager.h:
 
 /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/Building.h:
@@ -5647,12 +5662,6 @@ CMakeFiles/gra.dir/src/Game/WorldMap.cpp.o:
 
 /usr/include/bits/types/struct_itimerspec.h:
 
-/usr/include/c++/15/bits/nested_exception.h:
-
-/usr/include/c++/15/bits/memoryfwd.h:
-
-/usr/include/c++/15/bits/fstream.tcc:
-
 /usr/include/SFML/System/Export.hpp:
 
 /usr/include/SFML/System/Mutex.hpp:
@@ -5706,6 +5715,10 @@ CMakeFiles/gra.dir/src/Game/WorldMap.cpp.o:
 /usr/lib/gcc/x86_64-redhat-linux/15/include/limits.h:
 
 /usr/include/bits/types/__locale_t.h:
+
+/usr/include/c++/15/backward/binders.h:
+
+/usr/include/c++/15/exception:
 
 /usr/include/c++/15/ext/aligned_buffer.h:
 
@@ -5837,6 +5850,10 @@ CMakeFiles/gra.dir/src/Game/WorldMap.cpp.o:
 
 /usr/include/glm/ext/matrix_double4x4_precision.hpp:
 
+/usr/include/c++/15/x86_64-redhat-linux/bits/basic_file.h:
+
+/home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/GameState.cpp:
+
 /usr/include/glm/detail/type_half.hpp:
 
 /usr/include/c++/15/x86_64-redhat-linux/bits/c++allocator.h:
@@ -5844,6 +5861,8 @@ CMakeFiles/gra.dir/src/Game/WorldMap.cpp.o:
 /usr/include/c++/15/stdlib.h:
 
 /usr/include/c++/15/x86_64-redhat-linux/bits/c++config.h:
+
+/usr/include/c++/15/x86_64-redhat-linux/bits/c++io.h:
 
 /usr/include/c++/15/x86_64-redhat-linux/bits/cpu_defines.h:
 
@@ -6203,10 +6222,6 @@ CMakeFiles/gra.dir/src/Rendering/Shader.cpp.o:
 
 /home/mateuszsierakowski/Documents/Echo_Wojny/src/Core/Camera2D.cpp:
 
-/home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/GameState.cpp:
-
-/usr/include/c++/15/x86_64-redhat-linux/bits/basic_file.h:
-
 /usr/include/c++/15/bits/node_handle.h:
 
 /usr/include/c++/15/bits/stl_multiset.h:
@@ -6222,8 +6237,6 @@ CMakeFiles/gra.dir/src/Rendering/Shader.cpp.o:
 /home/mateuszsierakowski/Documents/Echo_Wojny/src/Rendering/PrimitiveRenderer.cpp:
 
 /usr/include/c++/15/bits/sstream.tcc:
-
-/usr/include/c++/15/x86_64-redhat-linux/bits/c++io.h:
 
 /home/mateuszsierakowski/Documents/Echo_Wojny/src/main.cpp:
 

@@ -2,7 +2,7 @@
 #include <vector> 
 #include <string>
 #include <memory> 
-
+#include <fstream> 
 
 #include "Game/Villager.h"
 #include "Game/ResourceNode.h"     
@@ -19,7 +19,7 @@ class GameState {
         enum Season { SUMMER, WINTER }; 
         Season currentSeason; 
 
-        float gloablTemperature; 
+        float globalTemperature; 
         float seasonTimer; 
         float heatingTimer; 
 
@@ -41,6 +41,10 @@ class GameState {
         Mode m_currentMode; 
         std::string currentEventTitle; 
         std::string currentEventDescription; 
+
+        // zapisywanie gry 
+        void saveGame(const std::string& filename); 
+        void loadGame(const std::string& filename); 
 
 
         // npc 

@@ -420,10 +420,24 @@ void Application::render(){
     // rysowanie ui 
     // definiowanie okna 
     ImGui::Begin("Panel Zarzadzania");
-    
+
+    // --- system zapisu --- 
+    if (ImGui::Button("ZAPISZ GRE"))
+    {
+        m_GameState->saveGame("save.txt");
+        std::cout << "[SYSTEM] Zapisano gre!\n";
+    }
+    ImGui::SameLine(); 
+    if (ImGui::Button("WCZYTAJ GRE"))
+    {
+        m_GameState->loadGame("save.txt");
+        std::cout << "[SYSTEM] Wczytano gre!\n";
+    }
+    ImGui::Separator(); 
+    // --- reszta fajnych rzeczy --- 
     ImGui::Text("Dzien: %d", m_GameState->dayCounter); 
     ImGui::Text("Godzina: %d:00", (int)m_GameState->timeOfDay); 
-    ImGui::Text("Temperatura: %.1f C", m_GameState->gloablTemperature); 
+    ImGui::Text("Temperatura: %.1f C", m_GameState->globalTemperature); 
     if (m_GameState->currentSeason == GameState::Season::WINTER) 
     {
         ImGui::TextColored(ImVec4(0.5f, 0.5f, 1.0f, 1.0f), "[ZIMA] Zużycie opalu!");
