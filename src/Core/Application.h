@@ -32,7 +32,8 @@ class Application{
             NONE, 
             KITCHEN, 
             WELL, 
-            STOCKPILE
+            STOCKPILE,
+            CAMPFIRE
         };
 
         sf::Window m_Window; 

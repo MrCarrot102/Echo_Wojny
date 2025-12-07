@@ -15,6 +15,13 @@ class GameState {
 
         enum class Mode { PLAYING, EVENT_PAUSED }; 
 
+        // system pogody 
+        enum Season { SUMMER, WINTER }; 
+        Season currentSeason; 
+
+        float gloablTemperature; 
+        float seasonTimer; 
+        float heatingTimer; 
 
 
         // glowna funkcja ticki symulacji 

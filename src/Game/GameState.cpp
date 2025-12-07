@@ -7,6 +7,10 @@ GameState::GameState()
     : dayCounter(1),
       timeOfDay(6.0f), // zaczynanie dnia od 6 :( 
       globalFood(100),
+      currentSeason(Season::SUMMER),
+      gloablTemperature(25.0f), 
+      seasonTimer(0.0f), 
+      heatingTimer(0.0f), 
       globalWood(50),
       globalWater(50),
       m_TimeAccumulator(0.0f),
@@ -45,6 +49,79 @@ void GameState::update(float deltaTime) {
     const float THIRST_RATE = 3.0f; 
     const float CRITICAL_THIRST = 40.0f;
     const float CRITICAL_HUNGER = 30.0f;
+
+
+    // --- system pogody i ogrzewania --- 
+    // cykl por roku zmiana co 3 dni 
+    int seasonCycle = (dayCounter - 1) / 3; 
+
+    if (seasonCycle % 2 == 0) 
+    { 
+        currentSeason = Season::SUMMER; 
+        gloablTemperature = 25.0f; 
+    }
+    else 
+    {
+        currentSeason = Season::WINTER; 
+        gloablTemperature = -10.0f; 
+    }
+
+    // mechanika wplywu temperatury na zycie 
+    if (currentSeason == Season::WINTER) 
+    {
+        heatingTimer += deltaTime; 
+
+        if (heatingTimer > 2.0f) 
+        {
+            heatingTimer = 0.0f; 
+
+            // sprawdzanie czy istnieje ognisko 
+            bool hasCampfire = false; 
+            for (const auto& b : m_buildings) 
+            {
+                if (b.buildingType == Building::CAMPFIRE)
+                {
+                    hasCampfire = true; 
+                    break; 
+                }
+            }
+
+            if (hasCampfire)
+            {
+                if (globalWood >= 5)
+                {
+                    globalWood -= 5; 
+                }
+                else
+                {
+                    std::cout << "[ALARM] Ognisko zgasło! Brak drewna! Ludzie marzną!\n";
+                    if (!m_villagers.empty())
+                    {
+                        m_villagers.pop_back(); 
+                        std::cout << "[ŚMIERĆ] Mieszkaniec zamarzł!\n";
+                    }
+                }
+            }
+            else 
+            {
+                // kiedy w ogole nie ma ogniska 
+                std::cout << "[ALARM] Brak ogniska w zimie! Too wyrok śmierci!\n";
+                if (globalWood >= 10) 
+                {
+                    globalWood -= 10; // probowanie sie ogrzac w mniej wydajny sposob 
+                }
+                else 
+                { 
+                    if (!m_villagers.empty())
+                    {
+                        m_villagers.pop_back(); 
+                        std::cout << "[ŚMIERĆ] Mieszkaniec zamarzł z braku ogniska!\n";
+                    }
+                }
+            }
+        }
+    }
+
 
     // --- 2. Pętla Mieszkańców ---
     for (Villager& villager : m_villagers) {

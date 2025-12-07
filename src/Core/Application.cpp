@@ -211,6 +211,23 @@ void Application::pollEvents() {
                         }
                     }
 
+                    // budowanie ogniska 
+                    else if (m_currentBuildMode == BuildMode::CAMPFIRE)
+                    {
+                        int woodCost = 30; 
+                        if (m_GameState->globalWood >= woodCost)
+                        {
+                            m_GameState->globalWood -= woodCost;
+                            m_GameState->m_buildings.emplace_back(Building::CAMPFIRE, m_ghostBuildingPos);
+                            std::cout << "[BUDOWA] Rozpalono Ognisko!\n";
+                            m_currentBuildMode = BuildMode::NONE; 
+                        }
+                        else 
+                        {
+                            std::cout << "[BUDOWA] Brakuje drewna mój Panie!\n";
+                        }
+                    }
+
                 } else { // BŁĄD LOGICZNY BYŁ TUTAJ: Ten 'else if' musi być W ŚRODKU
                     // === JESTEŚMY W TRYBIE ZAZNACZANIA (nie budowania) ===
                     std::cout << "Kliknięto w świat: " << worldMousePos.x << ", " << worldMousePos.y << std::endl; 
@@ -288,9 +305,19 @@ void Application::update(float deltaTime){
 }
 
 void Application::render(){
-    glClear(GL_COLOR_BUFFER_BIT); 
+    //glClear(GL_COLOR_BUFFER_BIT); 
 
     // renderowanie gry 
+    if (m_GameState->currentSeason == GameState::Season::SUMMER)
+    {
+        glClearColor(0.1f, 0.3f, 0.1f, 1.0f); 
+    }
+    else 
+    {
+        glClearColor(0.8f, 0.8f, 0.9f, 1.0f); 
+    }
+    glClear(GL_COLOR_BUFFER_BIT); 
+
 
     // 1 renderowanie zasobow 
     for (const auto& node : m_GameState->m_resourceNodes) { 
@@ -350,8 +377,14 @@ void Application::render(){
         else if (b.buildingType == Building::WELL){
             color = {0.0f, 0.5f, 1.0f, 1.0f}; // ciemnoniebieski 
         }
+        
         else if (b.buildingType == Building::Type::STOCKPILE){
             color = {0.9f, 0.9f, 0.8f, 1.0f}; 
+        }
+
+        else if (b.buildingType == Building::CAMPFIRE) 
+        {
+            color = {1.0f, 0.5f, 0.0f, 1.0f}; 
         }
         m_Renderer->drawSquare(*m_Camera, b.position, {20.0f, 20.0f}, color); 
     }
@@ -377,12 +410,24 @@ void Application::render(){
         m_Renderer->drawSquare(*m_Camera, m_ghostBuildingPos, {25.0f, 25.0f}, color);
     }
 
+    // budowanie ogniska 
+    else if (m_currentBuildMode == BuildMode::CAMPFIRE) 
+    {
+        glm::vec4 color = {1.0f, 0.5f, 0.0f, 0.5f}; 
+        m_Renderer->drawSquare(*m_Camera, m_ghostBuildingPos, {20.0f, 20.0f}, color);
+    }
+
     // rysowanie ui 
     // definiowanie okna 
     ImGui::Begin("Panel Zarzadzania");
     
     ImGui::Text("Dzien: %d", m_GameState->dayCounter); 
     ImGui::Text("Godzina: %d:00", (int)m_GameState->timeOfDay); 
+    ImGui::Text("Temperatura: %.1f C", m_GameState->gloablTemperature); 
+    if (m_GameState->currentSeason == GameState::Season::WINTER) 
+    {
+        ImGui::TextColored(ImVec4(0.5f, 0.5f, 1.0f, 1.0f), "[ZIMA] Zużycie opalu!");
+    }
     ImGui::Separator();
     ImGui::Text("Drewno: %d", m_GameState->globalWood);
     ImGui::Text("Woda: %d", m_GameState->globalWater);
@@ -437,6 +482,21 @@ void Application::render(){
         }
     }
     if (isStockpileActive) ImGui::PopStyleColor(); 
+
+    // przycisk odpowiedzialny za ognisko 
+    bool isCampfireAcitve = (m_currentBuildMode == BuildMode::CAMPFIRE);
+    if (isCampfireAcitve) ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.0f, 0.5, 0.0f, 1.0f)); 
+
+    if (ImGui::Button("Ognisko (30 Drewna)")) 
+    {
+        if (isCampfireAcitve) m_currentBuildMode = BuildMode::NONE; 
+        else 
+        {
+            m_currentBuildMode = BuildMode::CAMPFIRE;
+            m_selectedVillager = nullptr; 
+        }
+    }
+    if (isCampfireAcitve) ImGui::PopStyleColor(); 
 
     ImGui::End(); 
 

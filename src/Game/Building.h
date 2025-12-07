@@ -8,7 +8,8 @@ struct Building {
     enum Type { TENT, 
                 KITCHEN, 
                 WELL,
-                STOCKPILE 
+                STOCKPILE,
+                CAMPFIRE
             };
              
     Type buildingType; 
