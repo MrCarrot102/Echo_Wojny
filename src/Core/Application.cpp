@@ -324,6 +324,9 @@ void Application::render(){
     // 1 renderowanie zasobow 
     for (const auto& node : m_GameState->m_resourceNodes) { 
         glm::vec4 color = {1.0f, 1.0f, 1.0f, 1.0f}; 
+
+        if (node.amountLeft <= 0) continue;
+
         if (node.resourceType == ResourceNode::TREE)
         {
             color = {0.0f, 0.5f, 0.0f, 1.0f}; // ciemnozielony na drzewo 
@@ -497,10 +500,44 @@ void Application::render(){
     }
     ImGui::Separator();
     ImGui::Text("Drewno: %d", m_GameState->globalWood);
+    ImGui::Text("Kamień: %d", m_GameState->globalStone);
     ImGui::Text("Woda: %d", m_GameState->globalWater);
     ImGui::Text("Jedzenie: %d", m_GameState->globalFood);
     ImGui::Separator();
     ImGui::Text("Mieszkancy: %lu", m_GameState->m_villagers.size());
+    // --- INSPEKTOR OSADNIKA ---
+    if (m_selectedVillager != nullptr) 
+    {
+        ImGui::Text("WYBRANY: %s", m_selectedVillager->name.c_str());
+        ImGui::Text("Stan: %d", (int)m_selectedVillager->currentState);
+        
+        // Pasek Głodu (Zielony -> Czerwony)
+        float hungerRatio = m_selectedVillager->hunger / 100.0f;
+        ImGui::Text("Glod:");
+        ImGui::SameLine();
+        ImGui::ProgressBar(hungerRatio, ImVec2(150, 20));
+
+        // Pasek Pragnienia (Niebieski)
+        float thirstRatio = m_selectedVillager->thirst / 100.0f;
+        ImGui::Text("Woda:");
+        ImGui::SameLine();
+        ImGui::ProgressBar(thirstRatio, ImVec2(150, 20));
+
+        // --- PRZYCISKI DEBUGOWANIA (Żeby nie czekać!) ---
+        if (ImGui::Button("WYMUS GLOD (H=10)")) 
+        {
+            m_selectedVillager->hunger = 10.0f; // Powinien natychmiast rzucić pracę
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("WYMUS PRAGNIENIE (T=10)")) 
+        {
+            m_selectedVillager->thirst = 10.0f; // Powinien natychmiast iść pić
+        }
+    } 
+    else 
+    {
+        ImGui::Text("Kliknij na osadnika, aby zobaczyc szczegoly.");
+    }
     
     ImGui::Separator();
     ImGui::Text("BUDOWANIE:");

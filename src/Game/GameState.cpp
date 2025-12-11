@@ -150,12 +150,65 @@ void GameState::update(float deltaTime) {
     for (Villager& villager : m_villagers) 
     {
         
-        // Potrzeby
+        // potrzeby 
         villager.hunger -= (gameHoursPassed * HUNGER_RATE);
         villager.thirst -= (gameHoursPassed * THIRST_RATE);
         if (villager.hunger < 0.0f) villager.hunger = 0.0f;
         if (villager.thirst < 0.0f) villager.thirst = 0.0f;
 
+        // =========================================================
+        // 2. INSTYNKT SAMOZACHOWAWCZY
+        // =========================================================
+        // --- PRIORYTET 1: WODA (Poniżej 40%) ---
+        // Czy osadnik jest już w trakcie ratowania życia?
+        bool isBusySurviving = 
+        (
+            villager.currentState == Villager::State::MOVING_TO_DRINK ||
+            villager.currentState == Villager::State::DRINKING ||
+            villager.currentState == Villager::State::MOVING_TO_EAT ||
+            villager.currentState == Villager::State::EATING
+        );
+
+        // SPRAWDZAMY POTRZEBY TYLKO JEŚLI NIE JEST ZAJĘTY PRZETRWANIEM
+        if (!isBusySurviving) 
+        {
+            // PRIORYTET A: WODA (Najważniejsza)
+            if (villager.thirst < 40.0f) 
+            {
+                Building* targetWell = nullptr;
+                for (Building& b : m_buildings) 
+                {
+                    if (b.buildingType == Building::WELL) { targetWell = &b; break; }
+                }
+
+                if (targetWell != nullptr) 
+                {
+                    std::cout << "[AI] " << villager.name << " idzie pić.\n";
+                    villager.currentState = Villager::State::MOVING_TO_DRINK;
+                    villager.targetPosition = targetWell->position;
+                    villager.targetNode = nullptr; 
+                    villager.carryingAmount = 0;   
+                }
+            }
+            // PRIORYTET B: JEDZENIE 
+            else if (villager.hunger < 30.0f) 
+            {
+                Building* targetKitchen = nullptr;
+                for (Building& b : m_buildings) 
+                {
+                    if (b.buildingType == Building::KITCHEN) { targetKitchen = &b; break; }
+                }
+
+                if (targetKitchen != nullptr) 
+                {
+                    std::cout << "[AI] " << villager.name << " idzie jeść.\n";
+                    villager.currentState = Villager::State::MOVING_TO_EAT;
+                    villager.targetPosition = targetKitchen->position;
+                    villager.targetNode = nullptr; 
+                    villager.carryingAmount = 0;   
+                }
+            }
+        }
 
         // =========================================================
         // MASZYNA STANÓW
