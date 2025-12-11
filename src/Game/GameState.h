@@ -38,6 +38,7 @@ class GameState {
         int globalFood; 
         int globalWood; 
         int globalWater; 
+        int globalStone; 
         Mode m_currentMode; 
         std::string currentEventTitle; 
         std::string currentEventDescription; 

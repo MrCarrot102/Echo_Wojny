@@ -13,6 +13,7 @@ GameState::GameState()
       heatingTimer(0.0f), 
       globalWood(50),
       globalWater(50),
+      globalStone(0),
       m_TimeAccumulator(0.0f),
       m_eventDay3Triggered(false), 
       m_eventDay5Triggered(false),
@@ -21,16 +22,38 @@ GameState::GameState()
       m_worldMap(std::make_unique<WorldMap>(100, 100, 20.0f))
       
 {
-    
-    // testowanie npc 
-    m_villagers.emplace_back("Adam", glm::vec2(100.0f, 100.0f));
-    m_villagers.emplace_back("Ewa", glm::vec2(120.0f, 100.0f));
-    m_villagers.emplace_back("Radek", glm::vec2(100.0f, 120.0f));
+    // 1. ustawianie osadnikow 
+    m_villagers.emplace_back("Adam", glm::vec2(2000.0f, 2000.0f)); 
+    m_villagers.emplace_back("Ewa", glm::vec2(2020.0f, 2000.0f));
+    m_villagers.emplace_back("Radek", glm::vec2(2000.0f, 2020.0f));
 
-    // obiekty 
-    m_resourceNodes.emplace_back(ResourceNode::TREE, glm::vec2(200.0f, 200.0f), 100);
-    m_resourceNodes.emplace_back(ResourceNode::TREE, glm::vec2(250.0f, 210.0f), 100);
-    m_resourceNodes.emplace_back(ResourceNode::ROCK, glm::vec2(300.0f, 100.0f), 200);
+    // 2. proceduralny generator swiata losowanie pozycji startowych 
+    // drzewo 
+    for (int i = 0; i < 300; i++)
+    {
+        float x = rand() % 4000; 
+        float y = rand() % 4000; 
+        m_resourceNodes.emplace_back(ResourceNode::TREE, glm::vec2(x, y), 100); 
+    }
+    // sklala 
+    for (int i = 0; i < 100; i++)
+    {
+        float x = rand() % 4000; 
+        float y = rand() % 4000; 
+        m_resourceNodes.emplace_back(ResourceNode::ROCK, glm::vec2(x, y), 200);
+    }
+    // krzakow 
+    for (int i = 0; i < 100; i++)
+    {
+        float x = rand() % 4000; 
+        float y = rand() % 4000; 
+        m_resourceNodes.emplace_back(ResourceNode::BERRY_BUSH, glm::vec2(x, y), 50);
+    }
+
+    // 3. budynki startowe 
+    m_buildings.emplace_back(Building::KITCHEN, glm::vec2(2050.0f, 2050.0f));
+    m_buildings.emplace_back(Building::STOCKPILE, glm::vec2(2100.0f, 2050.0f));
+    m_buildings.emplace_back(Building::WELL, glm::vec2(2050.0f, 2100.0f));
 }
 
 void GameState::update(float deltaTime) {
@@ -123,188 +146,205 @@ void GameState::update(float deltaTime) {
     }
 
 
-    // --- 2. Pętla Mieszkańców ---
-    for (Villager& villager : m_villagers) {
+    // --- 2. petla po mieszkancach  ---
+    for (Villager& villager : m_villagers) 
+    {
         
-        // Symulacja potrzeb
+        // Potrzeby
         villager.hunger -= (gameHoursPassed * HUNGER_RATE);
         villager.thirst -= (gameHoursPassed * THIRST_RATE);
         if (villager.hunger < 0.0f) villager.hunger = 0.0f;
         if (villager.thirst < 0.0f) villager.thirst = 0.0f;
 
-        // --- PRIORYTETY ---
 
-        // 1. WODA
-        if (villager.thirst < CRITICAL_THIRST && 
-            villager.currentState != Villager::State::DRINKING && 
-            villager.currentState != Villager::State::MOVING_TO_DRINK) 
+        // =========================================================
+        // MASZYNA STANÓW
+        // =========================================================
+
+        // 1. biegnie gdzie mu pokazemy na mapie 
+        if (villager.currentState == Villager::State::MOVING_TO_POINT) 
         {
-            Building* targetWell = nullptr;
-            for (Building& b : m_buildings) {
-                if (b.buildingType == Building::WELL) { targetWell = &b; break; }
-            }
-            
-            if (targetWell) {
-                std::cout << "\n[AI] " << villager.name << " idzie pić.\n";
-                villager.currentState = Villager::State::MOVING_TO_DRINK;
-                villager.targetPosition = targetWell->position;
-                villager.currentPath.clear();
-            }
-        }
-        // 2. GŁÓD
-        else if (villager.hunger < CRITICAL_HUNGER && 
-                 villager.currentState != Villager::State::EATING && 
-                 villager.currentState != Villager::State::MOVING_TO_EAT)
-        {
-            Building* targetKitchen = nullptr;
-            for (Building& b : m_buildings) {
-                if (b.buildingType == Building::KITCHEN) { targetKitchen = &b; break; }
-            }
+            glm::vec2 direction = villager.targetPosition - villager.position;
+            float distance = glm::length(direction);
 
-            if (targetKitchen) {
-                std::cout << "\n[AI] " << villager.name << " idzie jeść.\n";
-                villager.currentState = Villager::State::MOVING_TO_EAT;
-                villager.targetPosition = targetKitchen->position;
-                villager.currentPath.clear();
-            }
-        }
-
-        // --- Funkcja Pomocnicza Ruchu (Lambda) ---
-        auto moveOnPath = [&](float reachDistance) -> bool {
-            
-            // A. Jeśli brak ścieżki - oblicz
-            if (villager.currentPath.empty()) {
-                // Optymalizacja: Jeśli blisko, idź prosto
-                float directDist = glm::distance(villager.position, villager.targetPosition);
-                if (directDist < 20.0f) {
-                    glm::vec2 dir = villager.targetPosition - villager.position;
-                    if (glm::length(dir) > 0.1f) 
-                        villager.position += glm::normalize(dir) * speed * deltaTime;
-                    
-                    if (directDist <= reachDistance) return true;
-                    return false;
-                }
-
-                // A* Pathfinder
-                villager.currentPath = Pathfinder::findPath(villager.position, villager.targetPosition, *m_worldMap);
-                villager.currentPathIndex = 0;
-                
-                if (villager.currentPath.empty()) {
-                    villager.currentState = Villager::State::IDLE;
-                    return false;
-                }
-            }
-
-            // B. Poruszanie po ścieżce
-            if (villager.currentPathIndex < villager.currentPath.size()) {
-                glm::vec2 nextWaypoint = villager.currentPath[villager.currentPathIndex];
-                glm::vec2 direction = nextWaypoint - villager.position;
-                float distToWaypoint = glm::length(direction);
-
-                if (distToWaypoint > 2.0f) {
-                    villager.position += glm::normalize(direction) * speed * deltaTime;
-                } else {
-                    villager.currentPathIndex++;
-                }
-                return false; 
-            } else {
-                // C. Końcówka trasy
-                glm::vec2 direction = villager.targetPosition - villager.position;
-                float distToTarget = glm::length(direction);
-
-                if (distToTarget > reachDistance) {
-                    villager.position += glm::normalize(direction) * speed * deltaTime;
-                    return false;
-                } else {
-                    villager.currentPath.clear();
-                    villager.currentPathIndex = 0;
-                    return true; // Dotarł!
-                }
-            }
-            return false; // Bezpiecznik
-        }; 
-
-
-        // --- Maszyna Stanów ---
-
-        if (villager.currentState == Villager::State::MOVING_TO_POINT) {
-            if (moveOnPath(1.0f)) {
+            if (distance > 5.0f) 
+            {
+                villager.position += glm::normalize(direction) * speed * deltaTime;
+            } 
+            else 
+            {
                 villager.currentState = Villager::State::IDLE;
             }
         }
-        else if (villager.currentState == Villager::State::MOVING_TO_WORK) {
-            if (!villager.targetNode) { 
-                villager.currentState = Villager::State::IDLE; continue; 
+
+        // 2. biegnie pracowac bo trzeba zyc 
+        else if (villager.currentState == Villager::State::MOVING_TO_WORK) 
+        {
+            // sprawdzanie czy istnieje jeszcze zasob 
+            if (villager.targetNode == nullptr) 
+            {
+                villager.currentState = Villager::State::IDLE;
+                continue;
             }
-            if (moveOnPath(10.0f)) {
+
+            glm::vec2 direction = villager.targetPosition - villager.position;
+            float distance = glm::length(direction);
+
+            // duza toleracja zeby w teksturach nie siedziec 
+            if (distance > 20.0f) 
+            {
+                villager.position += glm::normalize(direction) * speed * deltaTime;
+            } 
+            else 
+            {
+                // jest u celu pracuje 
                 villager.currentState = Villager::State::GATHERING;
                 villager.workTimer = GATHER_TIME;
             }
         }
-        else if (villager.currentState == Villager::State::MOVING_TO_EAT) {
-            if (moveOnPath(10.0f)) {
-                villager.currentState = Villager::State::EATING;
-                villager.workTimer = 2.0f;
+
+        // 3. praca praca 
+        else if (villager.currentState == Villager::State::GATHERING) 
+        {
+            if (villager.targetNode == nullptr) 
+            {
+                villager.currentState = Villager::State::IDLE;
+                continue;
+            }
+
+            villager.workTimer -= deltaTime;
+
+            if (villager.workTimer <= 0.0f) 
+            {
+                // konczenie pracy 
+                if (villager.targetNode->resourceType == ResourceNode::Type::TREE) 
+                {
+                    villager.carryingResourceType = ResourceNode::Type::TREE;
+                    villager.carryingAmount = 10;
+                }
+                else if (villager.targetNode->resourceType == ResourceNode::Type::ROCK) 
+                {
+                    villager.carryingResourceType = ResourceNode::Type::ROCK;
+                    villager.carryingAmount = 5;
+                }
+                else if (villager.targetNode->resourceType == ResourceNode::Type::BERRY_BUSH) 
+                {
+                    villager.carryingResourceType = ResourceNode::Type::BERRY_BUSH;
+                    villager.carryingAmount = 15;
+                }
+
+                // zmniejszanie zasobu na mapie 
+                villager.targetNode->amountLeft -= villager.carryingAmount;
+                if (villager.targetNode->amountLeft <= 0) {
+                    // zasób zniknął (wyczerpany)
+                    // tutaj trzeba by go usunąć z wektora m_resourceNodes
+                    villager.targetNode = nullptr;
+                }
+
+                // szukanie magazynu 
+                Building* stockpile = findNearestStockpile(villager.position);
+                if (stockpile != nullptr) 
+                {
+                    villager.currentState = Villager::State::MOVING_TO_HAUL;
+                    villager.targetPosition = stockpile->position;
+                } else {
+                    // jak nie ma magazynu strajkujemy nic nie robimy 
+                    villager.carryingAmount = 0;
+                    villager.currentState = Villager::State::IDLE;
+                    std::cout << "[AI] Brak magazynu!\n";
+                }
             }
         }
-        else if (villager.currentState == Villager::State::MOVING_TO_DRINK) {
-            if (moveOnPath(10.0f)) {
+
+        // 4. ruch do magazynu 
+        else if (villager.currentState == Villager::State::MOVING_TO_HAUL) 
+        {
+            glm::vec2 direction = villager.targetPosition - villager.position;
+            float distance = glm::length(direction);
+
+            if (distance > 10.0f) 
+            {
+                villager.position += glm::normalize(direction) * speed * deltaTime;
+            } 
+            else 
+            {
+                // wywala rzeczy w magazynie 
+                if (villager.carryingResourceType == ResourceNode::Type::TREE) 
+                    globalWood += villager.carryingAmount;
+                else if (villager.carryingResourceType == ResourceNode::Type::ROCK) 
+                    globalStone += villager.carryingAmount;
+                else if (villager.carryingResourceType == ResourceNode::Type::BERRY_BUSH) 
+                    globalFood += villager.carryingAmount;
+
+                villager.carryingAmount = 0;
+                villager.carryingResourceType = ResourceNode::Type::NONE;
+
+                // decydujemy czy wracamy pracowac czy nam sie nie chce i wolne 
+                if (villager.targetNode != nullptr && villager.targetNode->amountLeft > 0) 
+                {
+                    villager.currentState = Villager::State::MOVING_TO_WORK;
+                    villager.targetPosition = villager.targetNode->position;
+                } 
+                else 
+                {
+                    villager.currentState = Villager::State::IDLE;
+                }
+            }
+        }
+        
+        // 5. biegnie chać
+        else if (villager.currentState == Villager::State::MOVING_TO_DRINK) 
+        {
+            glm::vec2 direction = villager.targetPosition - villager.position;
+            float distance = glm::length(direction);
+            
+            if (distance > 10.0f) 
+            {
+                villager.position += glm::normalize(direction) * speed * deltaTime;
+            } else 
+            {
                 villager.currentState = Villager::State::DRINKING;
                 villager.workTimer = 2.0f;
             }
         }
-        else if (villager.currentState == Villager::State::MOVING_TO_HAUL) {
-            if (moveOnPath(10.0f)) {
-                std::cout << "\n[AI] " << villager.name << " zrzucił zasoby.\n";
-                if (villager.carryingResourceType == ResourceNode::Type::TREE) globalWood += villager.carryingAmount;
-                
-                villager.carryingAmount = 0;
-                villager.carryingResourceType = ResourceNode::Type::NONE; // Reset typu
-
-                if (villager.targetNode && villager.targetNode->amountLeft > 0) {
-                    villager.currentState = Villager::State::MOVING_TO_WORK;
-                    villager.targetPosition = villager.targetNode->position;
-                    villager.currentPath.clear();
-                } else {
-                    villager.currentState = Villager::State::IDLE;
-                }
-            }
-        }
         
-        // --- Stany Akcji ---
-        
-        else if (villager.currentState == Villager::State::GATHERING) {
-            if (!villager.targetNode) { villager.currentState = Villager::State::IDLE; continue; }
+        // 6. piciu 
+        else if (villager.currentState == Villager::State::DRINKING) 
+        {
             villager.workTimer -= deltaTime;
             
-            if (villager.workTimer <= 0.0f) {
-                villager.carryingAmount = 10;
-                villager.carryingResourceType = villager.targetNode->resourceType;
-                villager.targetNode->amountLeft -= 10;
-                if (villager.targetNode->amountLeft <= 0) villager.targetNode = nullptr;
-
-                Building* stockpile = findNearestStockpile(villager.position);
-                if (stockpile) {
-                    villager.currentState = Villager::State::MOVING_TO_HAUL;
-                    villager.targetPosition = stockpile->position;
-                    villager.currentPath.clear();
-                } else {
-                    villager.carryingAmount = 0;
-                    villager.currentState = Villager::State::IDLE;
-                }
-            }
-        }
-        else if (villager.currentState == Villager::State::EATING) {
-            villager.workTimer -= deltaTime;
-            if (villager.workTimer <= 0.0f) {
-                if (globalFood >= 10) { globalFood -= 10; villager.hunger = 100.0f; }
+            if (villager.workTimer <= 0.0f) 
+            {
+                if (globalWater >= 10) { globalWater -= 10; villager.thirst = 100.0f; }
                 villager.currentState = Villager::State::IDLE;
             }
         }
-        else if (villager.currentState == Villager::State::DRINKING) {
+
+        // 7. biegnie żreć 
+        else if (villager.currentState == Villager::State::MOVING_TO_EAT) 
+        {
+            glm::vec2 direction = villager.targetPosition - villager.position;
+            float distance = glm::length(direction);
+            
+            if (distance > 10.0f) 
+            {
+                villager.position += glm::normalize(direction) * speed * deltaTime;
+            } 
+            else 
+            {
+                villager.currentState = Villager::State::EATING;
+                villager.workTimer = 2.0f;
+            }
+        }
+
+        // 8. żarcie 
+        else if (villager.currentState == Villager::State::EATING) 
+        {
             villager.workTimer -= deltaTime;
-            if (villager.workTimer <= 0.0f) {
-                if (globalWater >= 10) { globalWater -= 10; villager.thirst = 100.0f; }
+            
+            if (villager.workTimer <= 0.0f) 
+            {
+                if (globalFood >= 10) { globalFood -= 10; villager.hunger = 100.0f; }
                 villager.currentState = Villager::State::IDLE;
             }
         }

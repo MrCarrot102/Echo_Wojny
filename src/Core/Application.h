@@ -49,16 +49,10 @@ class Application{
 
 
         Villager* m_selectedVillager; 
-
         BuildMode m_currentBuildMode = BuildMode::NONE; 
         glm::vec2 m_ghostBuildingPos; 
 
-
-
-        
-
+        float m_timeScale = 1.0f; 
 
 
     };
-
-

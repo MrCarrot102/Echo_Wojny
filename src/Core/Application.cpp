@@ -43,6 +43,8 @@ void Application::init() {
 
     // tworzenie obieku rdzenia 
     m_Camera = std::make_unique<Camera2D>((float)windowWidth, (float)widnowHeight); 
+    m_Camera->setPosition(glm::vec2(2000.0f, 2000.0f));
+    
     m_Renderer = std::make_unique<PrimitiveRenderer>(); 
 
     
@@ -294,7 +296,7 @@ void Application::update(float deltaTime){
     m_Camera->update(deltaTime, m_Window); 
 
     // tick w symulacji 
-    m_GameState->update(deltaTime); 
+    m_GameState->update(deltaTime * m_timeScale); 
 
     if (m_currentBuildMode != BuildMode::NONE){
         // aktualizowanie pozycji ducha na podstawie myszki 
@@ -321,11 +323,18 @@ void Application::render(){
 
     // 1 renderowanie zasobow 
     for (const auto& node : m_GameState->m_resourceNodes) { 
-        glm::vec4 color; 
-        if (node.resourceType == ResourceNode::TREE){
+        glm::vec4 color = {1.0f, 1.0f, 1.0f, 1.0f}; 
+        if (node.resourceType == ResourceNode::TREE)
+        {
             color = {0.0f, 0.5f, 0.0f, 1.0f}; // ciemnozielony na drzewo 
-        } else if (node.resourceType == ResourceNode::ROCK) {
+        } 
+        else if (node.resourceType == ResourceNode::ROCK) 
+        {
             color = {0.5f, 0.5f, 0.5f, 1.0f}; // szary na kamienie 
+        }
+        else if (node.resourceType == ResourceNode::BERRY_BUSH) 
+        {
+            color = {1.0f, 0.2f, 0.6f, 1.0f}; 
         }
         m_Renderer->drawSquare(*m_Camera, node.position, {10.0f, 10.0f}, color);
     }
@@ -433,7 +442,51 @@ void Application::render(){
         m_GameState->loadGame("save.txt");
         std::cout << "[SYSTEM] Wczytano gre!\n";
     }
+    
     ImGui::Separator(); 
+
+    // --- kontrola czasu --- 
+    ImGui::Text("KONTROLA CZASU: (%.1fx)", m_timeScale);
+
+    // --- 1. PRZYCISK STOP (||) ---
+    bool isPaused = (m_timeScale == 0.0f); // Zapamiętaj stan PRZED przyciskiem
+    if (isPaused) ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.0f, 0.0f, 0.0f, 1.0f));
+    
+    if (ImGui::Button("STOP (||)", ImVec2(70, 0))) {
+        m_timeScale = 0.0f;
+    }
+    
+    if (isPaused) ImGui::PopStyleColor(); // Użyj starego stanu do zdjęcia koloru
+
+    ImGui::SameLine();
+
+    // --- 2. PRZYCISK PLAY (>) ---
+    bool isNormal = (m_timeScale == 1.0f);
+    if (isNormal) ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 0.8f, 0.0f, 1.0f));
+    
+    if (ImGui::Button("PLAY (>)", ImVec2(70, 0))) {
+        m_timeScale = 1.0f;
+    }
+    
+    if (isNormal) ImGui::PopStyleColor();
+
+    ImGui::SameLine();
+
+    // --- 3. PRZYCISK FAST (>>) ---
+    bool isFast = (m_timeScale == 5.0f);
+    if (isFast) ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 0.5f, 1.0f, 1.0f));
+    
+    if (ImGui::Button("FAST (>>)", ImVec2(70, 0))) {
+        m_timeScale = 5.0f;
+    }
+    
+    if (isFast) ImGui::PopStyleColor();
+
+    // Suwak
+    ImGui::SliderFloat("Predkosc", &m_timeScale, 0.0f, 10.0f);
+    
+    ImGui::Separator();
+    
     // --- reszta fajnych rzeczy --- 
     ImGui::Text("Dzien: %d", m_GameState->dayCounter); 
     ImGui::Text("Godzina: %d:00", (int)m_GameState->timeOfDay); 

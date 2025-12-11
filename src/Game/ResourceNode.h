@@ -1,18 +1,18 @@
 #pragma once 
 #include <glm/glm.hpp> 
+
 #include "Game/Villager.h"
 
 
 struct ResourceNode {
-    glm::vec2 position; 
 
     enum Type { NONE, 
                 TREE, 
                 ROCK, 
-                FOOD_BUSH }; 
+                BERRY_BUSH }; 
                 
     Type resourceType; 
-
+    glm::vec2 position; 
     int amountLeft; 
 
     ResourceNode(Type type, const glm::vec2& pos, int amount)
