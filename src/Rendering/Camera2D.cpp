@@ -1,4 +1,4 @@
-#include "Core/Camera2D.h"
+#include "Rendering/Camera2D.h"
 
 Camera2D::Camera2D(float width, float height)
     : m_Position(0.0f, 0.0f), m_Zoom(1.0f), m_Width(width), m_Height(height)

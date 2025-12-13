@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 project(EchoWojny VERSION 1.0)
-
+set(SFML_DIR "/usr/local/lib/cmake/SFML")
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
@@ -57,5 +57,6 @@ target_include_directories(gra
 
 # Definicja dla ImGui-SFML
 target_compile_definitions(gra PRIVATE IMGUI_SFML_USE_DEFAULT_CONFIG)
+find_package(SFML 2.6 COMPONENTS system window graphics audio REQUIRED)
 
 file(COPY assets DESTINATION ${CMAKE_BINARY_DIR})
