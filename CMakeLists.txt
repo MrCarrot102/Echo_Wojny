@@ -22,7 +22,7 @@ set(IMGUI_SOURCES
 set(APP_SOURCES
     src/main.cpp
     src/Core/Application.cpp
-    src/Core/Camera2D.cpp
+    src/Rendering/Camera2D.cpp
     src/Rendering/Shader.cpp
     src/Rendering/PrimitiveRenderer.cpp
     src/Game/GameState.cpp
