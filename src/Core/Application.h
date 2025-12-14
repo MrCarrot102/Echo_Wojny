@@ -26,7 +26,15 @@ class Application{
         void update(float deltaTime); 
         void render(); 
 
-
+        // stany aplikacji 
+        enum class AppState 
+        {
+            MENU, 
+            GAME
+        };
+        
+        AppState m_AppState = AppState::MENU; 
+        char m_saveFilename[128] = "save.txt"; 
 
         enum class BuildMode {
             NONE, 

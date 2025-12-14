@@ -1,4 +1,5 @@
-#include "Core/Application.h" 
+#include "Core/Application.h"
+
 #include <iostream> 
 
 Application::Application()
@@ -75,6 +76,8 @@ void Application::pollEvents() {
         if (event.type == sf::Event::Closed){
             m_Running = false; 
         }
+
+        if (m_AppState == AppState::MENU) continue; 
 
         auto& io = ImGui::GetIO(); 
 
@@ -292,6 +295,10 @@ void Application::update(float deltaTime){
     ImGui::SFML::Update(sf::Mouse::getPosition(m_Window), static_cast<sf::Vector2f>(m_Window.getSize()), sf::seconds(deltaTime));
     // -------------------- 
 
+    // -- menu --
+    if (m_AppState == AppState::MENU) 
+        return; 
+
     // aktualizacja logiki gry 
     m_Camera->update(deltaTime, m_Window); 
 
@@ -308,338 +315,376 @@ void Application::update(float deltaTime){
 
 void Application::render(){
     //glClear(GL_COLOR_BUFFER_BIT); 
-
-    // renderowanie gry 
-    if (m_GameState->currentSeason == GameState::Season::SUMMER)
+    if (m_AppState == AppState::MENU)
     {
-        glClearColor(0.1f, 0.3f, 0.1f, 1.0f); 
-    }
-    else 
-    {
-        glClearColor(0.8f, 0.8f, 0.9f, 1.0f); 
-    }
-    glClear(GL_COLOR_BUFFER_BIT); 
+        ImGui::SetNextWindowPos(ImVec2(m_Window.getSize().x * 0.5f, m_Window.getSize().y * 0.5f), ImGuiCond_Always, ImVec2(0.5f, 0.5f));
+        ImGui::SetNextWindowSize(ImVec2(300, 250));
+        
+        ImGui::Begin("Menu Glowne", nullptr,ImGuiWindowFlags_NoDecoration); 
 
+        ImGui::Text("       Echo Wojny");
+        ImGui::Separator(); 
 
-    // 1 renderowanie zasobow 
-    for (const auto& node : m_GameState->m_resourceNodes) { 
-        glm::vec4 color = {1.0f, 1.0f, 1.0f, 1.0f}; 
-
-        if (node.amountLeft <= 0) continue;
-
-        if (node.resourceType == ResourceNode::TREE)
+        // przycisk nowa gra 
+        if (ImGui::Button("Nowa Gra", ImVec2(280, 40)))
         {
-            color = {0.0f, 0.5f, 0.0f, 1.0f}; // ciemnozielony na drzewo 
-        } 
-        else if (node.resourceType == ResourceNode::ROCK) 
+            // resetowanie gry 
+            m_GameState = std::make_unique<GameState>(); 
+            // resetowanie kamery 
+            m_Camera->setPosition(glm::vec2(2000.0f, 2000.0f)); 
+            // przelaczanie stanu gry 
+            m_AppState = AppState::GAME; 
+        }
+
+        // pole tekstowe i wczytaj 
+        ImGui::InputText("Plik", m_saveFilename, 128); 
+        if (ImGui::Button("Wczytaj Gre", ImVec2(280, 40)))
         {
-            color = {0.5f, 0.5f, 0.5f, 1.0f}; // szary na kamienie 
+            m_GameState->loadGame(m_saveFilename); 
+            m_AppState = AppState::GAME; 
         }
-        else if (node.resourceType == ResourceNode::BERRY_BUSH) 
-        {
-            color = {1.0f, 0.2f, 0.6f, 1.0f}; 
-        }
-        m_Renderer->drawSquare(*m_Camera, node.position, {10.0f, 10.0f}, color);
-    }
 
-    // dodanie debuga start 
-    int width = m_GameState->m_worldMap->getWidth(); 
-    int height = m_GameState->m_worldMap->getHeight(); 
-    float tileSize = m_GameState->m_worldMap->getTileSize();
-    
-    for (int y = 0; y < height; y++){
-        for (int x = 0; x < width; x++){
-            if (m_GameState->m_worldMap->isBlocked(x, y)){
-                // obliczanie pozycji w swiecie 
-                glm::vec2 pos = m_GameState->m_worldMap->gridToWorld({x, y});
-
-                // rysowanie czerwonego polprzezroczystego kwadratu 
-                glm::vec4 color = {1.0f, 0.0f, 0.0f, 0.3f}; 
-                m_Renderer->drawSquare(*m_Camera, pos, {tileSize, tileSize}, color);
-            }
-        }
-    }
-    // debug stop 
-
-
-    // 2 renderowanie mieszkancow 
-    for (const auto& villager : m_GameState->m_villagers) {
-        glm::vec4 color = {1.0f, 0.0f, 0.0f, 1.0f}; // czerwony 
+        // wyjscie z gry 
+        if (ImGui::Button("Wyjdz", ImVec2(280, 40)))
+            m_Running = false; 
         
-        
-        // zmienianie koloru kiedy zaznaczymy go 
-        if (m_selectedVillager == &villager){
-            color = {1.0f, 1.0f, 0.0f, 1.0f}; // zolty (jak zaznaczony)
-        }
-        
-        
-        
-        
-        m_Renderer->drawSquare(*m_Camera, villager.position, {10.0f, 10.0f}, color);
-    }
-
-    // renderowanie budynkow 
-    for (const auto& b : m_GameState->m_buildings) {
-        glm::vec4 color = {0.5f, 0.3f, 0.0f, 1.0f}; // brazowy 
-
-        if (b.buildingType == Building::KITCHEN){
-            color = {0.8f, 0.8f, 0.8f, 1.0f}; // jasnoszary 
-        }
-
-        else if (b.buildingType == Building::WELL){
-            color = {0.0f, 0.5f, 1.0f, 1.0f}; // ciemnoniebieski 
-        }
-        
-        else if (b.buildingType == Building::Type::STOCKPILE){
-            color = {0.9f, 0.9f, 0.8f, 1.0f}; 
-        }
-
-        else if (b.buildingType == Building::CAMPFIRE) 
-        {
-            color = {1.0f, 0.5f, 0.0f, 1.0f}; 
-        }
-        m_Renderer->drawSquare(*m_Camera, b.position, {20.0f, 20.0f}, color); 
-    }
-
-
-    // renderowanie ducha budynku 
-    if (m_currentBuildMode == BuildMode::KITCHEN){
-        // rysowanie polprzezroczystego kwadrata 
-        glm::vec4 color = {0.8f, 0.8f, 0.8f, 0.5f}; 
-        m_Renderer->drawSquare(*m_Camera, m_ghostBuildingPos, {20.0f, 20.0f}, color);
-    }
-
-    // budowanie studni
-    else if (m_currentBuildMode == BuildMode::WELL){
-        // polprzezroczysty niebieski kwadrat 
-        glm::vec4 color = {0.0f, 0.5f, 1.0f, 0.5f}; 
-        m_Renderer->drawSquare(*m_Camera, m_ghostBuildingPos, {15.0f, 15.0f}, color); 
-    }
-
-    // budowanie magazynu 
-    else if (m_currentBuildMode == BuildMode::STOCKPILE){
-        glm::vec4 color = {0.9f, 0.9f, 0.8f, 0.5f}; 
-        m_Renderer->drawSquare(*m_Camera, m_ghostBuildingPos, {25.0f, 25.0f}, color);
-    }
-
-    // budowanie ogniska 
-    else if (m_currentBuildMode == BuildMode::CAMPFIRE) 
-    {
-        glm::vec4 color = {1.0f, 0.5f, 0.0f, 0.5f}; 
-        m_Renderer->drawSquare(*m_Camera, m_ghostBuildingPos, {20.0f, 20.0f}, color);
-    }
-
-    // rysowanie ui 
-    // definiowanie okna 
-    ImGui::Begin("Panel Zarzadzania");
-
-    // --- system zapisu --- 
-    if (ImGui::Button("ZAPISZ GRE"))
-    {
-        m_GameState->saveGame("save.txt");
-        std::cout << "[SYSTEM] Zapisano gre!\n";
-    }
-    ImGui::SameLine(); 
-    if (ImGui::Button("WCZYTAJ GRE"))
-    {
-        m_GameState->loadGame("save.txt");
-        std::cout << "[SYSTEM] Wczytano gre!\n";
-    }
-    
-    ImGui::Separator(); 
-
-    // --- kontrola czasu --- 
-    ImGui::Text("KONTROLA CZASU: (%.1fx)", m_timeScale);
-
-    // --- 1. PRZYCISK STOP (||) ---
-    bool isPaused = (m_timeScale == 0.0f); // Zapamiętaj stan PRZED przyciskiem
-    if (isPaused) ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.0f, 0.0f, 0.0f, 1.0f));
-    
-    if (ImGui::Button("STOP (||)", ImVec2(70, 0))) {
-        m_timeScale = 0.0f;
-    }
-    
-    if (isPaused) ImGui::PopStyleColor(); // Użyj starego stanu do zdjęcia koloru
-
-    ImGui::SameLine();
-
-    // --- 2. PRZYCISK PLAY (>) ---
-    bool isNormal = (m_timeScale == 1.0f);
-    if (isNormal) ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 0.8f, 0.0f, 1.0f));
-    
-    if (ImGui::Button("PLAY (>)", ImVec2(70, 0))) {
-        m_timeScale = 1.0f;
-    }
-    
-    if (isNormal) ImGui::PopStyleColor();
-
-    ImGui::SameLine();
-
-    // --- 3. PRZYCISK FAST (>>) ---
-    bool isFast = (m_timeScale == 5.0f);
-    if (isFast) ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 0.5f, 1.0f, 1.0f));
-    
-    if (ImGui::Button("FAST (>>)", ImVec2(70, 0))) {
-        m_timeScale = 5.0f;
-    }
-    
-    if (isFast) ImGui::PopStyleColor();
-
-    // Suwak
-    ImGui::SliderFloat("Predkosc", &m_timeScale, 0.0f, 10.0f);
-    
-    ImGui::Separator();
-    
-    // --- reszta fajnych rzeczy --- 
-    ImGui::Text("Dzien: %d", m_GameState->dayCounter); 
-    ImGui::Text("Godzina: %d:00", (int)m_GameState->timeOfDay); 
-    ImGui::Text("Temperatura: %.1f C", m_GameState->globalTemperature); 
-    if (m_GameState->currentSeason == GameState::Season::WINTER) 
-    {
-        ImGui::TextColored(ImVec4(0.5f, 0.5f, 1.0f, 1.0f), "[ZIMA] Zużycie opalu!");
-    }
-    ImGui::Separator();
-    ImGui::Text("Drewno: %d", m_GameState->globalWood);
-    ImGui::Text("Kamień: %d", m_GameState->globalStone);
-    ImGui::Text("Woda: %d", m_GameState->globalWater);
-    ImGui::Text("Jedzenie: %d", m_GameState->globalFood);
-    ImGui::Separator();
-    ImGui::Text("Mieszkancy: %lu", m_GameState->m_villagers.size());
-    // --- INSPEKTOR OSADNIKA ---
-    if (m_selectedVillager != nullptr) 
-    {
-        ImGui::Text("WYBRANY: %s", m_selectedVillager->name.c_str());
-        ImGui::Text("Stan: %d", (int)m_selectedVillager->currentState);
-        
-        // Pasek Głodu (Zielony -> Czerwony)
-        float hungerRatio = m_selectedVillager->hunger / 100.0f;
-        ImGui::Text("Glod:");
-        ImGui::SameLine();
-        ImGui::ProgressBar(hungerRatio, ImVec2(150, 20));
-
-        // Pasek Pragnienia (Niebieski)
-        float thirstRatio = m_selectedVillager->thirst / 100.0f;
-        ImGui::Text("Woda:");
-        ImGui::SameLine();
-        ImGui::ProgressBar(thirstRatio, ImVec2(150, 20));
-
-        // --- PRZYCISKI DEBUGOWANIA (Żeby nie czekać!) ---
-        if (ImGui::Button("WYMUS GLOD (H=10)")) 
-        {
-            m_selectedVillager->hunger = 10.0f; // Powinien natychmiast rzucić pracę
-        }
-        ImGui::SameLine();
-        if (ImGui::Button("WYMUS PRAGNIENIE (T=10)")) 
-        {
-            m_selectedVillager->thirst = 10.0f; // Powinien natychmiast iść pić
-        }
-    } 
-    else 
-    {
-        ImGui::Text("Kliknij na osadnika, aby zobaczyc szczegoly.");
-    }
-    
-    ImGui::Separator();
-    ImGui::Text("BUDOWANIE:");
-
-    // logika przyciskow 
-    bool isKitchenActive = (m_currentBuildMode == BuildMode::KITCHEN); 
-    if (isKitchenActive) ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 0.5f, 0.0f, 1.0f)); 
-
-    // przycisk odpowiedzialny za kuchnie 
-    if(ImGui::Button("Kuchnia (50 Drewna)")){
-        if (isKitchenActive){
-            m_currentBuildMode = BuildMode::NONE; 
-        } else {
-            m_currentBuildMode = BuildMode::KITCHEN; 
-            m_selectedVillager = nullptr; 
-        }
-    }
-
-    if (isKitchenActive) ImGui::PopStyleColor(); 
-
-    // przycisk odpowiedzialny za studnie 
-    bool isWellActivate = (m_currentBuildMode == BuildMode::WELL); 
-    if (isWellActivate) ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 0.5f, 0.0f, 1.0f)); 
-
-    if (ImGui::Button("Studnia (25 Drewna)")){
-        if (isWellActivate){
-            m_currentBuildMode = BuildMode::NONE; 
-        } else {
-            m_currentBuildMode = BuildMode::WELL; 
-            m_selectedVillager = nullptr; 
-        }
-    }
-
-    if (isWellActivate) ImGui::PopStyleColor(); 
-
-    // przycisk odpowiedzialny za magazyn 
-    bool isStockpileActive = (m_currentBuildMode == BuildMode::STOCKPILE);
-    if (isStockpileActive) ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 0.5f, 0.0f, 1.0f));
-
-    if (ImGui::Button("Magazyn (10 Drewna)")){
-        if (isStockpileActive){
-            m_currentBuildMode = BuildMode::NONE; 
-        } else {
-            m_currentBuildMode = BuildMode::STOCKPILE; 
-            m_selectedVillager = nullptr; 
-        }
-    }
-    if (isStockpileActive) ImGui::PopStyleColor(); 
-
-    // przycisk odpowiedzialny za ognisko 
-    bool isCampfireAcitve = (m_currentBuildMode == BuildMode::CAMPFIRE);
-    if (isCampfireAcitve) ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.0f, 0.5, 0.0f, 1.0f)); 
-
-    if (ImGui::Button("Ognisko (30 Drewna)")) 
-    {
-        if (isCampfireAcitve) m_currentBuildMode = BuildMode::NONE; 
-        else 
-        {
-            m_currentBuildMode = BuildMode::CAMPFIRE;
-            m_selectedVillager = nullptr; 
-        }
-    }
-    if (isCampfireAcitve) ImGui::PopStyleColor(); 
-
-    ImGui::End(); 
-
-
-    // rysowanie okna eventu 
-    if (m_GameState->getMode() == GameState::Mode::EVENT_PAUSED){
-        // ustawianie okna na srodku 
-        ImGui::SetNextWindowPos(ImVec2(400, 300), ImGuiCond_Always, ImVec2(0.5f, 0.5f));
-        ImGui::SetNextWindowSize(ImVec2(400, 250)); 
-
-        // rozpoczynanie okna 
-        ImGui::Begin("WYDARZENIE", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
-
-        // tytul i opis 
-        ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "%s", m_GameState->currentEventTitle.c_str()); // Czerwony tytuł
-        ImGui::Separator();
-        ImGui::TextWrapped("%s", m_GameState->currentEventDescription.c_str());
-        
-        ImGui::Spacing();
-        ImGui::Spacing();
-
-        // --- PRZYCISKI DECYZJI ---
-        // Button zwraca 'true' jeśli został kliknięty w tej klatce
-        
-        if (ImGui::Button("PRZYJMIJ (Tak)", ImVec2(120, 30))) {
-            m_GameState->resolveRefugeeEvent(true); // Logika z GameState
-        }
-        
-        ImGui::SameLine(); // Rysuj następny element w tej samej linii
-        
-        if (ImGui::Button("ODRZUĆ (Nie)", ImVec2(120, 30))) {
-            m_GameState->resolveRefugeeEvent(false);
-        }
-
         ImGui::End(); 
     }
-
-
     
+    
+    else if (m_AppState == AppState::GAME)
+    {
+        // renderowanie gry 
+        if (m_GameState->currentSeason == GameState::Season::SUMMER)
+        {
+            glClearColor(0.1f, 0.3f, 0.1f, 1.0f); 
+        }
+        else 
+        {
+            glClearColor(0.8f, 0.8f, 0.9f, 1.0f); 
+        }
+        glClear(GL_COLOR_BUFFER_BIT); 
+
+
+        // 1 renderowanie zasobow 
+        for (const auto& node : m_GameState->m_resourceNodes) { 
+            glm::vec4 color = {1.0f, 1.0f, 1.0f, 1.0f}; 
+
+            if (node.amountLeft <= 0) continue;
+
+            if (node.resourceType == ResourceNode::TREE)
+            {
+                color = {0.0f, 0.5f, 0.0f, 1.0f}; // ciemnozielony na drzewo 
+            } 
+            else if (node.resourceType == ResourceNode::ROCK) 
+            {
+                color = {0.5f, 0.5f, 0.5f, 1.0f}; // szary na kamienie 
+            }
+            else if (node.resourceType == ResourceNode::BERRY_BUSH) 
+            {
+                color = {1.0f, 0.2f, 0.6f, 1.0f}; 
+            }
+            m_Renderer->drawSquare(*m_Camera, node.position, {10.0f, 10.0f}, color);
+        }
+
+        // dodanie debuga start 
+        int width = m_GameState->m_worldMap->getWidth(); 
+        int height = m_GameState->m_worldMap->getHeight(); 
+        float tileSize = m_GameState->m_worldMap->getTileSize();
+
+        for (int y = 0; y < height; y++){
+            for (int x = 0; x < width; x++){
+                if (m_GameState->m_worldMap->isBlocked(x, y)){
+                    // obliczanie pozycji w swiecie 
+                    glm::vec2 pos = m_GameState->m_worldMap->gridToWorld({x, y});
+
+                    // rysowanie czerwonego polprzezroczystego kwadratu 
+                    glm::vec4 color = {1.0f, 0.0f, 0.0f, 0.3f}; 
+                    m_Renderer->drawSquare(*m_Camera, pos, {tileSize, tileSize}, color);
+                }
+            }
+        }
+        // debug stop 
+
+
+        // 2 renderowanie mieszkancow 
+        for (const auto& villager : m_GameState->m_villagers) {
+            glm::vec4 color = {1.0f, 0.0f, 0.0f, 1.0f}; // czerwony 
+
+
+            // zmienianie koloru kiedy zaznaczymy go 
+            if (m_selectedVillager == &villager){
+                color = {1.0f, 1.0f, 0.0f, 1.0f}; // zolty (jak zaznaczony)
+            }
+
+
+
+
+            m_Renderer->drawSquare(*m_Camera, villager.position, {10.0f, 10.0f}, color);
+        }
+
+        // renderowanie budynkow 
+        for (const auto& b : m_GameState->m_buildings) {
+            glm::vec4 color = {0.5f, 0.3f, 0.0f, 1.0f}; // brazowy 
+
+            if (b.buildingType == Building::KITCHEN){
+                color = {0.8f, 0.8f, 0.8f, 1.0f}; // jasnoszary 
+            }
+
+            else if (b.buildingType == Building::WELL){
+                color = {0.0f, 0.5f, 1.0f, 1.0f}; // ciemnoniebieski 
+            }
+
+            else if (b.buildingType == Building::Type::STOCKPILE){
+                color = {0.9f, 0.9f, 0.8f, 1.0f}; 
+            }
+
+            else if (b.buildingType == Building::CAMPFIRE) 
+            {
+                color = {1.0f, 0.5f, 0.0f, 1.0f}; 
+            }
+            m_Renderer->drawSquare(*m_Camera, b.position, {20.0f, 20.0f}, color); 
+        }
+
+
+        // renderowanie ducha budynku 
+        if (m_currentBuildMode == BuildMode::KITCHEN){
+            // rysowanie polprzezroczystego kwadrata 
+            glm::vec4 color = {0.8f, 0.8f, 0.8f, 0.5f}; 
+            m_Renderer->drawSquare(*m_Camera, m_ghostBuildingPos, {20.0f, 20.0f}, color);
+        }
+
+        // budowanie studni
+        else if (m_currentBuildMode == BuildMode::WELL){
+            // polprzezroczysty niebieski kwadrat 
+            glm::vec4 color = {0.0f, 0.5f, 1.0f, 0.5f}; 
+            m_Renderer->drawSquare(*m_Camera, m_ghostBuildingPos, {15.0f, 15.0f}, color); 
+        }
+
+        // budowanie magazynu 
+        else if (m_currentBuildMode == BuildMode::STOCKPILE){
+            glm::vec4 color = {0.9f, 0.9f, 0.8f, 0.5f}; 
+            m_Renderer->drawSquare(*m_Camera, m_ghostBuildingPos, {25.0f, 25.0f}, color);
+        }
+
+        // budowanie ogniska 
+        else if (m_currentBuildMode == BuildMode::CAMPFIRE) 
+        {
+            glm::vec4 color = {1.0f, 0.5f, 0.0f, 0.5f}; 
+            m_Renderer->drawSquare(*m_Camera, m_ghostBuildingPos, {20.0f, 20.0f}, color);
+        }
+
+        // rysowanie ui 
+        // definiowanie okna 
+        ImGui::Begin("Panel Zarzadzania");
+
+        // --- system zapisu --- 
+        if (ImGui::Button("ZAPISZ GRE"))
+        {
+            m_GameState->saveGame("save.txt");
+            std::cout << "[SYSTEM] Zapisano gre!\n";
+        }
+        ImGui::SameLine(); 
+        if (ImGui::Button("WCZYTAJ GRE"))
+        {
+            m_GameState->loadGame("save.txt");
+            std::cout << "[SYSTEM] Wczytano gre!\n";
+        }
+
+        ImGui::Separator(); 
+
+        // --- kontrola czasu --- 
+        ImGui::Text("KONTROLA CZASU: (%.1fx)", m_timeScale);
+
+        // --- 1. PRZYCISK STOP (||) ---
+        bool isPaused = (m_timeScale == 0.0f); // Zapamiętaj stan PRZED przyciskiem
+        if (isPaused) ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.0f, 0.0f, 0.0f, 1.0f));
+
+        if (ImGui::Button("STOP (||)", ImVec2(70, 0))) {
+            m_timeScale = 0.0f;
+        }
+
+        if (isPaused) ImGui::PopStyleColor(); // Użyj starego stanu do zdjęcia koloru
+
+        ImGui::SameLine();
+
+        // --- 2. PRZYCISK PLAY (>) ---
+        bool isNormal = (m_timeScale == 1.0f);
+        if (isNormal) ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 0.8f, 0.0f, 1.0f));
+
+        if (ImGui::Button("PLAY (>)", ImVec2(70, 0))) {
+            m_timeScale = 1.0f;
+        }
+
+        if (isNormal) ImGui::PopStyleColor();
+
+        ImGui::SameLine();
+
+        // --- 3. PRZYCISK FAST (>>) ---
+        bool isFast = (m_timeScale == 5.0f);
+        if (isFast) ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 0.5f, 1.0f, 1.0f));
+
+        if (ImGui::Button("FAST (>>)", ImVec2(70, 0))) {
+            m_timeScale = 5.0f;
+        }
+
+        if (isFast) ImGui::PopStyleColor();
+
+        // Suwak
+        ImGui::SliderFloat("Predkosc", &m_timeScale, 0.0f, 10.0f);
+
+        ImGui::Separator();
+
+        // --- reszta fajnych rzeczy --- 
+        ImGui::Text("Dzien: %d", m_GameState->dayCounter); 
+        ImGui::Text("Godzina: %d:00", (int)m_GameState->timeOfDay); 
+        ImGui::Text("Temperatura: %.1f C", m_GameState->globalTemperature); 
+        if (m_GameState->currentSeason == GameState::Season::WINTER) 
+        {
+            ImGui::TextColored(ImVec4(0.5f, 0.5f, 1.0f, 1.0f), "[ZIMA] Zużycie opalu!");
+        }
+        ImGui::Separator();
+        ImGui::Text("Drewno: %d", m_GameState->globalWood);
+        ImGui::Text("Kamień: %d", m_GameState->globalStone);
+        ImGui::Text("Woda: %d", m_GameState->globalWater);
+        ImGui::Text("Jedzenie: %d", m_GameState->globalFood);
+        ImGui::Separator();
+        ImGui::Text("Mieszkancy: %lu", m_GameState->m_villagers.size());
+        // --- INSPEKTOR OSADNIKA ---
+        if (m_selectedVillager != nullptr) 
+        {
+            ImGui::Text("WYBRANY: %s", m_selectedVillager->name.c_str());
+            ImGui::Text("Stan: %d", (int)m_selectedVillager->currentState);
+
+            // Pasek Głodu (Zielony -> Czerwony)
+            float hungerRatio = m_selectedVillager->hunger / 100.0f;
+            ImGui::Text("Glod:");
+            ImGui::SameLine();
+            ImGui::ProgressBar(hungerRatio, ImVec2(150, 20));
+
+            // Pasek Pragnienia (Niebieski)
+            float thirstRatio = m_selectedVillager->thirst / 100.0f;
+            ImGui::Text("Woda:");
+            ImGui::SameLine();
+            ImGui::ProgressBar(thirstRatio, ImVec2(150, 20));
+
+            // --- PRZYCISKI DEBUGOWANIA (Żeby nie czekać!) ---
+            if (ImGui::Button("WYMUS GLOD (H=10)")) 
+            {
+                m_selectedVillager->hunger = 10.0f; // Powinien natychmiast rzucić pracę
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("WYMUS PRAGNIENIE (T=10)")) 
+            {
+                m_selectedVillager->thirst = 10.0f; // Powinien natychmiast iść pić
+            }
+        } 
+        else 
+        {
+            ImGui::Text("Kliknij na osadnika, aby zobaczyc szczegoly.");
+        }
+
+        ImGui::Separator();
+        ImGui::Text("BUDOWANIE:");
+
+        // logika przyciskow 
+        bool isKitchenActive = (m_currentBuildMode == BuildMode::KITCHEN); 
+        if (isKitchenActive) ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 0.5f, 0.0f, 1.0f)); 
+
+        // przycisk odpowiedzialny za kuchnie 
+        if(ImGui::Button("Kuchnia (50 Drewna)")){
+            if (isKitchenActive){
+                m_currentBuildMode = BuildMode::NONE; 
+            } else {
+                m_currentBuildMode = BuildMode::KITCHEN; 
+                m_selectedVillager = nullptr; 
+            }
+        }
+
+        if (isKitchenActive) ImGui::PopStyleColor(); 
+
+        // przycisk odpowiedzialny za studnie 
+        bool isWellActivate = (m_currentBuildMode == BuildMode::WELL); 
+        if (isWellActivate) ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 0.5f, 0.0f, 1.0f)); 
+
+        if (ImGui::Button("Studnia (25 Drewna)")){
+            if (isWellActivate){
+                m_currentBuildMode = BuildMode::NONE; 
+            } else {
+                m_currentBuildMode = BuildMode::WELL; 
+                m_selectedVillager = nullptr; 
+            }
+        }
+
+        if (isWellActivate) ImGui::PopStyleColor(); 
+
+        // przycisk odpowiedzialny za magazyn 
+        bool isStockpileActive = (m_currentBuildMode == BuildMode::STOCKPILE);
+        if (isStockpileActive) ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 0.5f, 0.0f, 1.0f));
+
+        if (ImGui::Button("Magazyn (10 Drewna)")){
+            if (isStockpileActive){
+                m_currentBuildMode = BuildMode::NONE; 
+            } else {
+                m_currentBuildMode = BuildMode::STOCKPILE; 
+                m_selectedVillager = nullptr; 
+            }
+        }
+        if (isStockpileActive) ImGui::PopStyleColor(); 
+
+        // przycisk odpowiedzialny za ognisko 
+        bool isCampfireAcitve = (m_currentBuildMode == BuildMode::CAMPFIRE);
+        if (isCampfireAcitve) ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.0f, 0.5, 0.0f, 1.0f)); 
+
+        if (ImGui::Button("Ognisko (30 Drewna)")) 
+        {
+            if (isCampfireAcitve) m_currentBuildMode = BuildMode::NONE; 
+            else 
+            {
+                m_currentBuildMode = BuildMode::CAMPFIRE;
+                m_selectedVillager = nullptr; 
+            }
+        }
+        if (isCampfireAcitve) ImGui::PopStyleColor(); 
+
+        ImGui::End(); 
+
+
+        // rysowanie okna eventu 
+        if (m_GameState->getMode() == GameState::Mode::EVENT_PAUSED){
+            // ustawianie okna na srodku 
+            ImGui::SetNextWindowPos(ImVec2(400, 300), ImGuiCond_Always, ImVec2(0.5f, 0.5f));
+            ImGui::SetNextWindowSize(ImVec2(400, 250)); 
+
+            // rozpoczynanie okna 
+            ImGui::Begin("WYDARZENIE", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
+
+            // tytul i opis 
+            ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "%s", m_GameState->currentEventTitle.c_str()); // Czerwony tytuł
+            ImGui::Separator();
+            ImGui::TextWrapped("%s", m_GameState->currentEventDescription.c_str());
+
+            ImGui::Spacing();
+            ImGui::Spacing();
+
+            // --- PRZYCISKI DECYZJI ---
+            // Button zwraca 'true' jeśli został kliknięty w tej klatce
+
+            if (ImGui::Button("PRZYJMIJ (Tak)", ImVec2(120, 30))) {
+                m_GameState->resolveRefugeeEvent(true); // Logika z GameState
+            }
+
+            ImGui::SameLine(); // Rysuj następny element w tej samej linii
+
+            if (ImGui::Button("ODRZUĆ (Nie)", ImVec2(120, 30))) {
+                m_GameState->resolveRefugeeEvent(false);
+            }
+
+            ImGui::End(); 
+        }
+    }
+
+
     // ------------------------------
     ImGui::SFML::Render();
 
