@@ -5,6 +5,7 @@ CMakeFiles/gra.dir/src/Core/Application.cpp.o: /home/mateuszsierakowski/Document
   /home/mateuszsierakowski/Documents/Echo_Wojny/src/Core/Application.h \
   /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/Building.h \
   /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/GameState.h \
+  /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/Pathfinder.h \
   /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/ResourceNode.h \
   /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/Villager.h \
   /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/WorldMap.h \
@@ -5095,10 +5096,6 @@ CMakeFiles/gra.dir/src/Rendering/PrimitiveRenderer.cpp.o:
 
 /usr/include/c++/15/ctime:
 
-/usr/include/c++/15/x86_64-redhat-linux/bits/c++config.h:
-
-/usr/include/c++/15/stdlib.h:
-
 /usr/include/c++/15/concepts:
 
 /usr/include/c++/15/cmath:
@@ -5249,6 +5246,10 @@ CMakeFiles/gra.dir/vendor/imgui/imgui.cpp.o:
 
 /usr/include/glm/detail/func_common.inl:
 
+/usr/lib/gcc/x86_64-redhat-linux/15/include/avxvnniint8intrin.h:
+
+/usr/include/c++/15/bits/cxxabi_forced.h:
+
 /usr/include/bits/stdint-uintn.h:
 
 /usr/lib/gcc/x86_64-redhat-linux/15/include/mwaitxintrin.h:
@@ -5299,12 +5300,6 @@ CMakeFiles/gra.dir/vendor/imgui/imgui.cpp.o:
 
 /usr/include/c++/15/bits/codecvt.h:
 
-/usr/include/bits/byteswap.h:
-
-/usr/include/bits/types/struct_FILE.h:
-
-/home/mateuszsierakowski/Documents/Echo_Wojny/src/Rendering/PrimitiveRenderer.h:
-
 /usr/include/bits/locale.h:
 
 /usr/include/bits/atomic_wide_counter.h:
@@ -5325,33 +5320,13 @@ CMakeFiles/gra.dir/vendor/imgui/imgui.cpp.o:
 
 /usr/include/glm/ext/vector_int3_sized.hpp:
 
-/usr/include/glm/detail/type_vec3.hpp:
+/usr/include/glm/ext/scalar_constants.inl:
 
-/usr/lib/gcc/x86_64-redhat-linux/15/include/bmiintrin.h:
+/usr/include/glm/ext/vector_uint3_sized.hpp:
 
-/usr/include/bits/select.h:
+/usr/include/c++/15/pstl/glue_memory_defs.h:
 
-/usr/include/c++/15/bits/basic_string.tcc:
-
-/home/mateuszsierakowski/Documents/Echo_Wojny/vendor/imgui/imconfig.h:
-
-/usr/include/c++/15/bits/stl_iterator_base_funcs.h:
-
-/usr/local/include/SFML/Graphics/BlendMode.hpp:
-
-/usr/include/c++/15/pstl/glue_algorithm_defs.h:
-
-/usr/include/bits/types/clock_t.h:
-
-/usr/include/c++/15/bits/charconv.h:
-
-/usr/include/glm/ext/matrix_double3x4.hpp:
-
-/usr/include/c++/15/ext/concurrence.h:
-
-/usr/include/c++/15/ext/atomicity.h:
-
-/usr/local/include/SFML/System/MemoryInputStream.hpp:
+/usr/include/bits/types/struct_FILE.h:
 
 /usr/include/c++/15/bits/fstream.tcc:
 
@@ -5394,6 +5369,28 @@ CMakeFiles/gra.dir/vendor/imgui/imgui.cpp.o:
 /usr/lib/gcc/x86_64-redhat-linux/15/include/gfniintrin.h:
 
 /usr/local/include/SFML/System/Thread.hpp:
+
+/usr/include/c++/15/bits/stl_iterator_base_funcs.h:
+
+/usr/local/include/SFML/Graphics/BlendMode.hpp:
+
+/usr/include/c++/15/pstl/glue_algorithm_defs.h:
+
+/usr/include/bits/types/clock_t.h:
+
+/usr/include/c++/15/bits/charconv.h:
+
+/usr/include/glm/ext/matrix_double3x4.hpp:
+
+/usr/include/c++/15/ext/concurrence.h:
+
+/usr/include/c++/15/ext/atomicity.h:
+
+/usr/local/include/SFML/System/MemoryInputStream.hpp:
+
+/usr/include/bits/byteswap.h:
+
+/home/mateuszsierakowski/Documents/Echo_Wojny/src/Rendering/PrimitiveRenderer.h:
 
 /usr/include/c++/15/bits/ostream_insert.h:
 
@@ -5473,17 +5470,15 @@ CMakeFiles/gra.dir/vendor/imgui/imgui.cpp.o:
 
 /usr/local/include/SFML/Window/Cursor.hpp:
 
+/usr/include/c++/15/bits/basic_string.tcc:
+
+/home/mateuszsierakowski/Documents/Echo_Wojny/vendor/imgui/imconfig.h:
+
 /usr/include/glm/ext/matrix_double4x4.hpp:
 
 /usr/include/alloca.h:
 
 /usr/include/glm/ext/vector_bool4_precision.hpp:
-
-/usr/include/glm/ext/scalar_constants.inl:
-
-/usr/include/glm/ext/vector_uint3_sized.hpp:
-
-/usr/include/c++/15/pstl/glue_memory_defs.h:
 
 /usr/include/c++/15/bits/stl_raw_storage_iter.h:
 
@@ -5532,6 +5527,12 @@ CMakeFiles/gra.dir/vendor/imgui/imgui.cpp.o:
 /home/mateuszsierakowski/Documents/Echo_Wojny/vendor/imgui-sfml/imgui-SFML_export.h:
 
 /usr/include/asm-generic/int-ll64.h:
+
+/usr/include/glm/detail/type_vec3.hpp:
+
+/usr/lib/gcc/x86_64-redhat-linux/15/include/bmiintrin.h:
+
+/usr/include/bits/select.h:
 
 /usr/include/c++/15/cctype:
 
@@ -5729,10 +5730,6 @@ CMakeFiles/gra.dir/vendor/imgui/imgui.cpp.o:
 
 /usr/include/c++/15/bits/atomic_lockfree_defines.h:
 
-/usr/lib/gcc/x86_64-redhat-linux/15/include/avxvnniint8intrin.h:
-
-/usr/include/c++/15/bits/cxxabi_forced.h:
-
 /lib64/libm.so.6:
 
 /usr/include/c++/15/pstl/pstl_config.h:
@@ -5764,6 +5761,10 @@ CMakeFiles/gra.dir/vendor/imgui/imgui_demo.cpp.o:
 /usr/include/glm/detail/type_mat3x4.inl:
 
 /usr/local/include/SFML/System/Vector3.inl:
+
+/usr/include/c++/15/stdlib.h:
+
+/usr/include/c++/15/x86_64-redhat-linux/bits/c++config.h:
 
 /usr/include/c++/15/x86_64-redhat-linux/bits/cpu_defines.h:
 

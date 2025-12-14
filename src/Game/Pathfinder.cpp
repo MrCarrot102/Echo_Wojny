@@ -61,9 +61,12 @@ std::vector<glm::vec2> Pathfinder::findPath(const glm::vec2& startWorld, const g
         for (const auto& offset : neighbors){ 
             glm::ivec2 neighborPos = currentNode->pos + offset; 
             
-            // jesli sciana lub juz w closedset pomijamy 
-            if (map.isBlocked(neighborPos.x, neighborPos.y) && neighborPos != endNodePos) continue;
-
+            // sprawdzanie czy nie wychodzimy poza mape 
+            if (neighborPos.x < 0 || neighborPos.y < 0 || neighborPos.x >= map.getWidth() || neighborPos.y >= map.getHeight()) continue;
+            // sprawdzanie jesli jest sciana to konczymy nie ma wejscia 
+            if (map.isBlocked(neighborPos.x, neighborPos.y)) continue; 
+            
+            
             bool inClosed = false; 
             for (Node* n : closedSet) { if (n->pos == neighborPos) { inClosed = true; break; }}
             if (inClosed) continue;

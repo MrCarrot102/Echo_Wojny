@@ -387,4 +387,5 @@ CMakeFiles/gra.dir/src/Core/Application.cpp.o: \
  /home/mateuszsierakowski/Documents/Echo_Wojny/vendor/imgui/imgui.h \
  /home/mateuszsierakowski/Documents/Echo_Wojny/vendor/imgui/imconfig.h \
  /usr/include/string.h /usr/include/strings.h \
+ /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/Pathfinder.h \
  /usr/include/c++/15/iostream

@@ -12,8 +12,10 @@ WorldMap::WorldMap(int width, int height, float tileSize)
 
 
 void WorldMap::setObstacle(int x, int y, bool isObstacle){
-    if (x >= 0 && x < m_width && y >= 0 && y < m_height) 
-        m_grid[y * m_width + x].isWall = isObstacle;
+    if (x >= 0 && x < m_width && y >= 0 && y < m_height) return; 
+    
+    int index = y * m_width + x; 
+    m_grid[index].isWall = isObstacle; 
 }
 
 bool WorldMap::isBlocked(int x, int y) const {

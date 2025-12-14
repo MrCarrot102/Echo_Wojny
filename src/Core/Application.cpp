@@ -1,4 +1,5 @@
 #include "Core/Application.h"
+#include "Game/Pathfinder.h"
 
 #include <iostream> 
 
@@ -160,12 +161,17 @@ void Application::pollEvents() {
 
                             m_GameState->m_buildings.emplace_back(Building::KITCHEN, m_ghostBuildingPos);
 
-                            glm::ivec2 gridPos = m_GameState->m_worldMap->worldToGrid(m_ghostBuildingPos);
+                            glm::ivec2 centerGrid = m_GameState->m_worldMap->worldToGrid(m_ghostBuildingPos);
+                            
+                            for (int x = -1; x <= 1; x++)
+                            {
+                                for (int y = -1; y <= 1; y++)
+                                {
+                                    m_GameState->m_worldMap->setObstacle(centerGrid.x + x, centerGrid.y + y, true); 
+                                }
+                            }
 
-
-                            m_GameState->m_worldMap->setObstacle(gridPos.x, gridPos.y, true);
-
-                            std::cout << "[MAPA] Zablokowano kratkę: " << gridPos.x << ", " << gridPos.y << "\n";
+                            std::cout << "[MAPA] Zablokowano kratkę: " << centerGrid.x << ", " << centerGrid.y << "\n";
                             // ----------------------------------------
 
                             m_currentBuildMode = BuildMode::NONE;
@@ -182,11 +188,17 @@ void Application::pollEvents() {
 
                             m_GameState->m_buildings.emplace_back(Building::WELL, m_ghostBuildingPos); 
 
-                            glm::ivec2 gridPos = m_GameState->m_worldMap->worldToGrid(m_ghostBuildingPos); 
+                            glm::ivec2 centerGrid = m_GameState->m_worldMap->worldToGrid(m_ghostBuildingPos);
+                            
+                            for (int x = -1; x <= 1; x++)
+                            {
+                                for (int y = -1; y <= 1; y++)
+                                {
+                                    m_GameState->m_worldMap->setObstacle(centerGrid.x + x, centerGrid.y + y, true); 
+                                }
+                            }
 
-                            m_GameState->m_worldMap->setObstacle(gridPos.x, gridPos.y, true); 
-
-                            std::cout << "[MAPA] Zbudowano kratkę: " << gridPos.x << ", " << gridPos.y << "\n";
+                            std::cout << "[MAPA] Zbudowano kratkę: " << centerGrid.x << ", " << centerGrid.y << "\n";
 
                             m_currentBuildMode = BuildMode::NONE;
 
@@ -203,11 +215,16 @@ void Application::pollEvents() {
                             
                             m_GameState->m_buildings.emplace_back(Building::STOCKPILE, m_ghostBuildingPos); 
 
-                            glm::ivec2 gridPos = m_GameState->m_worldMap->worldToGrid(m_ghostBuildingPos); 
-
-                            m_GameState->m_worldMap->setObstacle(gridPos.x, gridPos.y, true); 
-
-                            std::cout << "[MAPA] Zbudowano kartkę: " << gridPos.x << ", " << gridPos.y << "\n";
+                            glm::ivec2 centerGrid = m_GameState->m_worldMap->worldToGrid(m_ghostBuildingPos);
+                            
+                            for (int x = -1; x <= 1; x++)
+                            {
+                                for (int y = -1; y <= 1; y++)
+                                {
+                                    m_GameState->m_worldMap->setObstacle(centerGrid.x + x, centerGrid.y + y, true); 
+                                }
+                            }
+                            std::cout << "[MAPA] Zbudowano kartkę: " << centerGrid.x << ", " << centerGrid.y << "\n";
 
                             m_currentBuildMode = BuildMode::NONE;
 
@@ -222,8 +239,19 @@ void Application::pollEvents() {
                         int woodCost = 30; 
                         if (m_GameState->globalWood >= woodCost)
                         {
-                            m_GameState->globalWood -= woodCost;
-                            m_GameState->m_buildings.emplace_back(Building::CAMPFIRE, m_ghostBuildingPos);
+                            m_GameState->globalWood -= woodCost; 
+                            m_GameState->m_buildings.emplace_back(Building::CAMPFIRE, m_ghostBuildingPos); 
+                            
+                            glm::ivec2 centerGrid = m_GameState->m_worldMap->worldToGrid(m_ghostBuildingPos);
+                            
+                            for (int x = -1; x <= 1; x++)
+                            {
+                                for (int y = -1; y <= 1; y++)
+                                {
+                                    m_GameState->m_worldMap->setObstacle(centerGrid.x + x, centerGrid.y + y, true); 
+                                }
+                            }
+
                             std::cout << "[BUDOWA] Rozpalono Ognisko!\n";
                             m_currentBuildMode = BuildMode::NONE; 
                         }
@@ -231,10 +259,11 @@ void Application::pollEvents() {
                         {
                             std::cout << "[BUDOWA] Brakuje drewna mój Panie!\n";
                         }
-                    }
+                    }   
 
-                } else { // BŁĄD LOGICZNY BYŁ TUTAJ: Ten 'else if' musi być W ŚRODKU
-                    // === JESTEŚMY W TRYBIE ZAZNACZANIA (nie budowania) ===
+                } 
+                else 
+                { 
                     std::cout << "Kliknięto w świat: " << worldMousePos.x << ", " << worldMousePos.y << std::endl; 
                     m_selectedVillager = nullptr; 
                     for (Villager& v : m_GameState->m_villagers){
@@ -248,43 +277,58 @@ void Application::pollEvents() {
                     }
                 }
             } 
-            // BŁĄD LOGICZNY BYŁ TUTAJ: 'else if (Right)' musi być tutaj,
-            // a nie po 'else' od 'if (Left)'
             else if (event.mouseButton.button == sf::Mouse::Right){
-                // === LOGIKA PRAWGO PRZYCISKU (ROZKAZY) ===
+                // === ROZKAZY ===
                 if (m_selectedVillager != nullptr){
                     ResourceNode* clickedNode = nullptr; 
+                    
+                    // Szukanie zasobu
                     for (ResourceNode& node : m_GameState->m_resourceNodes){
-                        if (worldMousePos.x >= node.position.x && worldMousePos.x <= node.position.x + 15.0f &&
-                            worldMousePos.y >= node.position.y && worldMousePos.y <= node.position.y + 15.0f)
-                        {
+                        if (node.amountLeft > 0 && glm::distance(node.position, worldMousePos) < 30.0f) {
                             clickedNode = &node; 
                             break; 
                         }
                     }
                     
-                    if (clickedNode != nullptr){
-                        std::cout << "Rozkaz pracy dla " << m_selectedVillager->name << " przy zasobie" << std::endl; 
-                        m_selectedVillager->targetNode = clickedNode; 
-                        m_selectedVillager->targetPosition = clickedNode->position; 
-                        m_selectedVillager->currentState = Villager::State::MOVING_TO_WORK; 
+                    // Cel podróży (współrzędne w świecie gry)
+                    glm::vec2 finalTargetPos;
 
-                        m_selectedVillager->currentPath.clear(); 
-                        m_selectedVillager->currentPathIndex = 0; 
+                    if (clickedNode != nullptr){
+                        std::cout << "Rozkaz: Praca\n";
+                        m_selectedVillager->targetNode = clickedNode; 
+                        m_selectedVillager->currentState = Villager::State::MOVING_TO_WORK;
                         
+                        // Idź troszkę obok zasobu
+                        glm::vec2 dir = glm::normalize(m_selectedVillager->position - clickedNode->position);
                         
-                        m_selectedVillager->currentPath.clear(); 
+                        // --- POPRAWKA 1: Prawidłowa inicjalizacja wektora ---
+                        if(glm::length(dir) == 0) dir = glm::vec2(1.0f, 0.0f); 
+                        
+                        finalTargetPos = clickedNode->position + (dir * 35.0f);
                     } else {
-                        std::cout << "Rozkaz ruchu dla " << m_selectedVillager->name << std::endl;
+                        std::cout << "Rozkaz: Ruch\n";
                         m_selectedVillager->targetNode = nullptr; 
-                        m_selectedVillager->targetPosition = worldMousePos; 
                         m_selectedVillager->currentState = Villager::State::MOVING_TO_POINT;
-                        
-                        m_selectedVillager->currentPath.clear(); 
-                        m_selectedVillager->currentPathIndex = 0; 
+                        finalTargetPos = worldMousePos;
                     }
+
+                    // --- POPRAWKA 2: Literówka (Target a nie target) ---
+                    m_selectedVillager->targetPosition = finalTargetPos;
+
+                    // --- POPRAWKA 3: Prawidłowe wywołanie Pathfindera ---
+                    // Funkcja jest statyczna, więc wywołujemy ją przez nazwę klasy Pathfinder::
+                    // Kolejność argumentów to: (Start, Koniec, Mapa)
+                    // Nie musisz zamieniać na Grid (worldToGrid), Pathfinder zrobi to w środku
+                    
+                    m_selectedVillager->currentPath = Pathfinder::findPath(
+                        m_selectedVillager->position,   // Start (vec2)
+                        finalTargetPos,                 // Koniec (vec2)
+                        *m_GameState->m_worldMap        // Mapa (WorldMap)
+                    );
+                    
+                    m_selectedVillager->currentPathIndex = 0; // Reset indeksu
                 }
-            }
+            }   
         }   
     }
 }
@@ -386,26 +430,6 @@ void Application::render(){
             }
             m_Renderer->drawSquare(*m_Camera, node.position, {10.0f, 10.0f}, color);
         }
-
-        // dodanie debuga start 
-        int width = m_GameState->m_worldMap->getWidth(); 
-        int height = m_GameState->m_worldMap->getHeight(); 
-        float tileSize = m_GameState->m_worldMap->getTileSize();
-
-        for (int y = 0; y < height; y++){
-            for (int x = 0; x < width; x++){
-                if (m_GameState->m_worldMap->isBlocked(x, y)){
-                    // obliczanie pozycji w swiecie 
-                    glm::vec2 pos = m_GameState->m_worldMap->gridToWorld({x, y});
-
-                    // rysowanie czerwonego polprzezroczystego kwadratu 
-                    glm::vec4 color = {1.0f, 0.0f, 0.0f, 0.3f}; 
-                    m_Renderer->drawSquare(*m_Camera, pos, {tileSize, tileSize}, color);
-                }
-            }
-        }
-        // debug stop 
-
 
         // 2 renderowanie mieszkancow 
         for (const auto& villager : m_GameState->m_villagers) {

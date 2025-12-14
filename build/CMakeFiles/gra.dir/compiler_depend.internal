@@ -6,6 +6,7 @@ CMakeFiles/gra.dir/src/Core/Application.cpp.o
  /home/mateuszsierakowski/Documents/Echo_Wojny/src/Core/Application.h
  /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/Building.h
  /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/GameState.h
+ /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/Pathfinder.h
  /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/ResourceNode.h
  /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/Villager.h
  /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/WorldMap.h
