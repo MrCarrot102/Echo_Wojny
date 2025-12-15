@@ -1,6 +1,7 @@
 #include "Core/Application.h"
 #include "Game/Pathfinder.h"
 
+#include <SFML/Graphics.hpp> 
 #include <iostream> 
 
 Application::Application()
@@ -29,28 +30,31 @@ void Application::init() {
     m_Window.create(sf::VideoMode(windowWidth, widnowHeight), "Echo Wojny", sf::Style::Default, settings); 
     m_Window.setVerticalSyncEnabled(true); 
 
-    // --- INICJALIZACJA IMGUI --- 
+    // -- inicjalizacja imgui -- 
     // Rzutujemy rozmiar na Vector2f
     if (!ImGui::SFML::Init(m_Window, static_cast<sf::Vector2f>(m_Window.getSize()))){
         std::cerr << "Nie udało się zainicjować ImGui!\n";
     }
 
-
-    // inicjiowanie glew 
+    // -- inicjiowanie glew --
     if (glewInit() != GLEW_OK){
         std::cerr << "Nie udało się zainicjować GLEW!" << std::endl;
         m_Running = false; 
         return; 
     }
+    // -- inicjalizacja oswietlenia -- 
+    if (!m_lightMapTexture.create(windowWidth, windowWidth)) 
+    {
+        std::cerr << "Blad tworzenia LightMapy!\n";
+    }
 
     // tworzenie obieku rdzenia 
     m_Camera = std::make_unique<Camera2D>((float)windowWidth, (float)widnowHeight); 
     m_Camera->setPosition(glm::vec2(2000.0f, 2000.0f));
-    
     m_Renderer = std::make_unique<PrimitiveRenderer>(); 
+    m_GameState = std::make_unique<GameState>(); 
 
     
-    m_GameState = std::make_unique<GameState>(); 
 
     // ustawianie koloru tla
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
@@ -453,14 +457,10 @@ void Application::render(){
         for (const auto& villager : m_GameState->m_villagers) {
             glm::vec4 color = {1.0f, 0.0f, 0.0f, 1.0f}; // czerwony 
 
-
             // zmienianie koloru kiedy zaznaczymy go 
             if (m_selectedVillager == &villager){
                 color = {1.0f, 1.0f, 0.0f, 1.0f}; // zolty (jak zaznaczony)
             }
-
-
-
 
             m_Renderer->drawSquare(*m_Camera, villager.position, {10.0f, 10.0f}, color);
         }
@@ -514,6 +514,81 @@ void Application::render(){
         {
             glm::vec4 color = {1.0f, 0.5f, 0.0f, 0.5f}; 
             m_Renderer->drawSquare(*m_Camera, m_ghostBuildingPos, {20.0f, 20.0f}, color);
+        }
+
+
+        // -- dodanie cyklu dobowego i oswietlenia -- 
+        // obliczanie jasnosci otoczenia 
+        float time = m_GameState->timeOfDay; 
+        sf::Uint8 darknessAlpha = 0; 
+
+        // Logika obliczania ciemności (bez zmian)
+        if (time >= 20.0f || time < 4.0f) {
+            darknessAlpha = 200; 
+        }
+        else if (time >= 18.0f && time < 20.0f) {
+            float factor = (time - 18.0f) / 2.0f; 
+            darknessAlpha = (sf::Uint8)(factor * 200); 
+        }
+        else if (time >= 4.0f && time < 6.0f) {
+            float factor = (time - 4.0f) / 2.0f; 
+            darknessAlpha = (sf::Uint8)(200 - (factor * 200));
+        }
+        else {
+            darknessAlpha = 0; 
+        }
+
+        if (darknessAlpha > 0)
+        {
+            m_Window.pushGLStates(); 
+
+            m_lightMapTexture.clear(sf::Color(0, 0, 0, darknessAlpha));
+            m_lightMapTexture.setView(m_lightMapTexture.getDefaultView());
+
+            sf::BlendMode eraser(sf::BlendMode::Zero, sf::BlendMode::One, sf::BlendMode::Add, sf::BlendMode::Zero, sf::BlendMode::OneMinusSrcAlpha, sf::BlendMode::Add); 
+            sf::CircleShape lightShape; 
+            lightShape.setFillColor(sf::Color(255, 255, 255, 255)); 
+
+            glm::vec2 camPos = m_Camera->getPosition();
+            sf::Vector2f camSize = m_Camera->getSize();
+            sf::Vector2f winSize = static_cast<sf::Vector2f>(m_Window.getSize()); 
+
+            // Skala (Zoom)
+            float scaleX = winSize.x / camSize.x;
+            float scaleY = winSize.y / camSize.y;
+
+            for (const auto& b : m_GameState->m_buildings)
+            {
+                float radius = 0.0f; 
+                if (b.buildingType == Building::CAMPFIRE) radius = 150.0f; 
+                else if (b.buildingType == Building::KITCHEN) radius = 100.0f; 
+                else if (b.buildingType == Building::WELL) radius = 60.0f;
+
+                if (radius > 0.0f) 
+                {
+                    float screenX = (b.position.x - camPos.x) * scaleX;
+
+                    float screenY = winSize.y - ((b.position.y - camPos.y) * scaleY); 
+
+                    float screenRadius = radius * scaleX; 
+
+                    lightShape.setRadius(screenRadius); 
+                    lightShape.setOrigin(screenRadius, screenRadius); 
+                    lightShape.setPosition(screenX, screenY); 
+
+                    m_lightMapTexture.draw(lightShape, eraser); 
+                }
+            }
+
+            m_lightMapTexture.display(); 
+            m_lightMapSprite.setTexture(m_lightMapTexture.getTexture()); 
+            m_lightMapSprite.setPosition(0, 0);
+            
+            m_Window.setView(m_Window.getDefaultView()); 
+            glDisable(GL_DEPTH_TEST);
+            m_Window.draw(m_lightMapSprite); 
+            
+            m_Window.popGLStates(); 
         }
 
         // rysowanie ui 

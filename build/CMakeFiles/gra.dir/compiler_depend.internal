@@ -131,6 +131,7 @@ CMakeFiles/gra.dir/src/Core/Application.cpp.o
  /usr/include/c++/15/bits/cpp_type_traits.h
  /usr/include/c++/15/bits/cxxabi_forced.h
  /usr/include/c++/15/bits/cxxabi_init_exception.h
+ /usr/include/c++/15/bits/erase_if.h
  /usr/include/c++/15/bits/exception.h
  /usr/include/c++/15/bits/exception_defines.h
  /usr/include/c++/15/bits/exception_ptr.h
@@ -154,6 +155,7 @@ CMakeFiles/gra.dir/src/Core/Application.cpp.o
  /usr/include/c++/15/bits/move.h
  /usr/include/c++/15/bits/nested_exception.h
  /usr/include/c++/15/bits/new_allocator.h
+ /usr/include/c++/15/bits/node_handle.h
  /usr/include/c++/15/bits/ostream.h
  /usr/include/c++/15/bits/ostream.tcc
  /usr/include/c++/15/bits/ostream_insert.h
@@ -177,9 +179,12 @@ CMakeFiles/gra.dir/src/Core/Application.cpp.o
  /usr/include/c++/15/bits/stl_iterator.h
  /usr/include/c++/15/bits/stl_iterator_base_funcs.h
  /usr/include/c++/15/bits/stl_iterator_base_types.h
+ /usr/include/c++/15/bits/stl_map.h
+ /usr/include/c++/15/bits/stl_multimap.h
  /usr/include/c++/15/bits/stl_pair.h
  /usr/include/c++/15/bits/stl_raw_storage_iter.h
  /usr/include/c++/15/bits/stl_tempbuf.h
+ /usr/include/c++/15/bits/stl_tree.h
  /usr/include/c++/15/bits/stl_uninitialized.h
  /usr/include/c++/15/bits/stl_vector.h
  /usr/include/c++/15/bits/stream_iterator.h
@@ -228,6 +233,7 @@ CMakeFiles/gra.dir/src/Core/Application.cpp.o
  /usr/include/c++/15/iterator
  /usr/include/c++/15/limits
  /usr/include/c++/15/locale
+ /usr/include/c++/15/map
  /usr/include/c++/15/memory
  /usr/include/c++/15/new
  /usr/include/c++/15/ostream
@@ -455,10 +461,37 @@ CMakeFiles/gra.dir/src/Core/Application.cpp.o
  /usr/lib/gcc/x86_64-redhat-linux/15/include/stdint.h
  /usr/lib/gcc/x86_64-redhat-linux/15/include/syslimits.h
  /usr/local/include/SFML/Config.hpp
+ /usr/local/include/SFML/Graphics.hpp
+ /usr/local/include/SFML/Graphics/BlendMode.hpp
+ /usr/local/include/SFML/Graphics/CircleShape.hpp
  /usr/local/include/SFML/Graphics/Color.hpp
+ /usr/local/include/SFML/Graphics/ConvexShape.hpp
+ /usr/local/include/SFML/Graphics/Drawable.hpp
  /usr/local/include/SFML/Graphics/Export.hpp
+ /usr/local/include/SFML/Graphics/Font.hpp
+ /usr/local/include/SFML/Graphics/Glsl.hpp
+ /usr/local/include/SFML/Graphics/Glsl.inl
+ /usr/local/include/SFML/Graphics/Glyph.hpp
+ /usr/local/include/SFML/Graphics/Image.hpp
+ /usr/local/include/SFML/Graphics/PrimitiveType.hpp
  /usr/local/include/SFML/Graphics/Rect.hpp
  /usr/local/include/SFML/Graphics/Rect.inl
+ /usr/local/include/SFML/Graphics/RectangleShape.hpp
+ /usr/local/include/SFML/Graphics/RenderStates.hpp
+ /usr/local/include/SFML/Graphics/RenderTarget.hpp
+ /usr/local/include/SFML/Graphics/RenderTexture.hpp
+ /usr/local/include/SFML/Graphics/RenderWindow.hpp
+ /usr/local/include/SFML/Graphics/Shader.hpp
+ /usr/local/include/SFML/Graphics/Shape.hpp
+ /usr/local/include/SFML/Graphics/Sprite.hpp
+ /usr/local/include/SFML/Graphics/Text.hpp
+ /usr/local/include/SFML/Graphics/Texture.hpp
+ /usr/local/include/SFML/Graphics/Transform.hpp
+ /usr/local/include/SFML/Graphics/Transformable.hpp
+ /usr/local/include/SFML/Graphics/Vertex.hpp
+ /usr/local/include/SFML/Graphics/VertexArray.hpp
+ /usr/local/include/SFML/Graphics/VertexBuffer.hpp
+ /usr/local/include/SFML/Graphics/View.hpp
  /usr/local/include/SFML/System.hpp
  /usr/local/include/SFML/System/Clock.hpp
  /usr/local/include/SFML/System/Err.hpp
@@ -2965,6 +2998,7 @@ CMakeFiles/gra.dir/src/main.cpp.o
  /usr/include/c++/15/bits/cpp_type_traits.h
  /usr/include/c++/15/bits/cxxabi_forced.h
  /usr/include/c++/15/bits/cxxabi_init_exception.h
+ /usr/include/c++/15/bits/erase_if.h
  /usr/include/c++/15/bits/exception.h
  /usr/include/c++/15/bits/exception_defines.h
  /usr/include/c++/15/bits/exception_ptr.h
@@ -2988,6 +3022,7 @@ CMakeFiles/gra.dir/src/main.cpp.o
  /usr/include/c++/15/bits/move.h
  /usr/include/c++/15/bits/nested_exception.h
  /usr/include/c++/15/bits/new_allocator.h
+ /usr/include/c++/15/bits/node_handle.h
  /usr/include/c++/15/bits/ostream.h
  /usr/include/c++/15/bits/ostream.tcc
  /usr/include/c++/15/bits/ostream_insert.h
@@ -3011,9 +3046,12 @@ CMakeFiles/gra.dir/src/main.cpp.o
  /usr/include/c++/15/bits/stl_iterator.h
  /usr/include/c++/15/bits/stl_iterator_base_funcs.h
  /usr/include/c++/15/bits/stl_iterator_base_types.h
+ /usr/include/c++/15/bits/stl_map.h
+ /usr/include/c++/15/bits/stl_multimap.h
  /usr/include/c++/15/bits/stl_pair.h
  /usr/include/c++/15/bits/stl_raw_storage_iter.h
  /usr/include/c++/15/bits/stl_tempbuf.h
+ /usr/include/c++/15/bits/stl_tree.h
  /usr/include/c++/15/bits/stl_uninitialized.h
  /usr/include/c++/15/bits/stl_vector.h
  /usr/include/c++/15/bits/stream_iterator.h
@@ -3062,6 +3100,7 @@ CMakeFiles/gra.dir/src/main.cpp.o
  /usr/include/c++/15/iterator
  /usr/include/c++/15/limits
  /usr/include/c++/15/locale
+ /usr/include/c++/15/map
  /usr/include/c++/15/memory
  /usr/include/c++/15/new
  /usr/include/c++/15/ostream
@@ -3289,10 +3328,37 @@ CMakeFiles/gra.dir/src/main.cpp.o
  /usr/lib/gcc/x86_64-redhat-linux/15/include/stdint.h
  /usr/lib/gcc/x86_64-redhat-linux/15/include/syslimits.h
  /usr/local/include/SFML/Config.hpp
+ /usr/local/include/SFML/Graphics.hpp
+ /usr/local/include/SFML/Graphics/BlendMode.hpp
+ /usr/local/include/SFML/Graphics/CircleShape.hpp
  /usr/local/include/SFML/Graphics/Color.hpp
+ /usr/local/include/SFML/Graphics/ConvexShape.hpp
+ /usr/local/include/SFML/Graphics/Drawable.hpp
  /usr/local/include/SFML/Graphics/Export.hpp
+ /usr/local/include/SFML/Graphics/Font.hpp
+ /usr/local/include/SFML/Graphics/Glsl.hpp
+ /usr/local/include/SFML/Graphics/Glsl.inl
+ /usr/local/include/SFML/Graphics/Glyph.hpp
+ /usr/local/include/SFML/Graphics/Image.hpp
+ /usr/local/include/SFML/Graphics/PrimitiveType.hpp
  /usr/local/include/SFML/Graphics/Rect.hpp
  /usr/local/include/SFML/Graphics/Rect.inl
+ /usr/local/include/SFML/Graphics/RectangleShape.hpp
+ /usr/local/include/SFML/Graphics/RenderStates.hpp
+ /usr/local/include/SFML/Graphics/RenderTarget.hpp
+ /usr/local/include/SFML/Graphics/RenderTexture.hpp
+ /usr/local/include/SFML/Graphics/RenderWindow.hpp
+ /usr/local/include/SFML/Graphics/Shader.hpp
+ /usr/local/include/SFML/Graphics/Shape.hpp
+ /usr/local/include/SFML/Graphics/Sprite.hpp
+ /usr/local/include/SFML/Graphics/Text.hpp
+ /usr/local/include/SFML/Graphics/Texture.hpp
+ /usr/local/include/SFML/Graphics/Transform.hpp
+ /usr/local/include/SFML/Graphics/Transformable.hpp
+ /usr/local/include/SFML/Graphics/Vertex.hpp
+ /usr/local/include/SFML/Graphics/VertexArray.hpp
+ /usr/local/include/SFML/Graphics/VertexBuffer.hpp
+ /usr/local/include/SFML/Graphics/View.hpp
  /usr/local/include/SFML/System.hpp
  /usr/local/include/SFML/System/Clock.hpp
  /usr/local/include/SFML/System/Err.hpp

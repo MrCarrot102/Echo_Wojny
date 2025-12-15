@@ -8,15 +8,17 @@
 #include "imgui.h" 
 
 #include <SFML/Window.hpp>
+#include <SFML/Graphics.hpp>
 #include <memory> 
 #include <GL/glew.h> 
 #include <glm/glm.hpp> 
 
-class Application{
+
+class Application
+{
     public: 
         Application(); 
         ~Application(); 
-
 
         void run(); 
 
@@ -33,9 +35,6 @@ class Application{
             GAME
         };
         
-        AppState m_AppState = AppState::MENU; 
-        char m_saveFilename[128] = "save.txt"; 
-
         enum class BuildMode {
             NONE, 
             KITCHEN, 
@@ -44,23 +43,25 @@ class Application{
             CAMPFIRE
         };
 
-        sf::Window m_Window; 
+        // -- oswietlenie -- 
+        sf::RenderTexture m_lightMapTexture; 
+        sf::Sprite m_lightMapSprite; 
+        sf::RenderWindow m_Window; 
         sf::Clock m_DeltaClock; 
-        bool m_Running; 
+         
 
         // smart pointery do kontroli czasu zycia opiektow w opengl BO MOGE 
         std::unique_ptr<Camera2D> m_Camera; 
         std::unique_ptr<PrimitiveRenderer> m_Renderer; 
-
-
         std::unique_ptr<GameState> m_GameState; 
 
+        AppState m_AppState = AppState::MENU; 
+        char m_saveFilename[128] = "save.txt"; 
 
         Villager* m_selectedVillager; 
         BuildMode m_currentBuildMode = BuildMode::NONE; 
         glm::vec2 m_ghostBuildingPos; 
-
+        
+        bool m_Running;
         float m_timeScale = 1.0f; 
-
-
-    };
+};

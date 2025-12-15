@@ -130,6 +130,7 @@ CMakeFiles/gra.dir/src/Core/Application.cpp.o: /home/mateuszsierakowski/Document
   /usr/include/c++/15/bits/cpp_type_traits.h \
   /usr/include/c++/15/bits/cxxabi_forced.h \
   /usr/include/c++/15/bits/cxxabi_init_exception.h \
+  /usr/include/c++/15/bits/erase_if.h \
   /usr/include/c++/15/bits/exception.h \
   /usr/include/c++/15/bits/exception_defines.h \
   /usr/include/c++/15/bits/exception_ptr.h \
@@ -153,6 +154,7 @@ CMakeFiles/gra.dir/src/Core/Application.cpp.o: /home/mateuszsierakowski/Document
   /usr/include/c++/15/bits/move.h \
   /usr/include/c++/15/bits/nested_exception.h \
   /usr/include/c++/15/bits/new_allocator.h \
+  /usr/include/c++/15/bits/node_handle.h \
   /usr/include/c++/15/bits/ostream.h \
   /usr/include/c++/15/bits/ostream.tcc \
   /usr/include/c++/15/bits/ostream_insert.h \
@@ -176,9 +178,12 @@ CMakeFiles/gra.dir/src/Core/Application.cpp.o: /home/mateuszsierakowski/Document
   /usr/include/c++/15/bits/stl_iterator.h \
   /usr/include/c++/15/bits/stl_iterator_base_funcs.h \
   /usr/include/c++/15/bits/stl_iterator_base_types.h \
+  /usr/include/c++/15/bits/stl_map.h \
+  /usr/include/c++/15/bits/stl_multimap.h \
   /usr/include/c++/15/bits/stl_pair.h \
   /usr/include/c++/15/bits/stl_raw_storage_iter.h \
   /usr/include/c++/15/bits/stl_tempbuf.h \
+  /usr/include/c++/15/bits/stl_tree.h \
   /usr/include/c++/15/bits/stl_uninitialized.h \
   /usr/include/c++/15/bits/stl_vector.h \
   /usr/include/c++/15/bits/stream_iterator.h \
@@ -227,6 +232,7 @@ CMakeFiles/gra.dir/src/Core/Application.cpp.o: /home/mateuszsierakowski/Document
   /usr/include/c++/15/iterator \
   /usr/include/c++/15/limits \
   /usr/include/c++/15/locale \
+  /usr/include/c++/15/map \
   /usr/include/c++/15/memory \
   /usr/include/c++/15/new \
   /usr/include/c++/15/ostream \
@@ -454,10 +460,37 @@ CMakeFiles/gra.dir/src/Core/Application.cpp.o: /home/mateuszsierakowski/Document
   /usr/lib/gcc/x86_64-redhat-linux/15/include/stdint.h \
   /usr/lib/gcc/x86_64-redhat-linux/15/include/syslimits.h \
   /usr/local/include/SFML/Config.hpp \
+  /usr/local/include/SFML/Graphics.hpp \
+  /usr/local/include/SFML/Graphics/BlendMode.hpp \
+  /usr/local/include/SFML/Graphics/CircleShape.hpp \
   /usr/local/include/SFML/Graphics/Color.hpp \
+  /usr/local/include/SFML/Graphics/ConvexShape.hpp \
+  /usr/local/include/SFML/Graphics/Drawable.hpp \
   /usr/local/include/SFML/Graphics/Export.hpp \
+  /usr/local/include/SFML/Graphics/Font.hpp \
+  /usr/local/include/SFML/Graphics/Glsl.hpp \
+  /usr/local/include/SFML/Graphics/Glsl.inl \
+  /usr/local/include/SFML/Graphics/Glyph.hpp \
+  /usr/local/include/SFML/Graphics/Image.hpp \
+  /usr/local/include/SFML/Graphics/PrimitiveType.hpp \
   /usr/local/include/SFML/Graphics/Rect.hpp \
   /usr/local/include/SFML/Graphics/Rect.inl \
+  /usr/local/include/SFML/Graphics/RectangleShape.hpp \
+  /usr/local/include/SFML/Graphics/RenderStates.hpp \
+  /usr/local/include/SFML/Graphics/RenderTarget.hpp \
+  /usr/local/include/SFML/Graphics/RenderTexture.hpp \
+  /usr/local/include/SFML/Graphics/RenderWindow.hpp \
+  /usr/local/include/SFML/Graphics/Shader.hpp \
+  /usr/local/include/SFML/Graphics/Shape.hpp \
+  /usr/local/include/SFML/Graphics/Sprite.hpp \
+  /usr/local/include/SFML/Graphics/Text.hpp \
+  /usr/local/include/SFML/Graphics/Texture.hpp \
+  /usr/local/include/SFML/Graphics/Transform.hpp \
+  /usr/local/include/SFML/Graphics/Transformable.hpp \
+  /usr/local/include/SFML/Graphics/Vertex.hpp \
+  /usr/local/include/SFML/Graphics/VertexArray.hpp \
+  /usr/local/include/SFML/Graphics/VertexBuffer.hpp \
+  /usr/local/include/SFML/Graphics/View.hpp \
   /usr/local/include/SFML/System.hpp \
   /usr/local/include/SFML/System/Clock.hpp \
   /usr/local/include/SFML/System/Err.hpp \
@@ -2957,6 +2990,7 @@ CMakeFiles/gra.dir/src/main.cpp.o: /home/mateuszsierakowski/Documents/Echo_Wojny
   /usr/include/c++/15/bits/cpp_type_traits.h \
   /usr/include/c++/15/bits/cxxabi_forced.h \
   /usr/include/c++/15/bits/cxxabi_init_exception.h \
+  /usr/include/c++/15/bits/erase_if.h \
   /usr/include/c++/15/bits/exception.h \
   /usr/include/c++/15/bits/exception_defines.h \
   /usr/include/c++/15/bits/exception_ptr.h \
@@ -2980,6 +3014,7 @@ CMakeFiles/gra.dir/src/main.cpp.o: /home/mateuszsierakowski/Documents/Echo_Wojny
   /usr/include/c++/15/bits/move.h \
   /usr/include/c++/15/bits/nested_exception.h \
   /usr/include/c++/15/bits/new_allocator.h \
+  /usr/include/c++/15/bits/node_handle.h \
   /usr/include/c++/15/bits/ostream.h \
   /usr/include/c++/15/bits/ostream.tcc \
   /usr/include/c++/15/bits/ostream_insert.h \
@@ -3003,9 +3038,12 @@ CMakeFiles/gra.dir/src/main.cpp.o: /home/mateuszsierakowski/Documents/Echo_Wojny
   /usr/include/c++/15/bits/stl_iterator.h \
   /usr/include/c++/15/bits/stl_iterator_base_funcs.h \
   /usr/include/c++/15/bits/stl_iterator_base_types.h \
+  /usr/include/c++/15/bits/stl_map.h \
+  /usr/include/c++/15/bits/stl_multimap.h \
   /usr/include/c++/15/bits/stl_pair.h \
   /usr/include/c++/15/bits/stl_raw_storage_iter.h \
   /usr/include/c++/15/bits/stl_tempbuf.h \
+  /usr/include/c++/15/bits/stl_tree.h \
   /usr/include/c++/15/bits/stl_uninitialized.h \
   /usr/include/c++/15/bits/stl_vector.h \
   /usr/include/c++/15/bits/stream_iterator.h \
@@ -3054,6 +3092,7 @@ CMakeFiles/gra.dir/src/main.cpp.o: /home/mateuszsierakowski/Documents/Echo_Wojny
   /usr/include/c++/15/iterator \
   /usr/include/c++/15/limits \
   /usr/include/c++/15/locale \
+  /usr/include/c++/15/map \
   /usr/include/c++/15/memory \
   /usr/include/c++/15/new \
   /usr/include/c++/15/ostream \
@@ -3281,10 +3320,37 @@ CMakeFiles/gra.dir/src/main.cpp.o: /home/mateuszsierakowski/Documents/Echo_Wojny
   /usr/lib/gcc/x86_64-redhat-linux/15/include/stdint.h \
   /usr/lib/gcc/x86_64-redhat-linux/15/include/syslimits.h \
   /usr/local/include/SFML/Config.hpp \
+  /usr/local/include/SFML/Graphics.hpp \
+  /usr/local/include/SFML/Graphics/BlendMode.hpp \
+  /usr/local/include/SFML/Graphics/CircleShape.hpp \
   /usr/local/include/SFML/Graphics/Color.hpp \
+  /usr/local/include/SFML/Graphics/ConvexShape.hpp \
+  /usr/local/include/SFML/Graphics/Drawable.hpp \
   /usr/local/include/SFML/Graphics/Export.hpp \
+  /usr/local/include/SFML/Graphics/Font.hpp \
+  /usr/local/include/SFML/Graphics/Glsl.hpp \
+  /usr/local/include/SFML/Graphics/Glsl.inl \
+  /usr/local/include/SFML/Graphics/Glyph.hpp \
+  /usr/local/include/SFML/Graphics/Image.hpp \
+  /usr/local/include/SFML/Graphics/PrimitiveType.hpp \
   /usr/local/include/SFML/Graphics/Rect.hpp \
   /usr/local/include/SFML/Graphics/Rect.inl \
+  /usr/local/include/SFML/Graphics/RectangleShape.hpp \
+  /usr/local/include/SFML/Graphics/RenderStates.hpp \
+  /usr/local/include/SFML/Graphics/RenderTarget.hpp \
+  /usr/local/include/SFML/Graphics/RenderTexture.hpp \
+  /usr/local/include/SFML/Graphics/RenderWindow.hpp \
+  /usr/local/include/SFML/Graphics/Shader.hpp \
+  /usr/local/include/SFML/Graphics/Shape.hpp \
+  /usr/local/include/SFML/Graphics/Sprite.hpp \
+  /usr/local/include/SFML/Graphics/Text.hpp \
+  /usr/local/include/SFML/Graphics/Texture.hpp \
+  /usr/local/include/SFML/Graphics/Transform.hpp \
+  /usr/local/include/SFML/Graphics/Transformable.hpp \
+  /usr/local/include/SFML/Graphics/Vertex.hpp \
+  /usr/local/include/SFML/Graphics/VertexArray.hpp \
+  /usr/local/include/SFML/Graphics/VertexBuffer.hpp \
+  /usr/local/include/SFML/Graphics/View.hpp \
   /usr/local/include/SFML/System.hpp \
   /usr/local/include/SFML/System/Clock.hpp \
   /usr/local/include/SFML/System/Err.hpp \
@@ -4922,8 +4988,6 @@ CMakeFiles/gra.dir/src/Rendering/PrimitiveRenderer.cpp.o:
 
 /usr/lib/gcc/x86_64-redhat-linux/15/include/uintrintrin.h:
 
-/usr/lib/gcc/x86_64-redhat-linux/15/include/tsxldtrkintrin.h:
-
 /usr/lib/gcc/x86_64-redhat-linux/15/include/tmmintrin.h:
 
 /usr/lib/gcc/x86_64-redhat-linux/15/include/tbmintrin.h:
@@ -4996,8 +5060,6 @@ CMakeFiles/gra.dir/src/Rendering/PrimitiveRenderer.cpp.o:
 
 /usr/lib/gcc/x86_64-redhat-linux/15/include/avx512bitalgvlintrin.h:
 
-/usr/lib/gcc/x86_64-redhat-linux/15/include/avx512bitalgintrin.h:
-
 /usr/lib/gcc/x86_64-redhat-linux/15/include/avx512bf16vlintrin.h:
 
 /usr/lib/gcc/x86_64-redhat-linux/15/include/avx512bf16intrin.h:
@@ -5028,13 +5090,27 @@ CMakeFiles/gra.dir/src/Rendering/PrimitiveRenderer.cpp.o:
 
 /usr/lib/gcc/x86_64-redhat-linux/15/include/amxavx512intrin.h:
 
+/usr/lib/gcc/x86_64-redhat-linux/15/include/adxintrin.h:
+
+/usr/include/c++/15/math.h:
+
+/usr/local/include/SFML/OpenGL.hpp:
+
+/usr/include/c++/15/cstring:
+
+/usr/include/GL/glext.h:
+
+/home/mateuszsierakowski/Documents/Echo_Wojny/vendor/imgui-sfml/imgui-SFML.cpp:
+
+/home/mateuszsierakowski/Documents/Echo_Wojny/src/main.cpp:
+
+/home/mateuszsierakowski/Documents/Echo_Wojny/src/Rendering/Shader.cpp:
+
 /usr/lib/gcc/x86_64-redhat-linux/15/include/immintrin.h:
 
 /usr/include/c++/15/tuple:
 
 /usr/include/c++/15/tr1/legendre_function.tcc:
-
-/usr/include/bits/mathcalls-macros.h:
 
 /usr/include/glm/detail/type_mat2x2.inl:
 
@@ -5076,8 +5152,6 @@ CMakeFiles/gra.dir/src/Rendering/PrimitiveRenderer.cpp.o:
 
 /usr/include/c++/15/iosfwd:
 
-/home/mateuszsierakowski/Documents/Echo_Wojny/src/Rendering/Shader.cpp:
-
 /lib64/libmvec.so.1:
 
 /usr/include/c++/15/ext/string_conversions.h:
@@ -5116,9 +5190,27 @@ CMakeFiles/gra.dir/src/Rendering/PrimitiveRenderer.cpp.o:
 
 /usr/include/c++/15/x86_64-redhat-linux/bits/os_defines.h:
 
+/usr/lib64/libGLEW.so:
+
+/usr/include/bits/wchar.h:
+
+/usr/include/bits/waitstatus.h:
+
 /usr/include/c++/15/bits/stl_tempbuf.h:
 
 /usr/include/glm/detail/type_half.inl:
+
+/usr/include/c++/15/bits/stl_multimap.h:
+
+/usr/include/c++/15/bits/shared_ptr_base.h:
+
+/usr/include/c++/15/bits/stl_map.h:
+
+/usr/lib/gcc/x86_64-redhat-linux/15/include/avx512vbmi2intrin.h:
+
+/usr/include/c++/15/bits/locale_classes.h:
+
+/usr/lib/gcc/x86_64-redhat-linux/15/include/stdint.h:
 
 /usr/include/c++/15/bits/stl_iterator_base_types.h:
 
@@ -5127,8 +5219,6 @@ CMakeFiles/gra.dir/src/Rendering/PrimitiveRenderer.cpp.o:
 /usr/include/bits/types/struct_tm.h:
 
 /usr/include/c++/15/bits/ptr_traits.h:
-
-/usr/include/c++/15/vector:
 
 /usr/include/c++/15/memory:
 
@@ -5144,13 +5234,9 @@ CMakeFiles/gra.dir/src/Rendering/Camera2D.cpp.o:
 
 /usr/include/c++/15/bits/stl_algobase.h:
 
-/usr/include/c++/15/typeinfo:
-
 /usr/include/c++/15/ios:
 
 /usr/include/c++/15/bits/std_abs.h:
-
-/usr/include/c++/15/bits/shared_ptr_base.h:
 
 /usr/include/GL/glew.h:
 
@@ -5174,6 +5260,10 @@ CMakeFiles/gra.dir/vendor/imgui/imgui_tables.cpp.o:
 
 /usr/include/c++/15/bits/uses_allocator.h:
 
+/usr/include/KHR/khrplatform.h:
+
+/usr/include/c++/15/bits/new_allocator.h:
+
 /usr/include/bits/cpu-set.h:
 
 CMakeFiles/gra.dir/src/main.cpp.o:
@@ -5185,6 +5275,10 @@ CMakeFiles/gra.dir/src/main.cpp.o:
 /usr/include/c++/15/backward/binders.h:
 
 /usr/include/c++/15/exception:
+
+/home/mateuszsierakowski/Documents/Echo_Wojny/vendor/imgui/imgui.cpp:
+
+/usr/include/c++/15/bits/locale_facets_nonio.h:
 
 CMakeFiles/gra.dir/src/Game/Pathfinder.cpp.o:
 
@@ -5304,13 +5398,9 @@ CMakeFiles/gra.dir/vendor/imgui/imgui.cpp.o:
 
 /usr/include/bits/atomic_wide_counter.h:
 
-/usr/lib/gcc/x86_64-redhat-linux/15/include/lzcntintrin.h:
-
-/usr/local/include/SFML/System/Err.hpp:
-
-/usr/include/c++/15/cassert:
-
 /usr/include/c++/15/bits/streambuf.tcc:
+
+/usr/include/c++/15/typeinfo:
 
 /usr/include/assert.h:
 
@@ -5320,11 +5410,7 @@ CMakeFiles/gra.dir/vendor/imgui/imgui.cpp.o:
 
 /usr/include/glm/ext/vector_int3_sized.hpp:
 
-/usr/include/glm/ext/scalar_constants.inl:
-
-/usr/include/glm/ext/vector_uint3_sized.hpp:
-
-/usr/include/c++/15/pstl/glue_memory_defs.h:
+/usr/include/c++/15/bits/node_handle.h:
 
 /usr/include/bits/types/struct_FILE.h:
 
@@ -5335,10 +5421,6 @@ CMakeFiles/gra.dir/vendor/imgui/imgui.cpp.o:
 /usr/include/c++/15/bits/memoryfwd.h:
 
 /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/Villager.h:
-
-/usr/lib/gcc/x86_64-redhat-linux/15/libgcc.a:
-
-/home/mateuszsierakowski/Documents/Echo_Wojny/vendor/imgui-sfml/imgui-SFML.h:
 
 /usr/include/glm/ext/matrix_clip_space.hpp:
 
@@ -5426,15 +5508,7 @@ CMakeFiles/gra.dir/vendor/imgui/imgui.cpp.o:
 
 /usr/include/c++/15/cerrno:
 
-/usr/include/c++/15/x86_64-redhat-linux/bits/c++allocator.h:
-
-/usr/include/glm/detail/type_half.hpp:
-
 /usr/include/bits/posix1_lim.h:
-
-/usr/include/bits/iscanonical.h:
-
-/usr/include/glm/mat3x2.hpp:
 
 /usr/include/wchar.h:
 
@@ -5453,14 +5527,6 @@ CMakeFiles/gra.dir/vendor/imgui/imgui.cpp.o:
 /usr/include/bits/types/__FILE.h:
 
 /usr/include/features.h:
-
-/usr/include/c++/15/x86_64-redhat-linux/bits/basic_file.h:
-
-/home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/GameState.cpp:
-
-/home/mateuszsierakowski/Documents/Echo_Wojny/src/Rendering/Camera2D.cpp:
-
-/usr/include/c++/15/type_traits:
 
 /usr/lib/gcc/x86_64-redhat-linux/15/include/avx10_2-512minmaxintrin.h:
 
@@ -5495,6 +5561,12 @@ CMakeFiles/gra.dir/vendor/imgui/imgui.cpp.o:
 /usr/include/bits/endianness.h:
 
 /usr/include/libintl.h:
+
+/usr/lib/gcc/x86_64-redhat-linux/15/include/keylockerintrin.h:
+
+/usr/include/linux/stddef.h:
+
+/usr/include/bits/fp-logb.h:
 
 /usr/include/sys/single_threaded.h:
 
@@ -5544,12 +5616,6 @@ CMakeFiles/gra.dir/vendor/imgui/imgui.cpp.o:
 
 /usr/include/bits/setjmp.h:
 
-/usr/lib64/libGLEW.so:
-
-/usr/include/bits/wchar.h:
-
-/usr/include/bits/waitstatus.h:
-
 /usr/lib/gcc/x86_64-redhat-linux/15/include/avxvnniintrin.h:
 
 /usr/include/c++/15/bits/utility.h:
@@ -5574,9 +5640,11 @@ CMakeFiles/gra.dir/vendor/imgui/imgui.cpp.o:
 
 /usr/include/bits/stdio_lim.h:
 
-/usr/include/c++/15/x86_64-redhat-linux/bits/atomic_word.h:
+/usr/lib64/libm.so:
 
-/usr/include/glm/ext/matrix_double4x4_precision.hpp:
+/home/mateuszsierakowski/Documents/Echo_Wojny/vendor/imgui/imgui_internal.h:
+
+/usr/include/glm/ext/matrix_double2x2_precision.hpp:
 
 /home/mateuszsierakowski/Documents/Echo_Wojny/src/Core/Application.h:
 
@@ -5595,6 +5663,10 @@ CMakeFiles/gra.dir/vendor/imgui/imgui.cpp.o:
 /usr/include/c++/15/bits/requires_hosted.h:
 
 /usr/include/bits/time64.h:
+
+/usr/lib/gcc/x86_64-redhat-linux/15/include/avx512bitalgintrin.h:
+
+/usr/local/include/SFML/Graphics.hpp:
 
 /usr/include/glm/ext/matrix_float2x3_precision.hpp:
 
@@ -5616,12 +5688,6 @@ CMakeFiles/gra.dir/vendor/imgui/imgui.cpp.o:
 
 /usr/include/bits/types/FILE.h:
 
-/usr/lib64/crti.o:
-
-/usr/include/c++/15/bit:
-
-/usr/include/bits/types/__fpos64_t.h:
-
 /usr/lib/gcc/x86_64-redhat-linux/15/include/limits.h:
 
 /usr/include/bits/types/__locale_t.h:
@@ -5634,31 +5700,13 @@ CMakeFiles/gra.dir/vendor/imgui/imgui.cpp.o:
 
 /usr/local/include/SFML/Window/Mouse.hpp:
 
-/usr/lib/gcc/x86_64-redhat-linux/15/include/avx512vbmi2intrin.h:
-
-/usr/include/c++/15/bits/locale_classes.h:
-
-/usr/lib/gcc/x86_64-redhat-linux/15/include/keylockerintrin.h:
-
-/usr/include/bits/fp-logb.h:
-
-/usr/include/linux/stddef.h:
-
-/usr/lib/gcc/x86_64-redhat-linux/15/include/stdint.h:
-
 /usr/include/bits/types/locale_t.h:
 
 /usr/include/glm/ext/vector_uint3.hpp:
 
 /usr/include/c++/15/bits/alloc_traits.h:
 
-/home/mateuszsierakowski/Documents/Echo_Wojny/vendor/imgui-sfml/imgui-SFML.cpp:
-
 /usr/include/c++/15/tr1/poly_hermite.tcc:
-
-/usr/local/include/SFML/Window/VideoMode.hpp:
-
-/usr/include/bits/types/sigset_t.h:
 
 /usr/lib/gcc/x86_64-redhat-linux/15/include/amxbf16intrin.h:
 
@@ -5688,19 +5736,25 @@ CMakeFiles/gra.dir/vendor/imgui/imgui.cpp.o:
 
 /usr/lib/gcc/x86_64-redhat-linux/15/include/stddef.h:
 
+/usr/local/include/SFML/Graphics/Font.hpp:
+
 /usr/include/bits/types/struct_timespec.h:
 
-/home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/WorldMap.cpp:
+/home/mateuszsierakowski/Documents/Echo_Wojny/src/Rendering/PrimitiveRenderer.cpp:
 
-/usr/lib/gcc/x86_64-redhat-linux/15/include/avx10_2-512satcvtintrin.h:
+/usr/include/c++/15/string:
 
-/usr/include/c++/15/x86_64-redhat-linux/bits/time_members.h:
+/usr/include/bits/timesize.h:
 
 /usr/include/bits/stdint-intn.h:
 
 /usr/include/bits/wctype-wchar.h:
 
 /usr/include/c++/15/bits/cpp_type_traits.h:
+
+/home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/WorldMap.cpp:
+
+/usr/local/include/SFML/Graphics/VertexBuffer.hpp:
 
 /usr/local/include/SFML/System/Vector2.inl:
 
@@ -5711,6 +5765,10 @@ CMakeFiles/gra.dir/vendor/imgui/imgui.cpp.o:
 /usr/lib/gcc/x86_64-redhat-linux/15/include/avx512vp2intersectintrin.h:
 
 /usr/include/stdio.h:
+
+/home/mateuszsierakowski/Documents/Echo_Wojny/vendor/imgui/imstb_textedit.h:
+
+/usr/include/c++/15/bits/version.h:
 
 /usr/include/sys/cdefs.h:
 
@@ -5750,17 +5808,57 @@ CMakeFiles/gra.dir/vendor/imgui/imgui_demo.cpp.o:
 
 /usr/include/c++/15/bits/basic_string.h:
 
+/usr/lib/gcc/x86_64-redhat-linux/15/include/avx10_2-512satcvtintrin.h:
+
+/usr/include/c++/15/x86_64-redhat-linux/bits/time_members.h:
+
+/usr/local/include/SFML/Graphics/Shape.hpp:
+
 /usr/include/c++/15/bits/algorithmfwd.h:
 
 /usr/include/asm/bitsperlong.h:
 
 /usr/lib/gcc/x86_64-redhat-linux/15/include/avx512vbmivlintrin.h:
 
-/usr/include/c++/15/clocale:
-
 /usr/include/glm/detail/type_mat3x4.inl:
 
+/usr/include/c++/15/clocale:
+
 /usr/local/include/SFML/System/Vector3.inl:
+
+/usr/include/c++/15/type_traits:
+
+/usr/include/c++/15/vector:
+
+/usr/include/glm/ext/scalar_constants.inl:
+
+/usr/include/c++/15/pstl/glue_memory_defs.h:
+
+/usr/include/glm/ext/vector_uint3_sized.hpp:
+
+/usr/include/bits/types/sigset_t.h:
+
+/usr/local/include/SFML/Window/VideoMode.hpp:
+
+/usr/include/c++/15/x86_64-redhat-linux/bits/atomic_word.h:
+
+/usr/include/glm/ext/matrix_double4x4_precision.hpp:
+
+/usr/include/c++/15/x86_64-redhat-linux/bits/basic_file.h:
+
+/home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/GameState.cpp:
+
+/home/mateuszsierakowski/Documents/Echo_Wojny/src/Rendering/Camera2D.cpp:
+
+/usr/include/glm/detail/type_half.hpp:
+
+/usr/include/c++/15/x86_64-redhat-linux/bits/c++allocator.h:
+
+/usr/lib/gcc/x86_64-redhat-linux/15/include/lzcntintrin.h:
+
+/usr/include/c++/15/cassert:
+
+/usr/local/include/SFML/System/Err.hpp:
 
 /usr/include/c++/15/stdlib.h:
 
@@ -5880,8 +5978,6 @@ CMakeFiles/gra.dir/vendor/imgui/imgui_demo.cpp.o:
 
 /usr/local/include/SFML/Window/Joystick.hpp:
 
-/usr/include/c++/15/cstring:
-
 /usr/local/include/SFML/System/Thread.inl:
 
 /usr/include/glm/ext/matrix_double2x3.hpp:
@@ -5911,10 +6007,6 @@ CMakeFiles/gra.dir/vendor/imgui/imgui_demo.cpp.o:
 /usr/include/glm/ext/matrix_double4x2_precision.hpp:
 
 /usr/include/glm/ext/matrix_double4x3_precision.hpp:
-
-/usr/include/c++/15/bits/new_allocator.h:
-
-/usr/include/KHR/khrplatform.h:
 
 /usr/lib/gcc/x86_64-redhat-linux/15/include/clflushoptintrin.h:
 
@@ -5968,6 +6060,8 @@ CMakeFiles/gra.dir/src/Core/Application.cpp.o:
 
 /usr/include/glm/ext/matrix_float4x2.hpp:
 
+/usr/include/c++/15/map:
+
 /usr/include/c++/15/bits/refwrap.h:
 
 /usr/include/glm/ext/matrix_float4x3.hpp:
@@ -5975,6 +6069,10 @@ CMakeFiles/gra.dir/src/Core/Application.cpp.o:
 /usr/include/endian.h:
 
 /usr/include/glm/ext/matrix_float4x3_precision.hpp:
+
+/usr/lib/gcc/x86_64-redhat-linux/15/include/tsxldtrkintrin.h:
+
+/usr/local/include/SFML/Graphics/RectangleShape.hpp:
 
 /usr/local/include/SFML/System/Clock.hpp:
 
@@ -6025,6 +6123,8 @@ CMakeFiles/gra.dir/src/Game/WorldMap.cpp.o:
 CMakeFiles/gra.dir/src/Game/GameState.cpp.o:
 
 /usr/include/glm/ext/vector_double4_precision.hpp:
+
+/usr/local/include/SFML/Graphics/CircleShape.hpp:
 
 /usr/include/glm/ext/vector_float2.hpp:
 
@@ -6110,6 +6210,12 @@ CMakeFiles/gra.dir/vendor/imgui-sfml/imgui-SFML.cpp.o:
 
 /usr/include/glm/vector_relational.hpp:
 
+/usr/lib/gcc/x86_64-redhat-linux/15/libgcc.a:
+
+/home/mateuszsierakowski/Documents/Echo_Wojny/vendor/imgui-sfml/imgui-SFML.h:
+
+/usr/local/include/SFML/Graphics/VertexArray.hpp:
+
 /usr/include/gnu/stubs-64.h:
 
 /usr/include/c++/15/bits/locale_facets.h:
@@ -6158,11 +6264,59 @@ CMakeFiles/gra.dir/vendor/imgui-sfml/imgui-SFML.cpp.o:
 
 /usr/lib/gcc/x86_64-redhat-linux/15/include/syslimits.h:
 
+/usr/include/bits/iscanonical.h:
+
+/usr/include/glm/mat3x2.hpp:
+
+/usr/local/include/SFML/Graphics/ConvexShape.hpp:
+
+/usr/local/include/SFML/Graphics/Glsl.hpp:
+
+/usr/local/include/SFML/Graphics/Glyph.hpp:
+
+/usr/local/include/SFML/Graphics/RenderWindow.hpp:
+
+/usr/local/include/SFML/Graphics/PrimitiveType.hpp:
+
 /usr/include/c++/15/x86_64-redhat-linux/bits/c++io.h:
 
 /usr/local/include/SFML/Graphics/Rect.hpp:
 
 /usr/local/include/SFML/Graphics/Rect.inl:
+
+/usr/local/include/SFML/Graphics/RenderStates.hpp:
+
+/usr/local/include/SFML/Graphics/RenderTarget.hpp:
+
+/usr/local/include/SFML/Graphics/RenderTexture.hpp:
+
+/usr/lib64/crti.o:
+
+/usr/include/c++/15/bit:
+
+/usr/include/bits/types/__fpos64_t.h:
+
+/usr/local/include/SFML/Graphics/Shader.hpp:
+
+/usr/local/include/SFML/Graphics/Sprite.hpp:
+
+/usr/include/bits/mathcalls-macros.h:
+
+/usr/local/include/SFML/Graphics/Text.hpp:
+
+/usr/local/include/SFML/System/Vector2.hpp:
+
+/usr/lib/gcc/x86_64-redhat-linux/15/include/lwpintrin.h:
+
+/usr/include/glm/ext/matrix_float3x4_precision.hpp:
+
+/usr/local/include/SFML/Graphics/Transform.hpp:
+
+/lib64/ld-linux-x86-64.so.2:
+
+/usr/include/c++/15/bits/istream.tcc:
+
+/usr/local/include/SFML/Window/WindowStyle.hpp:
 
 /usr/local/include/SFML/System.hpp:
 
@@ -6186,6 +6340,8 @@ CMakeFiles/gra.dir/vendor/imgui-sfml/imgui-SFML.cpp.o:
 
 /usr/include/bits/xopen_lim.h:
 
+/usr/local/include/SFML/Graphics/Glsl.inl:
+
 /usr/local/include/SFML/System/ThreadLocalPtr.inl:
 
 /usr/include/glm/ext/matrix_double3x3.hpp:
@@ -6195,10 +6351,6 @@ CMakeFiles/gra.dir/vendor/imgui-sfml/imgui-SFML.cpp.o:
 /usr/include/c++/15/tr1/riemann_zeta.tcc:
 
 /usr/local/include/SFML/Window/Window.hpp:
-
-/usr/local/include/SFML/OpenGL.hpp:
-
-/usr/local/include/SFML/System/Vector2.hpp:
 
 /usr/local/include/SFML/System/Vector3.hpp:
 
@@ -6218,64 +6370,10 @@ CMakeFiles/gra.dir/src/Rendering/Shader.cpp.o:
 
 /usr/local/include/SFML/Window/Touch.hpp:
 
-/usr/local/include/SFML/Window/WindowBase.hpp:
-
-/lib64/ld-linux-x86-64.so.2:
-
-/usr/include/c++/15/bits/istream.tcc:
-
-/usr/local/include/SFML/Window/WindowStyle.hpp:
-
-/usr/lib/gcc/x86_64-redhat-linux/15/include/lwpintrin.h:
-
-/usr/include/glm/ext/matrix_float3x4_precision.hpp:
-
-/usr/local/include/SFML/Graphics/Transform.hpp:
-
-/usr/include/c++/15/bits/node_handle.h:
-
-/usr/include/c++/15/bits/stl_multiset.h:
-
-/usr/include/c++/15/string:
-
-/usr/include/bits/timesize.h:
-
-/home/mateuszsierakowski/Documents/Echo_Wojny/src/Rendering/PrimitiveRenderer.cpp:
+/usr/include/c++/15/bits/sstream.tcc:
 
 /usr/local/include/SFML/Window/Vulkan.hpp:
 
-/usr/include/c++/15/bits/sstream.tcc:
+/usr/local/include/SFML/Window/WindowBase.hpp:
 
-/home/mateuszsierakowski/Documents/Echo_Wojny/src/main.cpp:
-
-/usr/include/GL/glext.h:
-
-/usr/local/include/SFML/Graphics/PrimitiveType.hpp:
-
-/usr/local/include/SFML/Graphics/RenderStates.hpp:
-
-/usr/local/include/SFML/Graphics/RenderTarget.hpp:
-
-/usr/local/include/SFML/Graphics/RenderTexture.hpp:
-
-/usr/local/include/SFML/Graphics/RenderWindow.hpp:
-
-/usr/local/include/SFML/Graphics/Sprite.hpp:
-
-/usr/include/c++/15/bits/locale_facets_nonio.h:
-
-/home/mateuszsierakowski/Documents/Echo_Wojny/vendor/imgui/imgui.cpp:
-
-/usr/lib64/libm.so:
-
-/usr/include/glm/ext/matrix_double2x2_precision.hpp:
-
-/home/mateuszsierakowski/Documents/Echo_Wojny/vendor/imgui/imgui_internal.h:
-
-/usr/include/c++/15/bits/version.h:
-
-/home/mateuszsierakowski/Documents/Echo_Wojny/vendor/imgui/imstb_textedit.h:
-
-/usr/include/c++/15/math.h:
-
-/usr/lib/gcc/x86_64-redhat-linux/15/include/adxintrin.h:
+/usr/include/c++/15/bits/stl_multiset.h:

@@ -16,7 +16,11 @@ class Camera2D {
 
         void update(float deltaTime, const sf::Window& window);
         void setPosition(const glm::vec2& pos) { m_Position = pos; }
+        const glm::vec2& getPosition() const { return m_Position; }
         
+        
+        sf::Vector2f getSize() const { return sf::Vector2f(m_Width, m_Height); }
+
     private:
 
         void recalculateViewMatrix();

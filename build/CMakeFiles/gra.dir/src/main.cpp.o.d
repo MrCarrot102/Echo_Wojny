@@ -387,4 +387,36 @@ CMakeFiles/gra.dir/src/main.cpp.o: \
  /home/mateuszsierakowski/Documents/Echo_Wojny/vendor/imgui/imgui.h \
  /home/mateuszsierakowski/Documents/Echo_Wojny/vendor/imgui/imconfig.h \
  /usr/include/string.h /usr/include/strings.h \
+ /usr/local/include/SFML/Graphics.hpp \
+ /usr/local/include/SFML/Graphics/BlendMode.hpp \
+ /usr/local/include/SFML/Graphics/CircleShape.hpp \
+ /usr/local/include/SFML/Graphics/Shape.hpp \
+ /usr/local/include/SFML/Graphics/Drawable.hpp \
+ /usr/local/include/SFML/Graphics/RenderStates.hpp \
+ /usr/local/include/SFML/Graphics/Transform.hpp \
+ /usr/local/include/SFML/Graphics/Transformable.hpp \
+ /usr/local/include/SFML/Graphics/VertexArray.hpp \
+ /usr/local/include/SFML/Graphics/Vertex.hpp \
+ /usr/local/include/SFML/Graphics/PrimitiveType.hpp \
+ /usr/local/include/SFML/Graphics/ConvexShape.hpp \
+ /usr/local/include/SFML/Graphics/Font.hpp \
+ /usr/local/include/SFML/Graphics/Glyph.hpp \
+ /usr/local/include/SFML/Graphics/Texture.hpp \
+ /usr/local/include/SFML/Graphics/Image.hpp /usr/include/c++/15/map \
+ /usr/include/c++/15/bits/stl_tree.h \
+ /usr/include/c++/15/bits/node_handle.h \
+ /usr/include/c++/15/bits/stl_map.h \
+ /usr/include/c++/15/bits/stl_multimap.h \
+ /usr/include/c++/15/bits/erase_if.h \
+ /usr/local/include/SFML/Graphics/RectangleShape.hpp \
+ /usr/local/include/SFML/Graphics/RenderTarget.hpp \
+ /usr/local/include/SFML/Graphics/View.hpp \
+ /usr/local/include/SFML/Graphics/RenderTexture.hpp \
+ /usr/local/include/SFML/Graphics/RenderWindow.hpp \
+ /usr/local/include/SFML/Graphics/Shader.hpp \
+ /usr/local/include/SFML/Graphics/Glsl.hpp \
+ /usr/local/include/SFML/Graphics/Glsl.inl \
+ /usr/local/include/SFML/Graphics/Sprite.hpp \
+ /usr/local/include/SFML/Graphics/Text.hpp \
+ /usr/local/include/SFML/Graphics/VertexBuffer.hpp \
  /usr/include/c++/15/iostream
