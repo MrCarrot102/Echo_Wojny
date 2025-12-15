@@ -349,6 +349,24 @@ void Application::update(float deltaTime){
     // tick w symulacji 
     m_GameState->update(deltaTime * m_timeScale); 
 
+    // sprawdzanie czy wybrany osadnik dalej zyje XD 
+    if (m_selectedVillager != nullptr)
+    {
+        bool stillAlive = false; 
+        for (auto& v : m_GameState->m_villagers)
+        {
+            if (&v == m_selectedVillager)
+            {
+                stillAlive = true; 
+                break; 
+            }
+        }
+        if (!stillAlive)
+        {
+            m_selectedVillager = nullptr; 
+        }
+    }
+
     if (m_currentBuildMode != BuildMode::NONE){
         // aktualizowanie pozycji ducha na podstawie myszki 
         sf::Vector2i screenMousePos = sf::Mouse::getPosition(m_Window); 
@@ -580,13 +598,20 @@ void Application::render(){
             ImGui::Text("WYBRANY: %s", m_selectedVillager->name.c_str());
             ImGui::Text("Stan: %d", (int)m_selectedVillager->currentState);
 
-            // Pasek Głodu (Zielony -> Czerwony)
+            // -- pasek zdrowia -- 
+            float healthRatio = m_selectedVillager->health / 100.0f; 
+            ImGui::PushStyleColor(ImGuiCol_PlotHistogram, ImVec4(0.8f, 0.0f, 0.0f, 1.0f)); 
+            ImGui::Text("Zdrowie:"); ImGui::SameLine(); 
+            ImGui::ProgressBar(healthRatio, ImVec2(150, 20)); 
+            ImGui::PopStyleColor(); 
+
+            // -- pasek glodu -- 
             float hungerRatio = m_selectedVillager->hunger / 100.0f;
             ImGui::Text("Glod:");
             ImGui::SameLine();
             ImGui::ProgressBar(hungerRatio, ImVec2(150, 20));
 
-            // Pasek Pragnienia (Niebieski)
+            // -- pasek pragnienia -- 
             float thirstRatio = m_selectedVillager->thirst / 100.0f;
             ImGui::Text("Woda:");
             ImGui::SameLine();

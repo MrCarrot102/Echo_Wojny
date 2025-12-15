@@ -34,6 +34,9 @@ struct Villager {
     float workTimer; // zegar odliczania pracy 
     float hunger; 
     float thirst; 
+
+    // -- dodanie zdrowia -- 
+    float health; 
     // cel 
     glm::vec2 targetPosition; 
     std::vector<glm::vec2> currentPath; 
@@ -55,6 +58,7 @@ struct Villager {
         workTimer(0.0f),
         hunger(100.0f),
         thirst(100.0f),
+        health(100.0f),
         carryingResourceType(ResourceNode::Type::NONE),
         carryingAmount(0),
         currentPathIndex(0)

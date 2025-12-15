@@ -100,7 +100,7 @@ void GameState::update(float deltaTime) {
         currentSeason = Season::WINTER; 
         globalTemperature = -10.0f; 
     }
-
+    /*
     // mechanika wplywu temperatury na zycie 
     if (currentSeason == Season::WINTER) 
     {
@@ -155,18 +155,56 @@ void GameState::update(float deltaTime) {
                 }
             }
         }
-    }
+    }*/
 
 
     // --- 2. petla po mieszkancach  ---
-    for (Villager& villager : m_villagers) 
+    for (auto it = m_villagers.begin(); it != m_villagers.end(); ) 
     {
+        Villager& villager = *it; // dostep do osadnika przez referencje 
         
         // potrzeby 
         villager.hunger -= (gameHoursPassed * HUNGER_RATE);
         villager.thirst -= (gameHoursPassed * THIRST_RATE);
         if (villager.hunger < 0.0f) villager.hunger = 0.0f;
         if (villager.thirst < 0.0f) villager.thirst = 0.0f;
+
+        bool isTakingDamage = false; 
+
+        // obrazenia od glodu 
+        if (villager.hunger <= 0.0f) 
+        {
+            villager.health -= 5.0f * deltaTime; 
+            isTakingDamage = true; 
+        }
+        // obrazenie od pragnienia 
+        if (villager.thirst <= 0.0f) 
+        {
+            villager.health -= 10.0f * deltaTime; 
+            isTakingDamage = true; 
+        }
+        // obrazenia od zimna jak jest zima a nie ma czym sie ogrzac 
+        if (currentSeason == Season::WINTER && globalWood <= 0)
+        {
+            villager.health -= 2.0f * deltaTime; 
+            isTakingDamage = true; 
+        }
+
+        // regeneracja zycia kiedy potrzeby sa spelnione 
+        if (!isTakingDamage && villager.hunger > 50.0f && villager.thirst > 50.0f)
+        {
+            villager.health += 5.0f * deltaTime; 
+        }
+        // limit zdrowia 
+        if (villager.health > 100.0f) villager.health = 100.0f; 
+
+        // smierc 
+        if (villager.health <= 0.0f)
+        {
+            std::cout << "[ŚMIERĆ] " << villager.name << " zmarł z wycienczenia.\n";
+            it = m_villagers.erase(it); 
+            continue;
+        }
 
         // =========================================================
         // 2. INSTYNKT SAMOZACHOWAWCZY
@@ -429,11 +467,12 @@ void GameState::update(float deltaTime) {
                 villager.currentState = Villager::State::IDLE;
             }
         }
-
+        ++it;
     } // Koniec pętli for
 
     // --- Logika Dnia ---
-    if(timeOfDay >= 24.0f){
+    if(timeOfDay >= 24.0f)
+    {
         dayCounter++; 
         timeOfDay = 0.0f; 
         std::cout << "\n--- Dzien " << dayCounter << " ---\n"; 
@@ -441,22 +480,24 @@ void GameState::update(float deltaTime) {
     }
 
     // --- Debug ---
-    if (m_TimeAccumulator > 0.5f) {
+    if (m_TimeAccumulator > 0.5f) 
+    {
         m_TimeAccumulator = 0.0f; 
         std::cout << "D: " << dayCounter 
                   << " | Drewno: " << globalWood
                   << " | Populacja: " << m_villagers.size() 
                   << " \r";
         std::cout.flush(); 
-    }
+    } 
 }
 
 
-void GameState::checkForDailyEvents() {
-    
+
+void GameState::checkForDailyEvents() 
+{
     // wydarzenie 1: zrzuty zaopatrzenia 
-    if (dayCounter == 3 && !m_eventDay3Triggered) {
-        
+    if (dayCounter == 3 && !m_eventDay3Triggered) 
+    {
         m_eventDay3Triggered = true; 
 
         // narracja na razie do konsoli 
@@ -467,8 +508,8 @@ void GameState::checkForDailyEvents() {
         globalWater += 20; 
     }
 
-    if (dayCounter == 5 && !m_eventDay5Triggered){
-        
+    if (dayCounter == 5 && !m_eventDay5Triggered)
+    {   
         m_eventDay5Triggered = true; 
 
         currentEventTitle = "Najazd na bazę";
@@ -480,7 +521,8 @@ void GameState::checkForDailyEvents() {
         if (globalWood < 0 ) globalWood = 0; 
     }
 
-    if (dayCounter == 2 && !m_eventRefugeesTriggered) {
+    if (dayCounter == 2 && !m_eventRefugeesTriggered) 
+    {
         m_eventRefugeesTriggered = true; 
         
         currentEventTitle = "Uchodzcy u bram";
@@ -492,17 +534,20 @@ void GameState::checkForDailyEvents() {
 }
 
 
-Building* GameState::findNearestStockpile(const glm::vec2& fromPos){
+Building* GameState::findNearestStockpile(const glm::vec2& fromPos)
+{
     Building* closestStockpile = nullptr; 
     float minDistanceSquared = 999999.0f * 999999.0f; 
     
-    for(Building& b : m_buildings){
+    for(Building& b : m_buildings)
+    {
         
-        if (b.buildingType == Building::Type::STOCKPILE){
-            
+        if (b.buildingType == Building::Type::STOCKPILE)
+        {     
             float distanceSquared = glm::length(b.position - fromPos);
 
-            if (distanceSquared < minDistanceSquared){
+            if (distanceSquared < minDistanceSquared)
+            {
                 minDistanceSquared = distanceSquared; 
                 closestStockpile = &b; 
             }
@@ -512,14 +557,16 @@ Building* GameState::findNearestStockpile(const glm::vec2& fromPos){
     return closestStockpile;
 }
 
-void GameState::setMode(Mode newMode){
+void GameState::setMode(Mode newMode)
+{
     m_currentMode = newMode; 
 }
 
 
-void GameState::resolveRefugeeEvent(bool accepted) {
-    if (accepted) {
-
+void GameState::resolveRefugeeEvent(bool accepted) 
+{
+    if (accepted) 
+    {
         std::cout << "\n[DECYZJA] 'Nie możemy ich tak zostawić.' Wpuściliście ich.\n";
         std::cout << "[EFEKT] +2 Mieszkańców, -30 Jedzenia (natychmiast)\n";
 
@@ -527,8 +574,9 @@ void GameState::resolveRefugeeEvent(bool accepted) {
         m_villagers.emplace_back("Mariusz", glm::vec2(150.0f, 150.0f)); 
         m_villagers.emplace_back("Mateusz", glm::vec2(155.0f, 150.0f));
         globalFood -= 30; 
-
-    } else {
+    } 
+    else 
+    {
         std::cout << "\n[DECYZJA] 'Musimy myśleć o sobie.' Odprawiliście ich.\n";
         std::cout << "[EFEKT] Mieszkańcy są przybici.";
     }
@@ -601,12 +649,11 @@ void GameState::loadGame(const std::string& filename)
         if (lineType == "GLOBAL")
         {
             int seasonInt;
-            // Wczytujemy do zmiennych tymczasowych, żeby sprawdzić czy się udało
+
             int d; float t; int wood, water, food; float temp;
             
             file >> d >> t >> wood >> water >> food >> temp >> seasonInt;
 
-            // Przypisujemy do stanu gry
             dayCounter = d;
             timeOfDay = t;
             globalWood = wood;
