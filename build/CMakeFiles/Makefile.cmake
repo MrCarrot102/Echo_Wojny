@@ -8,9 +8,9 @@ set(CMAKE_DEPENDS_GENERATOR "Unix Makefiles")
 set(CMAKE_MAKEFILE_DEPENDS
   "CMakeCache.txt"
   "/home/mateuszsierakowski/Documents/Echo_Wojny/CMakeLists.txt"
-  "CMakeFiles/3.31.6/CMakeCCompiler.cmake"
-  "CMakeFiles/3.31.6/CMakeCXXCompiler.cmake"
-  "CMakeFiles/3.31.6/CMakeSystem.cmake"
+  "CMakeFiles/3.31.10/CMakeCCompiler.cmake"
+  "CMakeFiles/3.31.10/CMakeCXXCompiler.cmake"
+  "CMakeFiles/3.31.10/CMakeSystem.cmake"
   "/usr/local/lib64/cmake/SFML/SFMLConfig.cmake"
   "/usr/local/lib64/cmake/SFML/SFMLConfigDependencies.cmake"
   "/usr/local/lib64/cmake/SFML/SFMLConfigVersion.cmake"
@@ -111,6 +111,8 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/usr/share/cmake/Modules/Internal/CMakeCXXLinkerInformation.cmake"
   "/usr/share/cmake/Modules/Internal/CMakeCommonLinkerInformation.cmake"
   "/usr/share/cmake/Modules/Internal/CMakeDetermineLinkerId.cmake"
+  "/usr/share/cmake/Modules/Internal/CMakeInspectCLinker.cmake"
+  "/usr/share/cmake/Modules/Internal/CMakeInspectCXXLinker.cmake"
   "/usr/share/cmake/Modules/Internal/FeatureTesting.cmake"
   "/usr/share/cmake/Modules/Linker/GNU-C.cmake"
   "/usr/share/cmake/Modules/Linker/GNU-CXX.cmake"
@@ -137,11 +139,13 @@ set(CMAKE_MAKEFILE_OUTPUTS
 
 # Byproducts of CMake generate step:
 set(CMAKE_MAKEFILE_PRODUCTS
-  "CMakeFiles/3.31.6/CMakeSystem.cmake"
-  "CMakeFiles/3.31.6/CMakeCCompiler.cmake"
-  "CMakeFiles/3.31.6/CMakeCXXCompiler.cmake"
-  "CMakeFiles/3.31.6/CMakeCCompiler.cmake"
-  "CMakeFiles/3.31.6/CMakeCXXCompiler.cmake"
+  "CMakeFiles/3.31.10/CMakeSystem.cmake"
+  "CMakeFiles/3.31.10/CMakeCCompiler.cmake"
+  "CMakeFiles/3.31.10/CMakeCXXCompiler.cmake"
+  "CMakeFiles/3.31.10/CMakeCCompiler.cmake"
+  "CMakeFiles/3.31.10/CMakeCCompiler.cmake"
+  "CMakeFiles/3.31.10/CMakeCXXCompiler.cmake"
+  "CMakeFiles/3.31.10/CMakeCXXCompiler.cmake"
   "CMakeFiles/CMakeDirectoryInformation.cmake"
   )
 
