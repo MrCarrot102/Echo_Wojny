@@ -537,6 +537,7 @@ CMakeFiles/gra.dir/src/Core/Application.cpp.o: /home/mateuszsierakowski/Document
   /usr/local/include/SFML/Window/WindowStyle.hpp
 
 CMakeFiles/gra.dir/src/Game/GameState.cpp.o: /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/GameState.cpp \
+  /home/mateuszsierakowski/Documents/Echo_Wojny/vendor/stb/stb_perlin.h \
   /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/Building.h \
   /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/GameState.h \
   /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/Pathfinder.h \
@@ -739,6 +740,7 @@ CMakeFiles/gra.dir/src/Game/GameState.cpp.o: /home/mateuszsierakowski/Documents/
   /usr/include/c++/15/iostream \
   /usr/include/c++/15/istream \
   /usr/include/c++/15/limits \
+  /usr/include/c++/15/math.h \
   /usr/include/c++/15/memory \
   /usr/include/c++/15/new \
   /usr/include/c++/15/ostream \
@@ -5092,8 +5094,6 @@ CMakeFiles/gra.dir/src/Rendering/PrimitiveRenderer.cpp.o:
 
 /usr/lib/gcc/x86_64-redhat-linux/15/include/adxintrin.h:
 
-/usr/include/c++/15/math.h:
-
 /usr/local/include/SFML/OpenGL.hpp:
 
 /usr/include/c++/15/cstring:
@@ -5848,8 +5848,6 @@ CMakeFiles/gra.dir/vendor/imgui/imgui_demo.cpp.o:
 
 /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/GameState.cpp:
 
-/home/mateuszsierakowski/Documents/Echo_Wojny/src/Rendering/Camera2D.cpp:
-
 /usr/include/glm/detail/type_half.hpp:
 
 /usr/include/c++/15/x86_64-redhat-linux/bits/c++allocator.h:
@@ -6375,5 +6373,11 @@ CMakeFiles/gra.dir/src/Rendering/Shader.cpp.o:
 /usr/local/include/SFML/Window/Vulkan.hpp:
 
 /usr/local/include/SFML/Window/WindowBase.hpp:
+
+/home/mateuszsierakowski/Documents/Echo_Wojny/src/Rendering/Camera2D.cpp:
+
+/home/mateuszsierakowski/Documents/Echo_Wojny/vendor/stb/stb_perlin.h:
+
+/usr/include/c++/15/math.h:
 
 /usr/include/c++/15/bits/stl_multiset.h:

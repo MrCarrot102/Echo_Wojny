@@ -539,6 +539,7 @@ CMakeFiles/gra.dir/src/Core/Application.cpp.o
 
 CMakeFiles/gra.dir/src/Game/GameState.cpp.o
  /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/GameState.cpp
+ /home/mateuszsierakowski/Documents/Echo_Wojny/vendor/stb/stb_perlin.h
  /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/Building.h
  /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/GameState.h
  /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/Pathfinder.h
@@ -741,6 +742,7 @@ CMakeFiles/gra.dir/src/Game/GameState.cpp.o
  /usr/include/c++/15/iostream
  /usr/include/c++/15/istream
  /usr/include/c++/15/limits
+ /usr/include/c++/15/math.h
  /usr/include/c++/15/memory
  /usr/include/c++/15/new
  /usr/include/c++/15/ostream

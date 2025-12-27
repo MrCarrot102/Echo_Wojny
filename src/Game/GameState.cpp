@@ -1,7 +1,12 @@
 #include "Game/GameState.h"
 #include "Game/Pathfinder.h"
 
+#define STB_PERLIN_IMPLEMENTATION
+#include "../../vendor/stb/stb_perlin.h"
+
 #include <iostream> 
+
+
 
 GameState::GameState() 
     : dayCounter(1),
@@ -27,28 +32,55 @@ GameState::GameState()
     m_villagers.emplace_back("Ewa", glm::vec2(2020.0f, 2000.0f));
     m_villagers.emplace_back("Radek", glm::vec2(2000.0f, 2020.0f));
 
-    // 2. proceduralny generator swiata losowanie pozycji startowych 
-    // drzewo 
-    for (int i = 0; i < 300; i++)
-    {
-        float x = rand() % 4000; 
-        float y = rand() % 4000; 
-        m_resourceNodes.emplace_back(ResourceNode::TREE, glm::vec2(x, y), 100); 
+    // 2. proceduralnie generowany swiat perlin noise 
+    // parametry szumu 
+    m_resourceNodes.emplace_back(ResourceNode::TREE, glm::vec2(1960.0f, 2000.0f), 100);
+    m_resourceNodes.emplace_back(ResourceNode::TREE, glm::vec2(1980.0f, 2040.0f), 100);
+    m_resourceNodes.emplace_back(ResourceNode::TREE, glm::vec2(2040.0f, 1960.0f), 100);
+    
+    m_resourceNodes.emplace_back(ResourceNode::ROCK, glm::vec2(2080.0f, 2080.0f), 200);
+    
+    m_resourceNodes.emplace_back(ResourceNode::BERRY_BUSH, glm::vec2(2020.0f, 1950.0f), 50);
+    m_resourceNodes.emplace_back(ResourceNode::BERRY_BUSH, glm::vec2(2060.0f, 1960.0f), 50);
+
+
+    // KROK B: GENERATOR PERLIN
+    float scale = 0.005f; 
+    int step = 40;        
+
+    for (int y = 0; y < 4000; y += step) {
+        for (int x = 0; x < 4000; x += step) {
+            
+            // --- ZMIANA: STREFA OCHRONNA 70 (Bardzo ciasno) ---
+            // Tylko ścisłe centrum (tam gdzie stoją ludzie) jest puste.
+            // Las będzie rósł tuż przy budynkach.
+            if (glm::distance(glm::vec2(x, y), glm::vec2(2000.0f, 2000.0f)) < 70.0f) {
+                continue;
+            }
+
+            float noiseValue = stb_perlin_noise3(x * scale, y * scale, 0.0f, 0, 0, 0);
+
+            float offsetX = (rand() % 20) - 10.0f;
+            float offsetY = (rand() % 20) - 10.0f;
+
+            // Progi bez zmian (gęsty las)
+            if (noiseValue > 0.25f) {
+                m_resourceNodes.emplace_back(ResourceNode::TREE, glm::vec2(x + offsetX, y + offsetY), 100);
+            }
+            else if (noiseValue > 0.0f && noiseValue <= 0.25f) {
+                if (rand() % 3 == 0) { 
+                    m_resourceNodes.emplace_back(ResourceNode::ROCK, glm::vec2(x + offsetX, y + offsetY), 200);
+                }
+            }
+            else if (noiseValue < -0.2f) {
+                if (rand() % 4 == 0) {
+                     m_resourceNodes.emplace_back(ResourceNode::BERRY_BUSH, glm::vec2(x + offsetX, y + offsetY), 50);
+                }
+            }
+        }
     }
-    // sklala 
-    for (int i = 0; i < 100; i++)
-    {
-        float x = rand() % 4000; 
-        float y = rand() % 4000; 
-        m_resourceNodes.emplace_back(ResourceNode::ROCK, glm::vec2(x, y), 200);
-    }
-    // krzakow 
-    for (int i = 0; i < 100; i++)
-    {
-        float x = rand() % 4000; 
-        float y = rand() % 4000; 
-        m_resourceNodes.emplace_back(ResourceNode::BERRY_BUSH, glm::vec2(x, y), 50);
-    }
+     
+    
 
     // 3. budynki startowe 
     m_buildings.emplace_back(Building::KITCHEN, glm::vec2(2050.0f, 2050.0f));

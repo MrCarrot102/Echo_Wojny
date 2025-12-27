@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = -DIMGUI_SFML_USE_DEFAULT_CONFIG
 
-CXX_INCLUDES = -I/home/mateuszsierakowski/Documents/Echo_Wojny/src -I/home/mateuszsierakowski/Documents/Echo_Wojny/vendor -I/home/mateuszsierakowski/Documents/Echo_Wojny/vendor/imgui -I/home/mateuszsierakowski/Documents/Echo_Wojny/vendor/imgui-sfml
+CXX_INCLUDES = -I/home/mateuszsierakowski/Documents/Echo_Wojny/src -I/home/mateuszsierakowski/Documents/Echo_Wojny/vendor -I/home/mateuszsierakowski/Documents/Echo_Wojny/vendor/imgui -I/home/mateuszsierakowski/Documents/Echo_Wojny/vendor/imgui-sfml -I/vendor/stb
 
 CXX_FLAGS = -std=gnu++17
 
