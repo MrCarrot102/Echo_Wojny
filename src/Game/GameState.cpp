@@ -198,21 +198,29 @@ void GameState::update(float deltaTime) {
         // 2. INSTYNKT SAMOZACHOWAWCZY
         // =========================================================
         // --- PRIORYTET 1: WODA (Poniżej 40%) ---
-        auto getSafeInteractionPoint = [&](glm::vec2 buildingPos) -> glm::vec2 {
-            float checkDist = 40.0f; 
-            glm::vec2 directions[] = { {1,0}, {-1, 0}, {0, 1}, {0, -1} };
+        auto getSafeInteractionPoint = [&](glm::vec2 buildingPos) -> glm::vec2 
+        {
 
-            for (auto dir : directions) 
-            {
-                glm::vec2 testPos = buildingPos + (dir * checkDist); 
-                glm::ivec2 gridPos = m_worldMap->worldToGrid(testPos); 
+            std::vector<float> distances = { 25.0f, 35.0f, 45.0f, 60.0f };
+            
+            glm::vec2 directions[] = { 
+                {1,0}, {-1,0}, {0,1}, {0,-1},   // Prosto
+                {0.7f, 0.7f}, {-0.7f, 0.7f}, {0.7f, -0.7f}, {-0.7f, -0.7f} // Skosy
+            };
+            
+            for (float dist : distances) {
+                for(auto dir : directions) {
+                    glm::vec2 testPos = buildingPos + (dir * dist);
+                    glm::ivec2 gridPos = m_worldMap->worldToGrid(testPos);
+                    
 
-                if (!m_worldMap->isObstacle(gridPos.x, gridPos.y))
-                    return testPos; 
+                    if (!m_worldMap->isObstacle(gridPos.x, gridPos.y)) {
+                        return testPos;
+                    }
+                }
             }
-            return buildingPos; 
+            return buildingPos;
         };
-
 
         bool isBusySurviving = 
         (
@@ -221,7 +229,6 @@ void GameState::update(float deltaTime) {
             villager.currentState == Villager::State::MOVING_TO_EAT ||
             villager.currentState == Villager::State::EATING
         );
-
 
         if (!isBusySurviving) 
         {
@@ -234,10 +241,8 @@ void GameState::update(float deltaTime) {
 
                 if (targetWell != nullptr)
                 {
-  
                     glm::vec2 safeSpot = getSafeInteractionPoint(targetWell->position);
                     
-
                     std::vector<glm::vec2> path = Pathfinder::findPath(villager.position, safeSpot, *m_worldMap);
 
                     if (!path.empty()) 
@@ -299,7 +304,6 @@ void GameState::update(float deltaTime) {
                 return true;
             }
 
-            // B. Jak mamy sciezke to idziemy po kropkach
             if (villager.currentPathIndex >= villager.currentPath.size()) return true; // koniec trasy
 
            glm::vec2 nextWorldPos = villager.currentPath[villager.currentPathIndex];
