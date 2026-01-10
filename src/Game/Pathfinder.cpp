@@ -19,11 +19,11 @@ std::vector<glm::vec2> Pathfinder::findPath(const glm::vec2& startWorld, const g
     glm::ivec2 endNodePos = map.worldToGrid(endWorld); 
 
     // ochrona jak jest w scianie 
-    /*
+    
     if (map.isBlocked(endNodePos.x, endNodePos.y)) {
         return path; 
     }
-    */
+    
 
     std::vector<Node*> openSet; 
     std::vector<Node*> closedSet; 

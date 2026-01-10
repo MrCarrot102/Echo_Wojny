@@ -14,6 +14,7 @@ class WorldMap {
 
         // funkcje pomocnicze 
         void setObstacle(int x, int y, bool isObstacle); 
+        bool isObstacle(int x, int y) const; 
         bool isBlocked(int x, int y) const; 
 
         // konwersja z swiata na siatke 

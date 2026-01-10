@@ -96,7 +96,20 @@ GameState::GameState()
         // ustawianie przeszkody 
         m_worldMap->setObstacle(gridPos.x, gridPos.y, true); 
     }
-    std::cout << "[GAME] Zablokowano kratku pod surowcami!\n";
+
+    for (const auto& building : m_buildings) 
+    {
+        glm::ivec2 gridPos = m_worldMap->worldToGrid(building.position); 
+
+        m_worldMap->setObstacle(gridPos.x, gridPos.y, true); 
+        m_worldMap->setObstacle(gridPos.x + 1 , gridPos.y, true); 
+        m_worldMap->setObstacle(gridPos.x, gridPos.y + 1 , true); 
+        m_worldMap->setObstacle(gridPos.x + 1 , gridPos.y + 1, true);
+        
+        m_worldMap->setObstacle(gridPos.x - 1, gridPos.y, true); 
+        m_worldMap->setObstacle(gridPos.x, gridPos.y - 1, true); 
+    }
+
 
 }
 
@@ -132,64 +145,7 @@ void GameState::update(float deltaTime) {
         currentSeason = Season::WINTER; 
         globalTemperature = -10.0f; 
     }
-    /*
-    // mechanika wplywu temperatury na zycie 
-    if (currentSeason == Season::WINTER) 
-    {
-        heatingTimer += deltaTime; 
-
-        if (heatingTimer > 2.0f) 
-        {
-            heatingTimer = 0.0f; 
-
-            // sprawdzanie czy istnieje ognisko 
-            bool hasCampfire = false; 
-            for (const auto& b : m_buildings) 
-            {
-                if (b.buildingType == Building::CAMPFIRE)
-                {
-                    hasCampfire = true; 
-                    break; 
-                }
-            }
-
-            if (hasCampfire)
-            {
-                if (globalWood >= 5)
-                {
-                    globalWood -= 5; 
-                }
-                else
-                {
-                    std::cout << "[ALARM] Ognisko zgasło! Brak drewna! Ludzie marzną!\n";
-                    if (!m_villagers.empty())
-                    {
-                        m_villagers.pop_back(); 
-                        std::cout << "[ŚMIERĆ] Mieszkaniec zamarzł!\n";
-                    }
-                }
-            }
-            else 
-            {
-                // kiedy w ogole nie ma ogniska 
-                std::cout << "[ALARM] Brak ogniska w zimie! Too wyrok śmierci!\n";
-                if (globalWood >= 10) 
-                {
-                    globalWood -= 10; // probowanie sie ogrzac w mniej wydajny sposob 
-                }
-                else 
-                { 
-                    if (!m_villagers.empty())
-                    {
-                        m_villagers.pop_back(); 
-                        std::cout << "[ŚMIERĆ] Mieszkaniec zamarzł z braku ogniska!\n";
-                    }
-                }
-            }
-        }
-    }*/
-
-
+    
     // --- 2. petla po mieszkancach  ---
     for (auto it = m_villagers.begin(); it != m_villagers.end(); ) 
     {
@@ -242,6 +198,22 @@ void GameState::update(float deltaTime) {
         // 2. INSTYNKT SAMOZACHOWAWCZY
         // =========================================================
         // --- PRIORYTET 1: WODA (Poniżej 40%) ---
+        auto getSafeInteractionPoint = [&](glm::vec2 buildingPos) -> glm::vec2 {
+            float checkDist = 40.0f; 
+            glm::vec2 directions[] = { {1,0}, {-1, 0}, {0, 1}, {0, -1} };
+
+            for (auto dir : directions) 
+            {
+                glm::vec2 testPos = buildingPos + (dir * checkDist); 
+                glm::ivec2 gridPos = m_worldMap->worldToGrid(testPos); 
+
+                if (!m_worldMap->isObstacle(gridPos.x, gridPos.y))
+                    return testPos; 
+            }
+            return buildingPos; 
+        };
+
+
         bool isBusySurviving = 
         (
             villager.currentState == Villager::State::MOVING_TO_DRINK ||
@@ -250,58 +222,71 @@ void GameState::update(float deltaTime) {
             villager.currentState == Villager::State::EATING
         );
 
-        // SPRAWDZAMY POTRZEBY TYLKO JEŚLI NIE JEST ZAJĘTY PRZETRWANIEM
+
         if (!isBusySurviving) 
         {
-            // PRIORYTET A: WODA
             if (villager.thirst < 30.0f) 
             {
                 Building* targetWell = nullptr; 
-                for (auto& b : m_buildings) 
-                { 
-                    if (b.buildingType == Building::WELL) 
-                    {
-                        targetWell = &b; 
-                        break; 
-                    }
+                for (auto& b : m_buildings) { 
+                    if (b.buildingType == Building::WELL) { targetWell = &b; break; }
                 }
 
                 if (targetWell != nullptr)
                 {
-                    std::cout << "[AI] " << villager.name << " idzie pić.\n";
-                    villager.currentState = Villager::State::MOVING_TO_DRINK; 
-                    villager.targetPosition = targetWell->position; 
-                    villager.targetNode = nullptr; 
-                    villager.carryingAmount = 0; 
+  
+                    glm::vec2 safeSpot = getSafeInteractionPoint(targetWell->position);
+                    
 
-                    villager.currentPath = Pathfinder::findPath(villager.position, targetWell->position, *m_worldMap);
-                    villager.currentPathIndex = 0;  
+                    std::vector<glm::vec2> path = Pathfinder::findPath(villager.position, safeSpot, *m_worldMap);
 
+                    if (!path.empty()) 
+                    {
+                        std::cout << "[AI] " << villager.name << " idzie pić. (Droga: " << path.size() << " krokow)\n";
+                        villager.currentState = Villager::State::MOVING_TO_DRINK; 
+                        villager.targetPosition = safeSpot; 
+                        villager.targetNode = nullptr; 
+                        villager.carryingAmount = 0; 
+
+                        villager.currentPath = path;
+                        villager.currentPathIndex = 0;  
+                    }
+                    else 
+                    {
+                        if (rand() % 100 == 0) 
+                            std::cout << "[BLOKADA] " << villager.name << " chce pić, ale nie widzi drogi do studni!\n";
+                    }
                 }
             }
             // PRIORYTET B: JEDZENIE 
             else if (villager.hunger < 30.0f) 
             {
                 Building* targetKitchen = nullptr;
-                for (Building& b : m_buildings) 
-                {
-                    if (b.buildingType == Building::KITCHEN) 
-                    { 
-                        targetKitchen = &b; 
-                        break; 
-                    }
+                for (Building& b : m_buildings) {
+                    if (b.buildingType == Building::KITCHEN) { targetKitchen = &b; break; }
                 }
 
                 if (targetKitchen != nullptr) 
                 {
-                    std::cout << "[AI] " << villager.name << " idzie jeść.\n";
-                    villager.currentState = Villager::State::MOVING_TO_EAT;
-                    villager.targetPosition = targetKitchen->position;
-                    villager.targetNode = nullptr; 
-                    villager.carryingAmount = 0;   
+                    glm::vec2 safeSpot = getSafeInteractionPoint(targetKitchen->position);
+                    std::vector<glm::vec2> path = Pathfinder::findPath(villager.position, safeSpot, *m_worldMap);
 
-                    villager.currentPath = Pathfinder::findPath(villager.position, targetKitchen->position, *m_worldMap); 
-                    villager.currentPathIndex = 0; 
+                    if (!path.empty())
+                    {
+                        std::cout << "[AI] " << villager.name << " idzie jeść. (Droga: " << path.size() << " krokow)\n";
+                        villager.currentState = Villager::State::MOVING_TO_EAT;
+                        villager.targetPosition = safeSpot;
+                        villager.targetNode = nullptr; 
+                        villager.carryingAmount = 0;   
+
+                        villager.currentPath = path; 
+                        villager.currentPathIndex = 0; 
+                    }
+                    else 
+                    {
+                         if (rand() % 100 == 0)
+                            std::cout << "[BLOKADA] " << villager.name << " chce jeść, ale kuchnia zablokowana!\n";
+                    }
                 }
             }
         }
@@ -461,6 +446,12 @@ void GameState::update(float deltaTime) {
         // 5. biegnie chać
         else if (villager.currentState == Villager::State::MOVING_TO_DRINK) 
         {
+            if (villager.currentPath.empty() && glm::distance(villager.position, villager.targetPosition) > 40.0f) 
+            {
+                villager.currentState = Villager::State::IDLE; 
+                continue;
+            }
+
             if (moveAlongPath(speed)) 
             {
                 villager.currentState = Villager::State::DRINKING;
@@ -482,6 +473,12 @@ void GameState::update(float deltaTime) {
         // 7. biegnie żreć 
         else if (villager.currentState == Villager::State::MOVING_TO_EAT) 
         {
+            if (villager.currentPath.empty() && glm::distance(villager.position, villager.targetPosition) > 40.0f) 
+            {
+                villager.currentState = Villager::State::IDLE; 
+                continue;
+            }
+
             if (moveAlongPath(speed)) 
             {
                 villager.currentState = Villager::State::EATING;
