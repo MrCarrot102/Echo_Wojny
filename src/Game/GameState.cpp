@@ -19,6 +19,7 @@ GameState::GameState()
       globalWood(50),
       globalWater(50),
       globalStone(0),
+      globalMorale(100.0f),
       m_TimeAccumulator(0.0f),
       m_eventDay3Triggered(false), 
       m_eventDay5Triggered(false),
@@ -190,6 +191,10 @@ void GameState::update(float deltaTime) {
         if (villager.health <= 0.0f)
         {
             std::cout << "[ŚMIERĆ] " << villager.name << " zmarł z wycienczenia.\n";
+
+            globalMorale -= 25.0f; 
+            if (globalMorale < 0.0f) globalMorale = 0.0f; 
+            std::cout << "[MORALE] Spada drastycznie! Aktualnie: " << globalMorale << "%\n";
             it = m_villagers.erase(it); 
             continue;
         }
@@ -650,16 +655,18 @@ void GameState::resolveRefugeeEvent(bool accepted)
     {
         std::cout << "\n[DECYZJA] 'Nie możemy ich tak zostawić.' Wpuściliście ich.\n";
         std::cout << "[EFEKT] +2 Mieszkańców, -30 Jedzenia (natychmiast)\n";
-
+        globalMorale += 15.0f; 
+        if (globalMorale > 100.0f) globalMorale = 100.0f; 
         // dodawanie nowych mieszkancow 
         m_villagers.emplace_back("Mariusz", glm::vec2(150.0f, 150.0f)); 
         m_villagers.emplace_back("Mateusz", glm::vec2(155.0f, 150.0f));
         globalFood -= 30; 
     } 
     else 
-    {
+    {   
+        globalMorale -= 20.0f; 
         std::cout << "\n[DECYZJA] 'Musimy myśleć o sobie.' Odprawiliście ich.\n";
-        std::cout << "[EFEKT] Mieszkańcy są przybici.";
+        std::cout << "[EFEKT] Mieszkańcy są przybici. (Morale -20)\n";
     }
 
     setMode(Mode::PLAYING); 
@@ -685,7 +692,8 @@ void GameState::saveGame(const std::string& filename)
         << globalWater << " " 
         << globalFood << " "
         << globalTemperature << " " 
-        << (int)currentSeason << "\n";
+        << (int)currentSeason << " "
+        << globalMorale << "\n";
 
     // 2. zapisywanie mieszkancow 
     for (const auto& v : m_villagers) 
@@ -731,9 +739,9 @@ void GameState::loadGame(const std::string& filename)
         {
             int seasonInt;
 
-            int d; float t; int wood, water, food; float temp;
+            int d; float t; int wood, water, food; float temp; float mor;
             
-            file >> d >> t >> wood >> water >> food >> temp >> seasonInt;
+            file >> d >> t >> wood >> water >> food >> temp >> seasonInt >> mor;
 
             dayCounter = d;
             timeOfDay = t;
@@ -742,6 +750,7 @@ void GameState::loadGame(const std::string& filename)
             globalFood = food;
             globalTemperature = temp;
             currentSeason = (Season)seasonInt;
+            globalMorale = mor; 
 
             globalLinesRead++;
             std::cout << "[DEBUG] Wczytano GLOBAL: Dzien " << dayCounter << ", Czas " << timeOfDay << "\n";

@@ -381,8 +381,14 @@ void Application::update(float deltaTime){
     // -------------------- 
 
     // -- menu --
-    if (m_AppState == AppState::MENU) 
+    if (m_AppState == AppState::MENU || m_AppState == AppState::GAME_OVER) 
         return; 
+
+    if (m_GameState->m_villagers.empty() || m_GameState->globalMorale <= 0.0f)
+    {
+        m_AppState = AppState::GAME_OVER;
+        return; 
+    }
 
     // aktualizacja logiki gry 
     m_Camera->update(deltaTime, m_Window); 
@@ -673,6 +679,22 @@ void Application::render(){
             ImGui::Text("Jedzenie: %d", m_GameState->globalFood);
 
             ImGui::Text("Ludzie: %lu", m_GameState->m_villagers.size());
+
+            ImGui::Spacing(); 
+            ImGui::Text("Morale Spolecznosci:");
+
+            // Kolor paska zależny od poziomu
+            if (m_GameState->globalMorale > 50.0f)
+                ImGui::PushStyleColor(ImGuiCol_PlotHistogram, ImVec4(0.6f, 0.2f, 1.0f, 1.0f)); // Fioletowy (OK)
+            else
+                ImGui::PushStyleColor(ImGuiCol_PlotHistogram, ImVec4(0.3f, 0.3f, 0.3f, 1.0f)); // Szary (Depresja)
+
+            ImGui::ProgressBar(m_GameState->globalMorale / 100.0f, ImVec2(180, 20), "");
+            ImGui::PopStyleColor();
+            
+            if (m_GameState->globalMorale <= 0.0f) {
+                ImGui::TextColored(ImVec4(1,0,0,1), "BUNT! KONIEC GRY!");
+            }
         }
         ImGui::EndGroup();
 
@@ -828,7 +850,56 @@ void Application::render(){
             ImGui::End(); 
         }
     }
+    
+    else if (m_AppState == AppState::GAME_OVER)
+    {
+        glClearColor(0.2f, 0.0f, 0.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT); 
 
+       ImGui::SetNextWindowPos(ImVec2(m_Window.getSize().x * 0.5f, m_Window.getSize().y * 0.5f), ImGuiCond_Always, ImVec2(0.5f, 0.5f));
+        ImGui::SetNextWindowSize(ImVec2(400, 300));
+        
+        ImGui::Begin("Game Over", nullptr, ImGuiWindowFlags_NoDecoration); 
+
+
+        ImGui::SetWindowFontScale(2.0f); // Duży tekst
+        ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "     KONIEC GRY");
+        ImGui::SetWindowFontScale(1.0f); // Powrót do normy
+        ImGui::Separator();
+        ImGui::Spacing();
+
+
+        if (m_GameState->m_villagers.empty()) {
+            ImGui::TextWrapped("Twoja wioska opustoszała. Wszyscy mieszkańcy zginęli z głodu, pragnienia lub zimna. Pamięć o nich przeminie.");
+        } else {
+            ImGui::TextWrapped("Wybuchł bunt! Mieszkańcy, doprowadzeni do ostateczności twoimi decyzjami, obalili władzę i uciekli z wioski.");
+        }
+
+        ImGui::Spacing(); ImGui::Spacing(); ImGui::Separator(); ImGui::Spacing(); ImGui::Spacing();
+
+
+        if (ImGui::Button("SPROBUJ PONOWNIE", ImVec2(380, 50)))
+        {
+
+            m_GameState = std::make_unique<GameState>(); 
+            
+  
+            m_Camera->setPosition(glm::vec2(2000.0f, 2000.0f)); 
+            
+
+            m_AppState = AppState::GAME; 
+        }
+
+        ImGui::Spacing();
+
+
+        if (ImGui::Button("WYJDZ Z GRY", ImVec2(380, 40)))
+        {
+            m_Running = false; 
+        }
+
+        ImGui::End();
+    }
     // ------------------------------
     ImGui::SFML::Render();
 

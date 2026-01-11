@@ -32,7 +32,8 @@ class Application
         enum class AppState 
         {
             MENU, 
-            GAME
+            GAME, 
+            GAME_OVER
         };
         
         enum class BuildMode {
