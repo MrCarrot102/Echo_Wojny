@@ -9,7 +9,9 @@ struct Building {
                 KITCHEN, 
                 WELL,
                 STOCKPILE,
-                CAMPFIRE
+                CAMPFIRE, 
+                WALL, 
+                STONE_WELL
             };
              
     Type buildingType; 

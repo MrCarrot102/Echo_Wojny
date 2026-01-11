@@ -263,7 +263,50 @@ void Application::pollEvents() {
                         {
                             std::cout << "[BUDOWA] Brakuje drewna mój Panie!\n";
                         }
-                    }   
+                    } 
+                    
+                    else if (m_currentBuildMode == BuildMode::WALL) 
+                    {
+                        int cost = 10; 
+
+                        if (m_GameState->globalStone >= cost) 
+                        {
+                            m_GameState->globalStone -= cost; 
+                            m_GameState->m_buildings.emplace_back(Building::WALL, m_ghostBuildingPos); 
+
+                            // blokowanie terenu pod murem 
+                            glm::ivec2 centerGrid = m_GameState->m_worldMap->worldToGrid(m_ghostBuildingPos); 
+                            for (int x = -1; x <= 1; x++)
+                            {
+                                for (int y = -1; y <= 1; y++)
+                                {
+                                    m_GameState->m_worldMap->setObstacle(centerGrid.x + x, centerGrid.y + y, true); 
+                                }
+                            }
+                            std::cout << "Postawiono mur!\n";
+                        } else std::cout << "Brakuje kamienia!\n";
+                    }
+
+                    else if (m_currentBuildMode == BuildMode::STONE_WELL)
+                    {
+                        int cost = 50;
+                        if (m_GameState->globalStone >= cost) 
+                        {
+                            m_GameState->globalStone -= cost; 
+                            m_GameState->m_buildings.emplace_back(Building::STONE_WELL, m_ghostBuildingPos); 
+
+                            glm::ivec2 centerGrid = m_GameState->m_worldMap->worldToGrid(m_ghostBuildingPos); 
+                            for (int x = -1; x <= 1; x++)
+                            {
+                                for (int y = -1; y <= 1; y++)
+                                {
+                                    m_GameState->m_worldMap->setObstacle(centerGrid.x + x, centerGrid.y + y, true); 
+                                }
+                            }
+                            m_currentBuildMode = BuildMode::NONE; 
+                            std::cout << "Postawiono kamienną studnię!\n";
+                        } else std::cout << "Brakuje kamienia!\n";
+                    }
 
                 } 
                 else 
@@ -294,7 +337,7 @@ void Application::pollEvents() {
                         }
                     }
                     
-                    // Cel podróży (współrzędne w świecie gry)
+ 
                     glm::vec2 finalTargetPos;
 
                     if (clickedNode != nullptr){
@@ -302,10 +345,10 @@ void Application::pollEvents() {
                         m_selectedVillager->targetNode = clickedNode; 
                         m_selectedVillager->currentState = Villager::State::MOVING_TO_WORK;
                         
-                        // Idź troszkę obok zasobu
+
                         glm::vec2 dir = glm::normalize(m_selectedVillager->position - clickedNode->position);
                         
-                        // --- POPRAWKA 1: Prawidłowa inicjalizacja wektora ---
+
                         if(glm::length(dir) == 0) dir = glm::vec2(1.0f, 0.0f); 
                         
                         finalTargetPos = clickedNode->position + (dir * 35.0f);
@@ -316,14 +359,8 @@ void Application::pollEvents() {
                         finalTargetPos = worldMousePos;
                     }
 
-                    // --- POPRAWKA 2: Literówka (Target a nie target) ---
                     m_selectedVillager->targetPosition = finalTargetPos;
 
-                    // --- POPRAWKA 3: Prawidłowe wywołanie Pathfindera ---
-                    // Funkcja jest statyczna, więc wywołujemy ją przez nazwę klasy Pathfinder::
-                    // Kolejność argumentów to: (Start, Koniec, Mapa)
-                    // Nie musisz zamieniać na Grid (worldToGrid), Pathfinder zrobi to w środku
-                    
                     m_selectedVillager->currentPath = Pathfinder::findPath(
                         m_selectedVillager->position,   // Start (vec2)
                         finalTargetPos,                 // Koniec (vec2)
@@ -450,6 +487,7 @@ void Application::render(){
             {
                 color = {1.0f, 0.2f, 0.6f, 1.0f}; 
             }
+           
             m_Renderer->drawSquare(*m_Camera, node.position, {10.0f, 10.0f}, color);
         }
 
@@ -485,6 +523,16 @@ void Application::render(){
             {
                 color = {1.0f, 0.5f, 0.0f, 1.0f}; 
             }
+
+            else if (b.buildingType == Building::WALL) 
+            {
+                color = {0.4f, 0.4f, 0.4f, 1.0f}; // Szary
+            }
+            else if (b.buildingType == Building::STONE_WELL) 
+            {
+                color = {0.0f, 0.8f, 0.9f, 1.0f}; // Turkusowy
+            }
+
             m_Renderer->drawSquare(*m_Camera, b.position, {20.0f, 20.0f}, color); 
         }
 
@@ -635,10 +683,10 @@ void Application::render(){
         {
             ImGui::Text("BUDOWANIE:");
 
-            auto DrawBuildButton = [&](const char* label, Building::Type type, int cost, BuildMode mode) 
+            auto DrawBuildButton = [&](const char* label, int cost, int& resourcePool, BuildMode mode) 
             {
                 bool isActive = (m_currentBuildMode == mode);
-                bool canAfford = (m_GameState->globalWood >= cost);
+                bool canAfford = (resourcePool >= cost); 
 
                 if (isActive) ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 0.7f, 0.0f, 1.0f)); 
                 else if (!canAfford) ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.5f, 0.2f, 0.2f, 1.0f)); 
@@ -663,13 +711,17 @@ void Application::render(){
                 }
             };
 
-            DrawBuildButton("KUCHNIA", Building::KITCHEN, 50, BuildMode::KITCHEN); 
+            DrawBuildButton("KUCHNIA", 50, m_GameState->globalWood, BuildMode::KITCHEN); 
             ImGui::SameLine(); 
-            DrawBuildButton("STUDNIA", Building::WELL, 25, BuildMode::WELL);
+            DrawBuildButton("STUDNIA", 25,  m_GameState->globalWood, BuildMode::WELL);
 
-            DrawBuildButton("MAGAZYN", Building::STOCKPILE, 10, BuildMode::STOCKPILE); 
+            DrawBuildButton("MAGAZYN",  10,  m_GameState->globalWood, BuildMode::STOCKPILE); 
             ImGui::SameLine(); 
-            DrawBuildButton("OGNISKO", Building::CAMPFIRE, 30, BuildMode::CAMPFIRE);
+            DrawBuildButton("OGNISKO", 30,  m_GameState->globalWood, BuildMode::CAMPFIRE);
+        
+            DrawBuildButton("MUR", 10, m_GameState->globalStone, BuildMode::WALL);
+            ImGui::SameLine();
+            DrawBuildButton("K. STUDNIA", 50, m_GameState->globalStone, BuildMode::STONE_WELL);
         }
         ImGui::EndGroup();
 

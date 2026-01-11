@@ -24,7 +24,10 @@ struct Villager {
         MOVING_TO_DRINK, 
         DRINKING,
         MOVING_TO_HAUL, 
-        HAULING  
+        HAULING, 
+        
+        MOVING_TO_GATHER_WATER,
+        GATHERING_WATER
     }; 
     
     

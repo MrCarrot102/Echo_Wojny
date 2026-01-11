@@ -412,6 +412,51 @@ void GameState::update(float deltaTime) {
             }
         }
 
+        else if (villager.currentState == Villager::State::MOVING_TO_GATHER_WATER)
+        {
+            if (moveAlongPath(speed))
+            {
+                villager.currentState = Villager::State::GATHERING_WATER;
+                villager.workTimer = 3.0f; 
+            }
+        }
+
+        else if (villager.currentState == Villager::State::GATHERING_WATER)
+        {
+            villager.workTimer -= deltaTime; 
+            if (villager.workTimer <= 0.0f)
+            {
+                villager.carryingResourceType = ResourceNode::Type::WATER; 
+                villager.carryingAmount = 20; 
+
+                Building* stockpile = findNearestStockpile(villager.position); 
+                if (stockpile != nullptr)
+                {
+                    glm::vec2 safeSpot = getSafeInteractionPoint(stockpile->position); 
+
+                    villager.currentPath = Pathfinder::findPath(villager.position, safeSpot, *m_worldMap); 
+
+                    if(!villager.currentPath.empty())
+                    {
+                        villager.currentState = Villager::State::MOVING_TO_HAUL; 
+                        villager.targetPosition = safeSpot; 
+                        villager.currentPathIndex = 0; 
+                    }
+                    else 
+                    {
+                        villager.carryingAmount = 0; 
+                        villager.currentState = Villager::State::IDLE; 
+                    }
+                }
+
+                else 
+                {
+                    std::cout << "[AI] Mam wodę, ale nie ma magazynu!\n";
+                    villager.currentState = Villager::State::IDLE; 
+                }
+            }
+        }
+
         // 4. ruch do magazynu 
         else if (villager.currentState == Villager::State::MOVING_TO_HAUL) 
         {
@@ -424,7 +469,10 @@ void GameState::update(float deltaTime) {
                     globalStone += villager.carryingAmount;
                 else if (villager.carryingResourceType == ResourceNode::Type::BERRY_BUSH) 
                     globalFood += villager.carryingAmount;
+                else if  (villager.carryingResourceType == ResourceNode::Type::WATER)
+                    globalWater += villager.carryingAmount; 
 
+                    
                 villager.carryingAmount = 0;
                 villager.carryingResourceType = ResourceNode::Type::NONE;
 

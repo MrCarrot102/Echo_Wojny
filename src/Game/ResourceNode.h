@@ -9,7 +9,8 @@ struct ResourceNode {
     enum Type { NONE, 
                 TREE, 
                 ROCK, 
-                BERRY_BUSH }; 
+                BERRY_BUSH,
+                WATER }; 
                 
     Type resourceType; 
     glm::vec2 position; 

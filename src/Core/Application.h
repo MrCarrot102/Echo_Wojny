@@ -40,7 +40,9 @@ class Application
             KITCHEN, 
             WELL, 
             STOCKPILE,
-            CAMPFIRE
+            CAMPFIRE,
+            STONE_WELL, 
+            WALL
         };
 
         // -- oswietlenie -- 
