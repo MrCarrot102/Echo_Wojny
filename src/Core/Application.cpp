@@ -341,18 +341,46 @@ void Application::pollEvents() {
                     glm::vec2 finalTargetPos;
 
                     if (clickedNode != nullptr){
-                        std::cout << "Rozkaz: Praca\n";
-                        m_selectedVillager->targetNode = clickedNode; 
-                        m_selectedVillager->currentState = Villager::State::MOVING_TO_WORK;
-                        
+                            std::cout << "Rozkaz: Zbieraj zasoby\n";
+                            m_selectedVillager->targetNode = clickedNode; 
+                            m_selectedVillager->currentState = Villager::State::MOVING_TO_WORK;
+                            bool actionFound = false; 
+                            // 1. Oblicz domyślny kierunek (od zasobu do osadnika)
+                            glm::vec2 dir = glm::normalize(m_selectedVillager->position - clickedNode->position);
+                            if(glm::length(m_selectedVillager->position - clickedNode->position) < 0.1f) dir = glm::vec2(1.0f, 0.0f); 
 
-                        glm::vec2 dir = glm::normalize(m_selectedVillager->position - clickedNode->position);
-                        
+                            glm::vec2 bestSpot = clickedNode->position + (dir * 35.0f);
+                            bool foundSpot = false;
 
-                        if(glm::length(dir) == 0) dir = glm::vec2(1.0f, 0.0f); 
-                        
-                        finalTargetPos = clickedNode->position + (dir * 35.0f);
-                    } else {
+                            glm::vec2 offsets[] = {
+                                dir * 35.0f,                    // 1. Idealnie na wprost
+                                glm::vec2(dir.y, -dir.x) * 35.0f, // 2. Bokiem
+                                glm::vec2(-dir.y, dir.x) * 35.0f, // 3. Drugim bokiem
+                                -dir * 35.0f,                   // 4. Od tyłu
+                                glm::vec2(1,0)*35.0f, glm::vec2(-1,0)*35.0f, glm::vec2(0,1)*35.0f, glm::vec2(0,-1)*35.0f // 5. Standardowe kierunki
+                            };
+
+                            for (const auto& off : offsets) 
+                            {
+                                glm::vec2 testPos = clickedNode->position + off;
+                                glm::ivec2 gridPos = m_GameState->m_worldMap->worldToGrid(testPos);
+
+                                // Jeśli kratka jest wolna -> Bierzemy to miejsce!
+                                if (!m_GameState->m_worldMap->isObstacle(gridPos.x, gridPos.y)) {
+                                    bestSpot = testPos;
+                                    foundSpot = true;
+                                    break;
+                                }
+                            }
+
+                            if (!foundSpot && glm::distance(m_selectedVillager->position, clickedNode->position) < 45.0f) {
+                                bestSpot = m_selectedVillager->position;
+                            }
+
+                            finalTargetPos = bestSpot;
+                            actionFound = true;
+                        }
+                        else {
                         std::cout << "Rozkaz: Ruch\n";
                         m_selectedVillager->targetNode = nullptr; 
                         m_selectedVillager->currentState = Villager::State::MOVING_TO_POINT;
@@ -705,7 +733,7 @@ void Application::render(){
         {
             ImGui::Text("BUDOWANIE:");
 
-            auto DrawBuildButton = [&](const char* label, int cost, int& resourcePool, BuildMode mode) 
+            auto DrawBuildButton = [&](const char* label, int cost, int& resourcePool, BuildMode mode, const char* resName) 
             {
                 bool isActive = (m_currentBuildMode == mode);
                 bool canAfford = (resourcePool >= cost); 
@@ -729,21 +757,21 @@ void Application::render(){
 
                 if (ImGui::IsItemHovered()) 
                 {
-                    ImGui::SetTooltip("Koszt: %d Drewna", cost);
+                    ImGui::SetTooltip("Koszt: %d %s", cost, resName);
                 }
             };
 
-            DrawBuildButton("KUCHNIA", 50, m_GameState->globalWood, BuildMode::KITCHEN); 
+            DrawBuildButton("KUCHNIA", 50, m_GameState->globalWood, BuildMode::KITCHEN, "Drewna"); 
             ImGui::SameLine(); 
-            DrawBuildButton("STUDNIA", 25,  m_GameState->globalWood, BuildMode::WELL);
+            DrawBuildButton("STUDNIA", 25,  m_GameState->globalWood, BuildMode::WELL, "Drewna");
 
-            DrawBuildButton("MAGAZYN",  10,  m_GameState->globalWood, BuildMode::STOCKPILE); 
+            DrawBuildButton("MAGAZYN",  10,  m_GameState->globalWood, BuildMode::STOCKPILE, "Drewna"); 
             ImGui::SameLine(); 
-            DrawBuildButton("OGNISKO", 30,  m_GameState->globalWood, BuildMode::CAMPFIRE);
+            DrawBuildButton("OGNISKO", 30,  m_GameState->globalWood, BuildMode::CAMPFIRE, "Drewna");
         
-            DrawBuildButton("MUR", 10, m_GameState->globalStone, BuildMode::WALL);
+            DrawBuildButton("MUR", 10, m_GameState->globalStone, BuildMode::WALL, "Kamienia");
             ImGui::SameLine();
-            DrawBuildButton("K. STUDNIA", 50, m_GameState->globalStone, BuildMode::STONE_WELL);
+            DrawBuildButton("K. STUDNIA", 50, m_GameState->globalStone, BuildMode::STONE_WELL, "Kamienia");
         }
         ImGui::EndGroup();
 

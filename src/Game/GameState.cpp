@@ -134,7 +134,7 @@ void GameState::update(float deltaTime) {
 
     // --- system pogody i ogrzewania --- 
     // cykl por roku zmiana co 3 dni 
-    int seasonCycle = (dayCounter - 1) / 6; 
+    int seasonCycle = (dayCounter - 1) / 3; 
 
     if (seasonCycle % 2 == 0) 
     { 
@@ -145,6 +145,31 @@ void GameState::update(float deltaTime) {
     {
         currentSeason = Season::WINTER; 
         globalTemperature = -10.0f; 
+
+        heatingTimer += deltaTime;
+        if (heatingTimer > 2.0f)
+        {
+            heatingTimer = 0.0f; 
+
+            bool hasCampfire = false; 
+            for (const auto& b : m_buildings)
+            {
+                if (b.buildingType == Building::CAMPFIRE)
+                {
+                    hasCampfire = true; 
+                    break; 
+                }
+            }
+
+            if (hasCampfire)
+            {
+                if (globalWood >= 5) globalWood -= 5; 
+            }
+            else 
+            {
+                if (globalWood >= 10) globalWood -= 10; 
+            }
+        }
     }
     
     // --- 2. petla po mieszkancach  ---
