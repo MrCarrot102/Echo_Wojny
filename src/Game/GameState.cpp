@@ -49,6 +49,8 @@ GameState::GameState()
     float scale = 0.005f; 
     int step = 40;        
 
+    float perlinSeed = (float)(rand() % 10000) / 100.0f; 
+
     for (int y = 0; y < 4000; y += step) {
         for (int x = 0; x < 4000; x += step) {
             
@@ -59,7 +61,7 @@ GameState::GameState()
                 continue;
             }
 
-            float noiseValue = stb_perlin_noise3(x * scale, y * scale, 0.0f, 0, 0, 0);
+            float noiseValue = stb_perlin_noise3(x * scale, y * scale, perlinSeed, 0, 0, 0);
 
             float offsetX = (rand() % 20) - 10.0f;
             float offsetY = (rand() % 20) - 10.0f;

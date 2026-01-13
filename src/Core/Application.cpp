@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp> 
 #include <iostream> 
+#include <ctime> 
 
 Application::Application()
     : m_Window(), m_Running(true), m_selectedVillager(nullptr)
@@ -26,6 +27,7 @@ void Application::init() {
     settings.attributeFlags = sf::ContextSettings::Default; 
     unsigned int windowWidth = 800; 
     unsigned int widnowHeight = 600; 
+    std::srand(static_cast<unsigned int>(time(NULL))); 
 
     m_Window.create(sf::VideoMode(windowWidth, widnowHeight), "Echo Wojny", sf::Style::Default, settings); 
     m_Window.setVerticalSyncEnabled(true); 
