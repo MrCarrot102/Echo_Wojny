@@ -16,9 +16,9 @@ GameState::GameState()
       globalTemperature(25.0f), 
       seasonTimer(0.0f), 
       heatingTimer(0.0f), 
-      globalWood(50),
+      globalWood(150),
       globalWater(50),
-      globalStone(0),
+      globalStone(50),
       globalMorale(100.0f),
       m_TimeAccumulator(0.0f),
       m_eventDay3Triggered(false), 
@@ -57,7 +57,14 @@ GameState::GameState()
             // --- ZMIANA: STREFA OCHRONNA 70 (Bardzo ciasno) ---
             // Tylko ścisłe centrum (tam gdzie stoją ludzie) jest puste.
             // Las będzie rósł tuż przy budynkach.
-            if (glm::distance(glm::vec2(x, y), glm::vec2(2000.0f, 2000.0f)) < 70.0f) {
+            bool safePlayer = glm::distance(glm::vec2(x, y), glm::vec2(2000.0f, 2000.0f)) < 70.0f;
+            
+            // 2. Punkt spawnu uchodźców (150, 150) - To naprawia crash losowości!
+            bool safeRefugees = glm::distance(glm::vec2(x, y), glm::vec2(150.0f, 150.0f)) < 60.0f;
+
+            if (glm::distance(glm::vec2(x, y), glm::vec2(2000.0f, 2000.0f)) < 150.0f || 
+                glm::distance(glm::vec2(x, y), glm::vec2(150.0f, 150.0f)) < 60.0f)   // Strefa dla uchodźców
+            {
                 continue;
             }
 
@@ -86,9 +93,9 @@ GameState::GameState()
     
 
     // 3. budynki startowe 
-    m_buildings.emplace_back(Building::KITCHEN, glm::vec2(2050.0f, 2050.0f));
-    m_buildings.emplace_back(Building::STOCKPILE, glm::vec2(2100.0f, 2050.0f));
-    m_buildings.emplace_back(Building::WELL, glm::vec2(2050.0f, 2100.0f));
+    //m_buildings.emplace_back(Building::KITCHEN, glm::vec2(2050.0f, 2050.0f));
+    //m_buildings.emplace_back(Building::STOCKPILE, glm::vec2(2100.0f, 2050.0f));
+    //m_buildings.emplace_back(Building::WELL, glm::vec2(2050.0f, 2100.0f));
 
     // 4. aktualizowanie mapy logicznej bla bla bla pathtracing 
     for (const auto& node : m_resourceNodes)

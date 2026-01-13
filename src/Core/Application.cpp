@@ -26,10 +26,10 @@ void Application::init() {
     //settings.attributeFlags = sf::ContextSettings::Core; 
     settings.attributeFlags = sf::ContextSettings::Default; 
     unsigned int windowWidth = 800; 
-    unsigned int widnowHeight = 600; 
+    unsigned int windowHeight = 600; 
     std::srand(static_cast<unsigned int>(time(NULL))); 
 
-    m_Window.create(sf::VideoMode(windowWidth, widnowHeight), "Echo Wojny", sf::Style::Default, settings); 
+    m_Window.create(sf::VideoMode(windowWidth, windowHeight), "Echo Wojny", sf::Style::Default, settings); 
     m_Window.setVerticalSyncEnabled(true); 
 
     // -- inicjalizacja imgui -- 
@@ -45,13 +45,13 @@ void Application::init() {
         return; 
     }
     // -- inicjalizacja oswietlenia -- 
-    if (!m_lightMapTexture.create(windowWidth, windowWidth)) 
+    if (!m_lightMapTexture.create(windowWidth, windowHeight)) 
     {
         std::cerr << "Blad tworzenia LightMapy!\n";
     }
 
     // tworzenie obieku rdzenia 
-    m_Camera = std::make_unique<Camera2D>((float)windowWidth, (float)widnowHeight); 
+    m_Camera = std::make_unique<Camera2D>((float)windowWidth, (float)windowHeight); 
     m_Camera->setPosition(glm::vec2(2000.0f, 2000.0f));
     m_Renderer = std::make_unique<PrimitiveRenderer>(); 
     m_GameState = std::make_unique<GameState>(); 
@@ -327,77 +327,110 @@ void Application::pollEvents() {
                 }
             } 
             else if (event.mouseButton.button == sf::Mouse::Right){
-                // === ROZKAZY ===
+                // === ROZKAZY (PPM) ===
                 if (m_selectedVillager != nullptr){
-                    ResourceNode* clickedNode = nullptr; 
                     
-                    // Szukanie zasobu
-                    for (ResourceNode& node : m_GameState->m_resourceNodes){
-                        if (node.amountLeft > 0 && glm::distance(node.position, worldMousePos) < 30.0f) {
-                            clickedNode = &node; 
-                            break; 
+                    // --- POPRAWKA TUTAJ ---
+                    sf::Vector2i mousePos = sf::Mouse::getPosition(m_Window);
+                    glm::vec2 screenPos = {(float)mousePos.x, (float)mousePos.y};
+                    glm::vec2 worldMousePos = m_Camera->screenToWorld(screenPos, m_Window);
+                    // ---------------------
+                    
+                    bool actionFound = false; 
+                    glm::vec2 finalTargetPos = worldMousePos;
+
+                    // 1. SPRAWDZANIE BUDYNKÓW
+                    for (const auto& building : m_GameState->m_buildings) 
+                    {
+                        if (glm::distance(building.position, worldMousePos) < 40.0f) 
+                        {
+                            if (building.buildingType == Building::WELL || building.buildingType == Building::STONE_WELL)
+                            {
+                                std::cout << "Rozkaz: Pobieraj wodę ze studni!\n";
+                                
+                                m_selectedVillager->currentState = Villager::State::MOVING_TO_GATHER_WATER;
+                                m_selectedVillager->targetNode = nullptr; 
+                                m_selectedVillager->carryingAmount = 0; 
+
+                                glm::vec2 dir = glm::normalize(m_selectedVillager->position - building.position);
+                                if (glm::length(dir) == 0) dir = glm::vec2(1.0f, 0.0f);
+                                
+                                finalTargetPos = building.position + (dir * 50.0f); 
+                                actionFound = true;
+                                break; 
+                            }
                         }
                     }
-                    
- 
-                    glm::vec2 finalTargetPos;
 
-                    if (clickedNode != nullptr){
-                            std::cout << "Rozkaz: Zbieraj zasoby\n";
-                            m_selectedVillager->targetNode = clickedNode; 
-                            m_selectedVillager->currentState = Villager::State::MOVING_TO_WORK;
-                            bool actionFound = false; 
-                            // 1. Oblicz domyślny kierunek (od zasobu do osadnika)
-                            glm::vec2 dir = glm::normalize(m_selectedVillager->position - clickedNode->position);
-                            if(glm::length(m_selectedVillager->position - clickedNode->position) < 0.1f) dir = glm::vec2(1.0f, 0.0f); 
-
-                            glm::vec2 bestSpot = clickedNode->position + (dir * 35.0f);
-                            bool foundSpot = false;
-
-                            glm::vec2 offsets[] = {
-                                dir * 35.0f,                    // 1. Idealnie na wprost
-                                glm::vec2(dir.y, -dir.x) * 35.0f, // 2. Bokiem
-                                glm::vec2(-dir.y, dir.x) * 35.0f, // 3. Drugim bokiem
-                                -dir * 35.0f,                   // 4. Od tyłu
-                                glm::vec2(1,0)*35.0f, glm::vec2(-1,0)*35.0f, glm::vec2(0,1)*35.0f, glm::vec2(0,-1)*35.0f // 5. Standardowe kierunki
-                            };
-
-                            for (const auto& off : offsets) 
-                            {
-                                glm::vec2 testPos = clickedNode->position + off;
-                                glm::ivec2 gridPos = m_GameState->m_worldMap->worldToGrid(testPos);
-
-                                // Jeśli kratka jest wolna -> Bierzemy to miejsce!
-                                if (!m_GameState->m_worldMap->isObstacle(gridPos.x, gridPos.y)) {
-                                    bestSpot = testPos;
-                                    foundSpot = true;
-                                    break;
-                                }
+                    // 2. SPRAWDZANIE ZASOBÓW
+                    if (!actionFound) {
+                        ResourceNode* clickedNode = nullptr; 
+                        
+                        for (ResourceNode& node : m_GameState->m_resourceNodes){
+                            if (node.amountLeft > 0 && glm::distance(node.position, worldMousePos) < 30.0f) {
+                                clickedNode = &node; 
+                                break; 
                             }
-
-                            if (!foundSpot && glm::distance(m_selectedVillager->position, clickedNode->position) < 45.0f) {
-                                bestSpot = m_selectedVillager->position;
-                            }
-
-                            finalTargetPos = bestSpot;
-                            actionFound = true;
                         }
-                        else {
+
+                        if (clickedNode != nullptr){
+                                std::cout << "Rozkaz: Zbieraj zasoby\n";
+                                m_selectedVillager->targetNode = clickedNode; 
+                                m_selectedVillager->currentState = Villager::State::MOVING_TO_WORK;
+                                
+                                glm::vec2 dir = glm::normalize(m_selectedVillager->position - clickedNode->position);
+                                if(glm::length(m_selectedVillager->position - clickedNode->position) < 0.1f) dir = glm::vec2(1.0f, 0.0f); 
+
+                                glm::vec2 bestSpot = clickedNode->position + (dir * 35.0f);
+                                bool foundSpot = false;
+
+                                glm::vec2 offsets[] = {
+                                    dir * 35.0f,                    
+                                    glm::vec2(dir.y, -dir.x) * 35.0f, 
+                                    glm::vec2(-dir.y, dir.x) * 35.0f, 
+                                    -dir * 35.0f,                   
+                                    glm::vec2(1,0)*35.0f, glm::vec2(-1,0)*35.0f, glm::vec2(0,1)*35.0f, glm::vec2(0,-1)*35.0f 
+                                };
+
+                                for (const auto& off : offsets) 
+                                {
+                                    glm::vec2 testPos = clickedNode->position + off;
+                                    glm::ivec2 gridPos = m_GameState->m_worldMap->worldToGrid(testPos);
+
+                                    if (!m_GameState->m_worldMap->isObstacle(gridPos.x, gridPos.y)) {
+                                        bestSpot = testPos;
+                                        foundSpot = true;
+                                        break;
+                                    }
+                                }
+
+                                if (!foundSpot && glm::distance(m_selectedVillager->position, clickedNode->position) < 45.0f) {
+                                    bestSpot = m_selectedVillager->position;
+                                }
+
+                                finalTargetPos = bestSpot;
+                                actionFound = true;
+                            }
+                    }
+
+                    // 3. ZWYKŁY RUCH
+                    if (!actionFound) {
                         std::cout << "Rozkaz: Ruch\n";
                         m_selectedVillager->targetNode = nullptr; 
                         m_selectedVillager->currentState = Villager::State::MOVING_TO_POINT;
                         finalTargetPos = worldMousePos;
                     }
 
+                    // FINALIZACJA
                     m_selectedVillager->targetPosition = finalTargetPos;
 
                     m_selectedVillager->currentPath = Pathfinder::findPath(
-                        m_selectedVillager->position,   // Start (vec2)
-                        finalTargetPos,                 // Koniec (vec2)
-                        *m_GameState->m_worldMap        // Mapa (WorldMap)
+                        m_selectedVillager->position,   
+                        finalTargetPos,                 
+                        *m_GameState->m_worldMap        
                     );
                     
-                    m_selectedVillager->currentPathIndex = 0; // Reset indeksu
+                    m_selectedVillager->currentPathIndex = 0; 
                 }
             }   
         }   
@@ -528,31 +561,57 @@ void Application::render(){
         }
 
         // 2 renderowanie mieszkancow 
-        for (const auto& villager : m_GameState->m_villagers) {
-            glm::vec4 color = {1.0f, 0.0f, 0.0f, 1.0f}; // czerwony 
+        m_Window.pushGLStates(); 
 
-            // zmienianie koloru kiedy zaznaczymy go 
+        // Pobieramy dane kamery do obliczeń pozycji na ekranie
+        glm::vec2 camPos = m_Camera->getPosition();
+        sf::Vector2f camSize = m_Camera->getSize();
+        sf::Vector2f winSize = static_cast<sf::Vector2f>(m_Window.getSize()); 
+        float scaleX = winSize.x / camSize.x;
+        float scaleY = winSize.y / camSize.y;
+
+        for (const auto& villager : m_GameState->m_villagers) 
+        {
+            // Obliczamy pozycję na ekranie (World -> Screen)
+            // Oś Y w OpenGL jest w górę, a w SFML w dół, więc musimy to odwrócić
+            float screenX = (villager.position.x - camPos.x) * scaleX;
+            float screenY = winSize.y - ((villager.position.y - camPos.y) * scaleY); 
+
+            // Tworzymy koło
+            float radius = 6.0f * scaleX; // Skalujemy wielkość koła wraz z zoomem
+            sf::CircleShape circle(radius);
+            circle.setOrigin(radius, radius); // Środek koła w punkcie pozycji
+            circle.setPosition(screenX, screenY);
+
+            // Kolory
             if (m_selectedVillager == &villager){
-                color = {1.0f, 1.0f, 0.0f, 1.0f}; // zolty (jak zaznaczony)
+                circle.setFillColor(sf::Color(255, 255, 0)); // Żółty (Zaznaczony)
+                circle.setOutlineThickness(2.0f);
+                circle.setOutlineColor(sf::Color(0, 0, 0));
+            } else {
+                circle.setFillColor(sf::Color(255, 50, 50)); // Czerwony (Zwykły)
             }
 
-            m_Renderer->drawSquare(*m_Camera, villager.position, {10.0f, 10.0f}, color);
+            m_Window.draw(circle);
         }
+
+        // Przywracamy stan OpenGL dla reszty renderera (budynki, zasoby)
+        m_Window.popGLStates();
 
         // renderowanie budynkow 
         for (const auto& b : m_GameState->m_buildings) {
             glm::vec4 color = {0.5f, 0.3f, 0.0f, 1.0f}; // brazowy 
 
             if (b.buildingType == Building::KITCHEN){
-                color = {0.8f, 0.8f, 0.8f, 1.0f}; // jasnoszary 
+                color = {0.3f, 0.3f, 0.4f, 1.0f}; // jasnoszary 
             }
 
             else if (b.buildingType == Building::WELL){
-                color = {0.0f, 0.5f, 1.0f, 1.0f}; // ciemnoniebieski 
+                color = {0.0f, 0.4f, 0.9f, 1.0f}; // ciemnoniebieski 
             }
 
             else if (b.buildingType == Building::Type::STOCKPILE){
-                color = {0.9f, 0.9f, 0.8f, 1.0f}; 
+                color = {0.45f, 0.25f, 0.1f, 1.0f}; 
             }
 
             else if (b.buildingType == Building::CAMPFIRE) 
@@ -566,38 +625,46 @@ void Application::render(){
             }
             else if (b.buildingType == Building::STONE_WELL) 
             {
-                color = {0.0f, 0.8f, 0.9f, 1.0f}; // Turkusowy
+                color = {0.0f, 0.6f, 0.7f, 1.0f}; // Turkusowy
             }
 
             m_Renderer->drawSquare(*m_Camera, b.position, {20.0f, 20.0f}, color); 
         }
 
 
-        // renderowanie ducha budynku 
-        if (m_currentBuildMode == BuildMode::KITCHEN){
-            // rysowanie polprzezroczystego kwadrata 
-            glm::vec4 color = {0.8f, 0.8f, 0.8f, 0.5f}; 
-            m_Renderer->drawSquare(*m_Camera, m_ghostBuildingPos, {20.0f, 20.0f}, color);
-        }
+       // 4. DUCH BUDOWANIA (Podgląd przy myszce)
+        if (m_currentBuildMode != BuildMode::NONE) {
+            
+            // Domyślny kolor i rozmiar
+            glm::vec4 ghostColor = {1.0f, 1.0f, 1.0f, 0.5f};
+            float size = 20.0f;
 
-        // budowanie studni
-        else if (m_currentBuildMode == BuildMode::WELL){
-            // polprzezroczysty niebieski kwadrat 
-            glm::vec4 color = {0.0f, 0.5f, 1.0f, 0.5f}; 
-            m_Renderer->drawSquare(*m_Camera, m_ghostBuildingPos, {15.0f, 15.0f}, color); 
-        }
+            // Ustawienia dla konkretnych budynków
+            if (m_currentBuildMode == BuildMode::KITCHEN) { 
+                ghostColor = {0.8f, 0.8f, 0.8f, 0.5f}; 
+            }
+            else if (m_currentBuildMode == BuildMode::WELL) { 
+                ghostColor = {0.0f, 0.5f, 1.0f, 0.5f}; 
+                size = 15.0f; 
+            }
+            else if (m_currentBuildMode == BuildMode::STOCKPILE) { 
+                ghostColor = {0.9f, 0.9f, 0.8f, 0.5f}; 
+                size = 25.0f; 
+            }
+            else if (m_currentBuildMode == BuildMode::CAMPFIRE) { 
+                ghostColor = {1.0f, 0.5f, 0.0f, 0.5f}; 
+            }
+            
+            // --- BRAKOWAŁO TEGO: ---
+            else if (m_currentBuildMode == BuildMode::WALL) { 
+                ghostColor = {0.4f, 0.4f, 0.4f, 0.5f}; // Szary półprzezroczysty
+            }
+            else if (m_currentBuildMode == BuildMode::STONE_WELL) { 
+                ghostColor = {0.0f, 0.8f, 0.9f, 0.5f}; // Turkusowy półprzezroczysty
+            }
+            // -----------------------
 
-        // budowanie magazynu 
-        else if (m_currentBuildMode == BuildMode::STOCKPILE){
-            glm::vec4 color = {0.9f, 0.9f, 0.8f, 0.5f}; 
-            m_Renderer->drawSquare(*m_Camera, m_ghostBuildingPos, {25.0f, 25.0f}, color);
-        }
-
-        // budowanie ogniska 
-        else if (m_currentBuildMode == BuildMode::CAMPFIRE) 
-        {
-            glm::vec4 color = {1.0f, 0.5f, 0.0f, 0.5f}; 
-            m_Renderer->drawSquare(*m_Camera, m_ghostBuildingPos, {20.0f, 20.0f}, color);
+            m_Renderer->drawSquare(*m_Camera, m_ghostBuildingPos, {size, size}, ghostColor);
         }
 
 
@@ -626,6 +693,8 @@ void Application::render(){
         {
             m_Window.pushGLStates(); 
 
+            m_Window.resetGLStates(); 
+
             m_lightMapTexture.clear(sf::Color(0, 0, 0, darknessAlpha));
             m_lightMapTexture.setView(m_lightMapTexture.getDefaultView());
 
@@ -644,15 +713,22 @@ void Application::render(){
             for (const auto& b : m_GameState->m_buildings)
             {
                 float radius = 0.0f; 
-                if (b.buildingType == Building::CAMPFIRE) radius = 150.0f; 
+                
+                // Konfiguracja promienia światła dla budynków
+                if (b.buildingType == Building::CAMPFIRE) radius = 180.0f; // Ognisko świeci mocniej
                 else if (b.buildingType == Building::KITCHEN) radius = 100.0f; 
                 else if (b.buildingType == Building::WELL) radius = 60.0f;
+                else if (b.buildingType == Building::STONE_WELL) radius = 80.0f; // Kamienna studnia też świeci!
 
                 if (radius > 0.0f) 
                 {
-                    float screenX = (b.position.x - camPos.x) * scaleX;
+                    // --- POPRAWKA CENTROWANIA ---
+                    // Budynki rysowane są od rogu. Żeby światło było na środku,
+                    // musimy dodać połowę wielkości budynku (10.0f, bo budynek ma 20x20).
+                    glm::vec2 centerPos = b.position + glm::vec2(10.0f, 10.0f); 
 
-                    float screenY = winSize.y - ((b.position.y - camPos.y) * scaleY); 
+                    float screenX = (centerPos.x - camPos.x) * scaleX;
+                    float screenY = winSize.y - ((centerPos.y - camPos.y) * scaleY); 
 
                     float screenRadius = radius * scaleX; 
 
@@ -868,12 +944,14 @@ void Application::render(){
             ImGui::Spacing();
 
             if (ImGui::Button("PRZYJMIJ (Tak)", ImVec2(120, 30))) {
+                m_selectedVillager = nullptr; 
                 m_GameState->resolveRefugeeEvent(true);
             }
 
             ImGui::SameLine();
 
             if (ImGui::Button("ODRZUĆ (Nie)", ImVec2(120, 30))) {
+                m_selectedVillager = nullptr; 
                 m_GameState->resolveRefugeeEvent(false);
             }
 
