@@ -330,7 +330,7 @@ void Application::pollEvents() {
                 // === ROZKAZY (PPM) ===
                 if (m_selectedVillager != nullptr){
                     
-                    // --- POPRAWKA TUTAJ ---
+
                     sf::Vector2i mousePos = sf::Mouse::getPosition(m_Window);
                     glm::vec2 screenPos = {(float)mousePos.x, (float)mousePos.y};
                     glm::vec2 worldMousePos = m_Camera->screenToWorld(screenPos, m_Window);
@@ -572,12 +572,10 @@ void Application::render(){
 
         for (const auto& villager : m_GameState->m_villagers) 
         {
-            // Obliczamy pozycję na ekranie (World -> Screen)
-            // Oś Y w OpenGL jest w górę, a w SFML w dół, więc musimy to odwrócić
             float screenX = (villager.position.x - camPos.x) * scaleX;
             float screenY = winSize.y - ((villager.position.y - camPos.y) * scaleY); 
 
-            // Tworzymy koło
+
             float radius = 6.0f * scaleX; // Skalujemy wielkość koła wraz z zoomem
             sf::CircleShape circle(radius);
             circle.setOrigin(radius, radius); // Środek koła w punkcie pozycji
@@ -722,9 +720,6 @@ void Application::render(){
 
                 if (radius > 0.0f) 
                 {
-                    // --- POPRAWKA CENTROWANIA ---
-                    // Budynki rysowane są od rogu. Żeby światło było na środku,
-                    // musimy dodać połowę wielkości budynku (10.0f, bo budynek ma 20x20).
                     glm::vec2 centerPos = b.position + glm::vec2(10.0f, 10.0f); 
 
                     float screenX = (centerPos.x - camPos.x) * scaleX;
