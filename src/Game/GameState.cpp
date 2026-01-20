@@ -504,6 +504,8 @@ void GameState::update(float deltaTime) {
         {
             if (moveAlongPath(speed)) 
             {
+                ResourceNode::Type lastJobType = villager.carryingResourceType;
+
                 // wywala rzeczy w magazynie 
                 if (villager.carryingResourceType == ResourceNode::Type::TREE) 
                     globalWood += villager.carryingAmount;
@@ -518,22 +520,54 @@ void GameState::update(float deltaTime) {
                 villager.carryingAmount = 0;
                 villager.carryingResourceType = ResourceNode::Type::NONE;
 
-                // decydujemy czy wracamy pracowac czy nam sie nie chce i wolne 
-                if (villager.targetNode != nullptr && villager.targetNode->amountLeft > 0) 
-                {
-                   villager.currentState = Villager::State::MOVING_TO_WORK; 
 
-                   glm::vec2 dir = glm::normalize(villager.targetNode->position - villager.position);
-                   if (glm::length(dir) == 0) dir = glm::vec2(1, 0); 
-                   villager.targetPosition = villager.targetNode->position - (dir * 30.0f); 
+               // zmieniona logika powrotu 
+               if (lastJobType == ResourceNode::Type::WATER)
+               {
+                    Building* targetWell = nullptr; 
 
-                   villager.currentPath = Pathfinder::findPath(villager.position, villager.targetPosition, *m_worldMap); 
-                   villager.currentPathIndex = 0; 
-                } 
-                else 
-                {
-                    villager.currentState = Villager::State::IDLE;
-                }
+                    for (auto& b : m_buildings)
+                    {
+                        if (b.buildingType == Building::STONE_WELL)
+                        {
+                            targetWell = &b; 
+                            break; 
+                        }
+                    }
+
+                    if (targetWell != nullptr)
+                    {
+                        glm::vec2 safeSpot = getSafeInteractionPoint(targetWell->position); 
+
+                        villager.currentState = Villager::State::MOVING_TO_GATHER_WATER;
+                        villager.targetPosition = safeSpot; 
+
+                        villager.currentPath = Pathfinder::findPath(villager.position, safeSpot, *m_worldMap); 
+                        villager.currentPathIndex = 0; 
+                    }
+                    else 
+                    { 
+                        villager.currentState = Villager::State::IDLE; 
+                    }
+               }
+
+               else if (villager.targetNode != nullptr && villager.targetNode->amountLeft > 0)
+               {
+                villager.currentState = Villager::State::MOVING_TO_WORK; 
+
+                glm::vec2 dir = glm::normalize(villager.targetNode->position - villager.position); 
+                if (glm::length(dir) == 0) dir = glm::vec2(1, 0); 
+
+                villager.targetPosition = villager.targetNode->position - (dir * 30.0f);
+
+                villager.currentPath = Pathfinder::findPath(villager.position, villager.targetPosition, *m_worldMap); 
+                villager.currentPathIndex = 0; 
+               }
+               else 
+               {
+                villager.currentState = Villager::State::IDLE; 
+               }
+
             }
         }
         
