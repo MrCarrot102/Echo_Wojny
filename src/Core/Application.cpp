@@ -11,9 +11,9 @@ Application::Application()
     init(); 
 }
 
-Application::~Application() {
+Application::~Application() 
+{
     ImGui::SFML::Shutdown(); 
-    // i teraz magia bo smart pointery same sie sprzataja ez 
 }
 
 void Application::init() {
@@ -23,7 +23,6 @@ void Application::init() {
     settings.stencilBits = 8; 
     settings.majorVersion = 3; 
     settings.minorVersion = 3; 
-    //settings.attributeFlags = sf::ContextSettings::Core; 
     settings.attributeFlags = sf::ContextSettings::Default; 
     unsigned int windowWidth = 800; 
     unsigned int windowHeight = 600; 
@@ -34,12 +33,14 @@ void Application::init() {
 
     // -- inicjalizacja imgui -- 
     // Rzutujemy rozmiar na Vector2f
-    if (!ImGui::SFML::Init(m_Window, static_cast<sf::Vector2f>(m_Window.getSize()))){
+    if (!ImGui::SFML::Init(m_Window, static_cast<sf::Vector2f>(m_Window.getSize())))
+    {
         std::cerr << "Nie udało się zainicjować ImGui!\n";
     }
 
     // -- inicjiowanie glew --
-    if (glewInit() != GLEW_OK){
+    if (glewInit() != GLEW_OK)
+    {
         std::cerr << "Nie udało się zainicjować GLEW!" << std::endl;
         m_Running = false; 
         return; 
@@ -63,8 +64,10 @@ void Application::init() {
 }
 
 
-void Application::run() {
-    while(m_Running) {
+void Application::run() 
+{
+    while(m_Running) 
+    {
         float deltaTime = m_DeltaClock.restart().asSeconds(); 
 
         pollEvents(); 
@@ -73,9 +76,11 @@ void Application::run() {
     }
 }
 
-void Application::pollEvents() {
+void Application::pollEvents() 
+{
     sf::Event event; 
-    while (m_Window.pollEvent(event)) {
+    while (m_Window.pollEvent(event)) 
+    {
         
         ImGui::SFML::ProcessEvent(m_Window, event);         
 
@@ -123,23 +128,33 @@ void Application::pollEvents() {
                     }
                 }
 
-                if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::N){
-                    if (m_currentBuildMode == BuildMode::NONE){
+                if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::N)
+                {
+                    if (m_currentBuildMode == BuildMode::NONE)
+                    {
                         m_currentBuildMode = BuildMode::WELL;
                         std::cout << "Tryb budowania: STUDNIA\n";
                         m_selectedVillager = nullptr; 
-                    } else {
+                    } 
+                    
+                    else 
+                    {
                         m_currentBuildMode = BuildMode::NONE; 
                         std::cout << "Wyłączono tryb budowania\n";
                     }
                 }
 
-                if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::P){
-                    if (m_currentBuildMode == BuildMode::NONE){
+                if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::P)
+                {
+                    if (m_currentBuildMode == BuildMode::NONE)
+                    {
                         m_currentBuildMode = BuildMode::STOCKPILE; 
                         std::cout << "Tryb budowania: MAGAZYN\n";
                         m_selectedVillager = nullptr; 
-                    } else {
+                    } 
+                    
+                    else 
+                    {
                         m_currentBuildMode = BuildMode::NONE; 
                         std::cout << "Wyłączono tryb budowania\n";
                     }
@@ -147,22 +162,24 @@ void Application::pollEvents() {
             }
         }
         
-        if (event.type == sf::Event::MouseButtonPressed) {
+        if (event.type == sf::Event::MouseButtonPressed) 
+        {
             // pobbieranie funkcji myszy 
             glm::vec2 screenMousePos = {(float)event.mouseButton.x, (float)event.mouseButton.y};
             // konwersja na pozycje w swiecie 
             glm::vec2 worldMousePos = m_Camera->screenToWorld(screenMousePos, m_Window); 
 
-            // --- POCZĄTEK POPRAWIONEJ LOGIKI ---
-
-            if (event.mouseButton.button == sf::Mouse::Left){
-                
-                if (m_currentBuildMode != BuildMode::NONE){
+            if (event.mouseButton.button == sf::Mouse::Left)
+            {
+                if (m_currentBuildMode != BuildMode::NONE)
+                {
                     // === JESTEŚMY W TRYBIE BUDOWANIA ===
                     // budowanie kuchni 
-                    if (m_currentBuildMode == BuildMode::KITCHEN){
+                    if (m_currentBuildMode == BuildMode::KITCHEN)
+                    {
                         int woodCost = 50;
-                        if (m_GameState->globalWood >= woodCost){
+                        if (m_GameState->globalWood >= woodCost)
+                        {
                             m_GameState->globalWood -= woodCost;
 
                             m_GameState->m_buildings.emplace_back(Building::KITCHEN, m_ghostBuildingPos);
@@ -181,15 +198,20 @@ void Application::pollEvents() {
                             // ----------------------------------------
 
                             m_currentBuildMode = BuildMode::NONE;
-                        } else {
+                        } 
+                        
+                        else 
+                        {
                             std::cout << "[BUDOWA] Potrzeba więcej drewna mój Panie, a dokładnie " << woodCost << std::endl; 
                         }
                     }
                     
                     // budowanie studni 
-                    else if (m_currentBuildMode == BuildMode::WELL){
+                    else if (m_currentBuildMode == BuildMode::WELL)
+                    {
                         int woodCost = 25; 
-                        if(m_GameState->globalWood >= woodCost){
+                        if(m_GameState->globalWood >= woodCost)
+                        {
                             m_GameState->globalWood -= woodCost; 
 
                             m_GameState->m_buildings.emplace_back(Building::WELL, m_ghostBuildingPos); 
@@ -208,15 +230,19 @@ void Application::pollEvents() {
 
                             m_currentBuildMode = BuildMode::NONE;
 
-                        } else {
+                        }
+                        else 
+                        {
                             std::cout << "[BUDOWA] Za mało drewna! Potrzeba " << woodCost << std::endl; 
                         }
                     }
                     
                     // budowanie magazynu 
-                    else if (m_currentBuildMode == BuildMode::STOCKPILE){
+                    else if (m_currentBuildMode == BuildMode::STOCKPILE) 
+                    {
                         int woodCost = 10; 
-                        if (m_GameState->globalWood >= woodCost){
+                        if (m_GameState->globalWood >= woodCost)
+                        {
                             m_GameState->globalWood -= woodCost; 
                             
                             m_GameState->m_buildings.emplace_back(Building::STOCKPILE, m_ghostBuildingPos); 
@@ -234,7 +260,9 @@ void Application::pollEvents() {
 
                             m_currentBuildMode = BuildMode::NONE;
 
-                        } else {
+                        } 
+                        else 
+                        {
                             std::cout << "[BUDOWA] Za mało drewna na magazyn! Potrzeba " << woodCost << std::endl; 
                         }
                     }
@@ -315,7 +343,8 @@ void Application::pollEvents() {
                 { 
                     std::cout << "Kliknięto w świat: " << worldMousePos.x << ", " << worldMousePos.y << std::endl; 
                     m_selectedVillager = nullptr; 
-                    for (Villager& v : m_GameState->m_villagers){
+                    for (Villager& v : m_GameState->m_villagers)
+                    {
                         if (worldMousePos.x >= v.position.x && worldMousePos.x <= v.position.x + 10.0f &&
                              worldMousePos.y >= v.position.y && worldMousePos.y <= v.position.y + 10.0f)
                         {   
@@ -326,7 +355,8 @@ void Application::pollEvents() {
                     }
                 }
             } 
-            else if (event.mouseButton.button == sf::Mouse::Right){
+            else if (event.mouseButton.button == sf::Mouse::Right)
+            {
                 // === ROZKAZY (PPM) ===
                 if (m_selectedVillager != nullptr){
                     
@@ -366,14 +396,17 @@ void Application::pollEvents() {
                     if (!actionFound) {
                         ResourceNode* clickedNode = nullptr; 
                         
-                        for (ResourceNode& node : m_GameState->m_resourceNodes){
-                            if (node.amountLeft > 0 && glm::distance(node.position, worldMousePos) < 30.0f) {
+                        for (ResourceNode& node : m_GameState->m_resourceNodes)
+                        {
+                            if (node.amountLeft > 0 && glm::distance(node.position, worldMousePos) < 30.0f) 
+                            {
                                 clickedNode = &node; 
                                 break; 
                             }
                         }
 
-                        if (clickedNode != nullptr){
+                        if (clickedNode != nullptr)
+                        {
                                 std::cout << "Rozkaz: Zbieraj zasoby\n";
                                 m_selectedVillager->targetNode = clickedNode; 
                                 m_selectedVillager->currentState = Villager::State::MOVING_TO_WORK;
@@ -384,7 +417,8 @@ void Application::pollEvents() {
                                 glm::vec2 bestSpot = clickedNode->position + (dir * 35.0f);
                                 bool foundSpot = false;
 
-                                glm::vec2 offsets[] = {
+                                glm::vec2 offsets[] = 
+                                {
                                     dir * 35.0f,                    
                                     glm::vec2(dir.y, -dir.x) * 35.0f, 
                                     glm::vec2(-dir.y, dir.x) * 35.0f, 
@@ -397,14 +431,16 @@ void Application::pollEvents() {
                                     glm::vec2 testPos = clickedNode->position + off;
                                     glm::ivec2 gridPos = m_GameState->m_worldMap->worldToGrid(testPos);
 
-                                    if (!m_GameState->m_worldMap->isObstacle(gridPos.x, gridPos.y)) {
+                                    if (!m_GameState->m_worldMap->isObstacle(gridPos.x, gridPos.y)) 
+                                    {
                                         bestSpot = testPos;
                                         foundSpot = true;
                                         break;
                                     }
                                 }
 
-                                if (!foundSpot && glm::distance(m_selectedVillager->position, clickedNode->position) < 45.0f) {
+                                if (!foundSpot && glm::distance(m_selectedVillager->position, clickedNode->position) < 45.0f) 
+                                {
                                     bestSpot = m_selectedVillager->position;
                                 }
 
@@ -414,7 +450,8 @@ void Application::pollEvents() {
                     }
 
                     // 3. ZWYKŁY RUCH
-                    if (!actionFound) {
+                    if (!actionFound) 
+                    {
                         std::cout << "Rozkaz: Ruch\n";
                         m_selectedVillager->targetNode = nullptr; 
                         m_selectedVillager->currentState = Villager::State::MOVING_TO_POINT;

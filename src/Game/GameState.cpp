@@ -74,29 +74,29 @@ GameState::GameState()
             float offsetY = (rand() % 20) - 10.0f;
 
             // Progi bez zmian (gęsty las)
-            if (noiseValue > 0.25f) {
+            if (noiseValue > 0.25f) 
+            {
                 m_resourceNodes.emplace_back(ResourceNode::TREE, glm::vec2(x + offsetX, y + offsetY), 100);
             }
-            else if (noiseValue > 0.0f && noiseValue <= 0.25f) {
-                if (rand() % 3 == 0) { 
+            
+            else if (noiseValue > 0.0f && noiseValue <= 0.25f) 
+            {
+                if (rand() % 3 == 0) 
+                { 
                     m_resourceNodes.emplace_back(ResourceNode::ROCK, glm::vec2(x + offsetX, y + offsetY), 200);
                 }
             }
-            else if (noiseValue < -0.2f) {
-                if (rand() % 4 == 0) {
+            
+            else if (noiseValue < -0.2f) 
+            {
+                if (rand() % 4 == 0) 
+                {
                      m_resourceNodes.emplace_back(ResourceNode::BERRY_BUSH, glm::vec2(x + offsetX, y + offsetY), 50);
                 }
             }
         }
     }
      
-    
-
-    // 3. budynki startowe 
-    //m_buildings.emplace_back(Building::KITCHEN, glm::vec2(2050.0f, 2050.0f));
-    //m_buildings.emplace_back(Building::STOCKPILE, glm::vec2(2100.0f, 2050.0f));
-    //m_buildings.emplace_back(Building::WELL, glm::vec2(2050.0f, 2100.0f));
-
     // 4. aktualizowanie mapy logicznej bla bla bla pathtracing 
     for (const auto& node : m_resourceNodes)
     {
@@ -437,11 +437,14 @@ void GameState::update(float deltaTime) {
                 Building* stockpile = findNearestStockpile(villager.position);
                 if (stockpile != nullptr) 
                 {
-                    villager.currentState = Villager::State::MOVING_TO_HAUL;
-                    villager.targetPosition = stockpile->position;
+                    glm::vec2 safeSpot = getSafeInteractionPoint(stockpile->position);
                     
-                    villager.currentPath = Pathfinder::findPath(villager.position, stockpile->position, *m_worldMap); 
-                    villager.currentPathIndex = 0; 
+                    villager.currentState = Villager::State::MOVING_TO_HAUL;
+                    villager.targetPosition = safeSpot; // Idziemy do bezpiecznego punktu
+                    
+                    // Obliczamy ścieżkę do safeSpot, a nie stockpile->position
+                    villager.currentPath = Pathfinder::findPath(villager.position, safeSpot, *m_worldMap); 
+                    villager.currentPathIndex = 0;
 
                 } else {
                     villager.carryingAmount = 0;
