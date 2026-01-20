@@ -345,8 +345,7 @@ void Application::pollEvents()
                     m_selectedVillager = nullptr; 
                     for (Villager& v : m_GameState->m_villagers)
                     {
-                        if (worldMousePos.x >= v.position.x && worldMousePos.x <= v.position.x + 10.0f &&
-                             worldMousePos.y >= v.position.y && worldMousePos.y <= v.position.y + 10.0f)
+                        if (glm::distance(worldMousePos, v.position) < 20.0f)
                         {   
                             m_selectedVillager = &v; 
                             std::cout << "Zaznaczono: " << v.name << std::endl; 
@@ -385,7 +384,7 @@ void Application::pollEvents()
                                 glm::vec2 dir = glm::normalize(m_selectedVillager->position - building.position);
                                 if (glm::length(dir) == 0) dir = glm::vec2(1.0f, 0.0f);
                                 
-                                finalTargetPos = building.position + (dir * 50.0f); 
+                                finalTargetPos = building.position + (dir * 25.0f); 
                                 actionFound = true;
                                 break; 
                             }
@@ -414,16 +413,18 @@ void Application::pollEvents()
                                 glm::vec2 dir = glm::normalize(m_selectedVillager->position - clickedNode->position);
                                 if(glm::length(m_selectedVillager->position - clickedNode->position) < 0.1f) dir = glm::vec2(1.0f, 0.0f); 
 
+                                float dist = 20.0f; 
+
                                 glm::vec2 bestSpot = clickedNode->position + (dir * 35.0f);
                                 bool foundSpot = false;
 
                                 glm::vec2 offsets[] = 
                                 {
-                                    dir * 35.0f,                    
-                                    glm::vec2(dir.y, -dir.x) * 35.0f, 
-                                    glm::vec2(-dir.y, dir.x) * 35.0f, 
-                                    -dir * 35.0f,                   
-                                    glm::vec2(1,0)*35.0f, glm::vec2(-1,0)*35.0f, glm::vec2(0,1)*35.0f, glm::vec2(0,-1)*35.0f 
+                                    dir * dist,                    
+                                    glm::vec2(dir.y, -dir.x) * dist, 
+                                    glm::vec2(-dir.y, dir.x) * dist, 
+                                    -dir * dist,                   
+                                    glm::vec2(1,0)*35.0f, glm::vec2(-1,0)*dist, glm::vec2(0,1)*35.0f, glm::vec2(0,-1)*dist 
                                 };
 
                                 for (const auto& off : offsets) 

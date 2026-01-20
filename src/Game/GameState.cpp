@@ -240,7 +240,7 @@ void GameState::update(float deltaTime) {
         auto getSafeInteractionPoint = [&](glm::vec2 buildingPos) -> glm::vec2 
         {
 
-            std::vector<float> distances = { 25.0f, 35.0f, 45.0f, 60.0f };
+            std::vector<float> distances = { 10.0f, 15.0f, 25.0f, 35.0f };
             
             glm::vec2 directions[] = { 
                 {1,0}, {-1,0}, {0,1}, {0,-1},   // Prosto
