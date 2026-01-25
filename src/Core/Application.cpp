@@ -553,7 +553,26 @@ void Application::update(float deltaTime){
 }
 
 void Application::render(){
-    //glClear(GL_COLOR_BUFFER_BIT); 
+    glClear(GL_COLOR_BUFFER_BIT); 
+    float time = m_GameState->timeOfDay;
+        glm::vec2 shadowOffset = {0.0f, 0.0f};
+        float shadowStretch = 0.0f; // Jak bardzo cień się wydłuża
+        bool drawShadows = false;
+
+        if (time >= 6.0f && time <= 18.0f) 
+        {
+            drawShadows = true;
+            // O 6:00 i 18:00 współczynnik wynosi +/- 6.0. W południe wynosi 0.
+            float sunAngle = (time - 12.0f); 
+
+            // Offset mówi, jak daleko przesuwa się ŚRODEK cienia
+            shadowOffset.x = sunAngle * 1.5f; 
+            shadowOffset.y = -2.0f; // Lekko w dół, pod nogi/podstawę
+
+            // Stretch mówi, o ile PIKSELI cień staje się dłuższy (wartość bezwzględna)
+            shadowStretch = std::abs(sunAngle) * 2.0f; 
+        }
+
     if (m_AppState == AppState::MENU)
     {
         ImGui::SetNextWindowPos(ImVec2(m_Window.getSize().x * 0.5f, m_Window.getSize().y * 0.5f), ImGuiCond_Always, ImVec2(0.5f, 0.5f));
@@ -624,7 +643,12 @@ void Application::render(){
             {
                 color = {1.0f, 0.2f, 0.6f, 1.0f}; 
             }
-           
+            
+           if (drawShadows) {
+                glm::vec2 size = {10.0f + shadowStretch, 8.0f}; 
+                m_Renderer->drawSquare(*m_Camera, node.position + shadowOffset, size, {0.0f, 0.0f, 0.0f, 0.35f});
+            }
+
             m_Renderer->drawSquare(*m_Camera, node.position, {10.0f, 10.0f}, color);
         }
 
@@ -648,7 +672,14 @@ void Application::render(){
             if (m_selectedVillager == &villager) {
                 color = {1.0f, 1.0f, 0.0f, 1.0f}; 
             }
-        
+            if (drawShadows) {
+                // Cień osadnika jest mały, ale reaguje na słońce
+                glm::vec2 v_shadowPos = villager.position + glm::vec2(shadowOffset.x * 0.5f, -3.0f);
+                
+                // Rysujemy go jako płaskie koło (używając drawSquare, bo oszukuje oko jako płaski cień)
+                // Szerokość cienia rośnie rano i wieczorem!
+                m_Renderer->drawSquare(*m_Camera, v_shadowPos, {8.0f + shadowStretch * 0.5f, 4.0f}, {0.0f, 0.0f, 0.0f, 0.35f});
+            }
             // Rysujemy idealne koło o promieniu 6 jednostek
             m_Renderer->drawCircle(*m_Camera, villager.position, 6.0f, color);
         }
@@ -684,6 +715,13 @@ void Application::render(){
             else if (b.buildingType == Building::STONE_WELL) 
             {
                 color = {0.0f, 0.6f, 0.7f, 1.0f}; // Turkusowy
+            }
+
+          // CIEŃ BUDYNKÓW: Są duże, więc rozciągamy je 2 razy mocniej
+            if (drawShadows) {
+                glm::vec2 size = {20.0f + (shadowStretch * 2.0f), 12.0f};
+                glm::vec2 b_offset = shadowOffset * 2.0f;
+                m_Renderer->drawSquare(*m_Camera, b.position + b_offset, size, {0.0f, 0.0f, 0.0f, 0.35f});
             }
 
             m_Renderer->drawSquare(*m_Camera, b.position, {20.0f, 20.0f}, color); 
