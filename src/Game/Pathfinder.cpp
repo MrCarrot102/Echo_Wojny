@@ -8,7 +8,7 @@
 
 // pomocnicze do obliczania dystansu (heurystyka mangattan) 
 int getDistance(glm::ivec2 a, glm::ivec2 b){
-    return std::abs(a.x - b.x) + std::abs(a.y - b.y); 
+    return static_cast<int>(std::hypot(a.x - b.x, a.y - b.y)); 
 }
 
 std::vector<glm::vec2> Pathfinder::findPath(const glm::vec2& startWorld, const glm::vec2& endWorld, const WorldMap& map) {
@@ -55,8 +55,11 @@ std::vector<glm::vec2> Pathfinder::findPath(const glm::vec2& startWorld, const g
             break; 
         }
 
-        glm::ivec2 neighbors[4] = { {0, 1}, {0, -1}, {1, 0}, {-1, 0} }; 
-
+        // Dodano 4 nowe kierunki: góra-prawo, dół-lewo, dół-prawo, góra-lewo
+        glm::ivec2 neighbors[8] = { 
+            {0, 1}, {0, -1}, {1, 0}, {-1, 0}, 
+            {1, 1}, {-1, -1}, {1, -1}, {-1, 1} 
+        };
 
         for (const auto& offset : neighbors){ 
             glm::ivec2 neighborPos = currentNode->pos + offset; 
