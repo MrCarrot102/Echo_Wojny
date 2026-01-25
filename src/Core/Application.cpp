@@ -161,8 +161,17 @@ void Application::pollEvents()
                 }
             }
         }
+        if (event.type == sf::Event::MouseWheelScrolled) 
+        {
+            if (event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel) 
+            {
+                // delta to np. 1.0 dla góry, -1.0 dla dołu
+                // Mnożymy przez 0.1f, aby jeden klik scrolla zmieniał zoom o 10%
+                m_Camera->addZoom(event.mouseWheelScroll.delta * 0.1f);
+            }
+        }
         
-        if (event.type == sf::Event::MouseButtonPressed) 
+        else if (event.type == sf::Event::MouseButtonPressed) 
         {
             // pobbieranie funkcji myszy 
             glm::vec2 screenMousePos = {(float)event.mouseButton.x, (float)event.mouseButton.y};
@@ -608,27 +617,19 @@ void Application::render(){
         float scaleX = winSize.x / camSize.x;
         float scaleY = winSize.y / camSize.y;
 
+        // 2. renderowanie mieszkancow (WŁASNY SILNIK OPENGL)
         for (const auto& villager : m_GameState->m_villagers) 
         {
-            float screenX = (villager.position.x - camPos.x) * scaleX;
-            float screenY = winSize.y - ((villager.position.y - camPos.y) * scaleY); 
-
-
-            float radius = 6.0f * scaleX; // Skalujemy wielkość koła wraz z zoomem
-            sf::CircleShape circle(radius);
-            circle.setOrigin(radius, radius); // Środek koła w punkcie pozycji
-            circle.setPosition(screenX, screenY);
-
-            // Kolory
-            if (m_selectedVillager == &villager){
-                circle.setFillColor(sf::Color(255, 255, 0)); // Żółty (Zaznaczony)
-                circle.setOutlineThickness(2.0f);
-                circle.setOutlineColor(sf::Color(0, 0, 0));
-            } else {
-                circle.setFillColor(sf::Color(255, 50, 50)); // Czerwony (Zwykły)
+            // Domyślny kolor: Czerwony
+            glm::vec4 color = {1.0f, 0.2f, 0.2f, 1.0f}; 
+        
+            // Kolor dla zaznaczonego osadnika: Żółty
+            if (m_selectedVillager == &villager) {
+                color = {1.0f, 1.0f, 0.0f, 1.0f}; 
             }
-
-            m_Window.draw(circle);
+        
+            // Rysujemy idealne koło o promieniu 6 jednostek
+            m_Renderer->drawCircle(*m_Camera, villager.position, 6.0f, color);
         }
 
         // Przywracamy stan OpenGL dla reszty renderera (budynki, zasoby)

@@ -21,17 +21,20 @@ class Camera2D {
         
         sf::Vector2f getSize() const { return sf::Vector2f(m_Width, m_Height); }
 
+
+        void addZoom(float delta); 
     private:
 
         void recalculateViewMatrix();
 
-
-
         glm::vec2 m_Position; 
-        float m_Zoom; 
-        float m_Width, m_Height;
         glm::mat4 m_ProjectionMatrix;
         glm::mat4 m_ViewMatrix; 
         glm::mat4 m_ProjectionViewMatrix; 
+
+        float m_Zoom; 
+        float m_Width, m_Height;
+        float m_TargetZoom = 1.0f; 
+        
 };
 
