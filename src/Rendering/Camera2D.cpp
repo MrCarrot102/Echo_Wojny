@@ -63,3 +63,28 @@ void Camera2D::addZoom(float delta)
     if (m_TargetZoom < 0.3f) m_TargetZoom = 0.3f;
     if (m_TargetZoom > 3.0f) m_TargetZoom = 3.0f; 
 }
+
+void Camera2D::startPanning(const glm::vec2& mousePos)
+{
+    m_IsPanning = true; 
+    m_PanStartMousePos = mousePos; 
+    m_PanStartCameraPos = m_Position; 
+}
+
+void Camera2D::stopPanning()
+{
+    m_IsPanning = false; 
+}
+
+void Camera2D::updatePanning(const glm::vec2& mousePos)
+{
+    if (!m_IsPanning) return; 
+
+    glm::vec2 delta = mousePos - m_PanStartMousePos; 
+
+    m_Position.x = m_PanStartCameraPos.x - (delta.x * m_Zoom); 
+
+    m_Position.y = m_PanStartCameraPos.y + (delta.y * m_Zoom); 
+
+    recalculateViewMatrix(); 
+}

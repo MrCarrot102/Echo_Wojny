@@ -161,15 +161,6 @@ void Application::pollEvents()
                 }
             }
         }
-        if (event.type == sf::Event::MouseWheelScrolled) 
-        {
-            if (event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel) 
-            {
-                // delta to np. 1.0 dla góry, -1.0 dla dołu
-                // Mnożymy przez 0.1f, aby jeden klik scrolla zmieniał zoom o 10%
-                m_Camera->addZoom(event.mouseWheelScroll.delta * 0.1f);
-            }
-        }
         
         else if (event.type == sf::Event::MouseButtonPressed) 
         {
@@ -363,8 +354,11 @@ void Application::pollEvents()
                     }
                 }
             } 
+
+            // prawy przycisk 
             else if (event.mouseButton.button == sf::Mouse::Right)
             {
+                m_Camera->startPanning({(float)event.mouseButton.x, (float)event.mouseButton.y});
                 // === ROZKAZY (PPM) ===
                 if (m_selectedVillager != nullptr){
                     
@@ -480,8 +474,34 @@ void Application::pollEvents()
                     m_selectedVillager->currentPathIndex = 0; 
                 }
             }   
-        }   
-    }
+        }
+           
+        else if (event.type == sf::Event::MouseButtonReleased) 
+        {
+            if (event.mouseButton.button == sf::Mouse::Right) 
+            {
+                m_Camera->stopPanning();
+            }
+        }
+            
+        else if (event.type == sf::Event::MouseMoved) 
+        {
+            if (!sf::Mouse::isButtonPressed(sf::Mouse::Right)) 
+            {
+                m_Camera->stopPanning();
+            }
+
+            m_Camera->updatePanning({(float)event.mouseMove.x, (float)event.mouseMove.y});
+        }
+        
+        else if (event.type == sf::Event::MouseWheelScrolled)   
+        {
+            if (event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel) 
+            {
+                m_Camera->addZoom(event.mouseWheelScroll.delta * 0.1f);
+            }
+        }
+    }   
 }
 
 
@@ -550,6 +570,7 @@ void Application::render(){
             // resetowanie gry 
             m_GameState = std::make_unique<GameState>(); 
             // resetowanie kamery 
+            m_Camera = std::make_unique<Camera2D>((float)m_Window.getSize().x, (float)m_Window.getSize().y);
             m_Camera->setPosition(glm::vec2(2000.0f, 2000.0f)); 
             // przelaczanie stanu gry 
             m_AppState = AppState::GAME; 
@@ -617,7 +638,7 @@ void Application::render(){
         float scaleX = winSize.x / camSize.x;
         float scaleY = winSize.y / camSize.y;
 
-        // 2. renderowanie mieszkancow (WŁASNY SILNIK OPENGL)
+        // 2. renderowanie mieszkancow
         for (const auto& villager : m_GameState->m_villagers) 
         {
             // Domyślny kolor: Czerwony
@@ -749,28 +770,43 @@ void Application::render(){
 
             for (const auto& b : m_GameState->m_buildings)
             {
-                float radius = 0.0f; 
-                
-                // Konfiguracja promienia światła dla budynków
-                if (b.buildingType == Building::CAMPFIRE) radius = 180.0f; // Ognisko świeci mocniej
-                else if (b.buildingType == Building::KITCHEN) radius = 100.0f; 
-                else if (b.buildingType == Building::WELL) radius = 60.0f;
-                else if (b.buildingType == Building::STONE_WELL) radius = 80.0f; // Kamienna studnia też świeci!
+                // Pobieramy dokładną macierz Twojej kamery
+                glm::mat4 viewProj = m_Camera->getProjectionViewMatrix();
+                float currentZoom = m_Camera->getZoom();
+                sf::Vector2f winSize = static_cast<sf::Vector2f>(m_Window.getSize()); 
 
-                if (radius > 0.0f) 
+                for (const auto& b : m_GameState->m_buildings)
                 {
-                    glm::vec2 centerPos = b.position + glm::vec2(10.0f, 10.0f); 
+                    float radius = 0.0f; 
 
-                    float screenX = (centerPos.x - camPos.x) * scaleX;
-                    float screenY = winSize.y - ((centerPos.y - camPos.y) * scaleY); 
+                    // Konfiguracja promienia światła dla budynków (w jednostkach mapy)
+                    if (b.buildingType == Building::CAMPFIRE) radius = 180.0f; 
+                    else if (b.buildingType == Building::KITCHEN) radius = 100.0f; 
+                    else if (b.buildingType == Building::WELL) radius = 60.0f;
+                    else if (b.buildingType == Building::STONE_WELL) radius = 80.0f; 
 
-                    float screenRadius = radius * scaleX; 
+                    if (radius > 0.0f) 
+                    {
+                        // Środek budynku w świecie
+                        glm::vec3 centerPos = glm::vec3(b.position.x + 10.0f, b.position.y + 10.0f, 0.0f); 
 
-                    lightShape.setRadius(screenRadius); 
-                    lightShape.setOrigin(screenRadius, screenRadius); 
-                    lightShape.setPosition(screenX, screenY); 
+                        // MAGIA MACIERZY: Obliczamy gdzie dokładnie ten punkt wypada na ekranie!
+                        glm::vec4 ndc = viewProj * glm::vec4(centerPos, 1.0f);
 
-                    m_lightMapTexture.draw(lightShape, eraser); 
+                        // Konwersja na piksele ekranu SFML
+                        float screenX = (ndc.x + 1.0f) * 0.5f * winSize.x;
+                        // Odwracamy Y, bo OpenGL rośnie w górę, a SFML w dół
+                        float screenY = (1.0f - ndc.y) * 0.5f * winSize.y; 
+
+                        // Skalowanie wielkości światła przez aktualny zoom
+                        float screenRadius = radius * currentZoom; 
+
+                        lightShape.setRadius(screenRadius); 
+                        lightShape.setOrigin(screenRadius, screenRadius); 
+                        lightShape.setPosition(screenX, screenY); 
+
+                        m_lightMapTexture.draw(lightShape, eraser); 
+                    }
                 }
             }
 
