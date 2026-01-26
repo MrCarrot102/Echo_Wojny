@@ -627,6 +627,39 @@ void GameState::update(float deltaTime) {
         ++it;
     } // Koniec pętli for
 
+
+    // kolizja miedzy osadnikami 
+    const float separationRadius = 14.0f; 
+    const float pushForce = 40.0f; 
+
+    for (size_t i = 0; i < m_villagers.size(); ++i) 
+    {
+        for (size_t j = i + 1; j < m_villagers.size(); ++j) 
+        {
+            Villager& a = m_villagers[i];
+            Villager& b = m_villagers[j];
+
+            
+            glm::vec2 diff = a.position - b.position;
+            float dist = glm::length(diff);
+
+            
+            if (dist < separationRadius && dist > 0.001f) 
+            {
+                
+                glm::vec2 pushDir = glm::normalize(diff);
+                
+                float pushStrength = (separationRadius - dist) / separationRadius;
+
+
+                glm::vec2 pushVec = pushDir * pushStrength * pushForce * deltaTime;
+
+                a.position += pushVec;
+                b.position -= pushVec;
+            }
+        }
+    }
+
     // --- Logika Dnia ---
     if(timeOfDay >= 24.0f)
     {
