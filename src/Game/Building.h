@@ -11,7 +11,9 @@ struct Building {
                 STOCKPILE,
                 CAMPFIRE, 
                 WALL, 
-                STONE_WELL
+                STONE_WELL, 
+                WOODEN_BED, 
+                STONE_BED
             };
              
     Type buildingType; 

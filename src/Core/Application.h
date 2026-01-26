@@ -43,7 +43,9 @@ class Application
             STOCKPILE,
             CAMPFIRE,
             STONE_WELL, 
-            WALL
+            WALL, 
+            WOODEN_BED, 
+            STONE_BED
         };
 
         // -- oswietlenie -- 

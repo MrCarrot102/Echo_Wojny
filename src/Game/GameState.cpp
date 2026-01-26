@@ -186,11 +186,123 @@ void GameState::update(float deltaTime) {
     {
         Villager& villager = *it; // dostep do osadnika przez referencje 
         
+        auto getSafeInteractionPoint = [&](glm::vec2 buildingPos) -> glm::vec2 
+        {
+
+            std::vector<float> distances = { 10.0f, 15.0f, 25.0f, 35.0f };
+            
+            glm::vec2 directions[] = { 
+                {1,0}, {-1,0}, {0,1}, {0,-1},   // Prosto
+                {0.7f, 0.7f}, {-0.7f, 0.7f}, {0.7f, -0.7f}, {-0.7f, -0.7f} // Skosy
+            };
+            
+            for (float dist : distances) {
+                for(auto dir : directions) {
+                    glm::vec2 testPos = buildingPos + (dir * dist);
+                    glm::ivec2 gridPos = m_worldMap->worldToGrid(testPos);
+                    
+
+                    if (!m_worldMap->isObstacle(gridPos.x, gridPos.y)) {
+                        return testPos;
+                    }
+                }
+            }
+            return buildingPos;
+        };
+
+        bool isBusySurviving = 
+        (
+            villager.currentState == Villager::State::MOVING_TO_DRINK ||
+            villager.currentState == Villager::State::DRINKING ||
+            villager.currentState == Villager::State::MOVING_TO_EAT ||
+            villager.currentState == Villager::State::EATING
+        );
+
         // potrzeby 
         villager.hunger -= (gameHoursPassed * HUNGER_RATE);
         villager.thirst -= (gameHoursPassed * THIRST_RATE);
         if (villager.hunger < 0.0f) villager.hunger = 0.0f;
         if (villager.thirst < 0.0f) villager.thirst = 0.0f;
+
+        // energia 
+        if (villager.currentState != Villager::State::SLEEPING) 
+        {
+            villager.energy -= 1.5f * deltaTime; 
+        }
+
+        // szukanie łóżka gdy energia spada
+        if (villager.energy < 20.0f && !isBusySurviving && villager.currentState != Villager::State::MOVING_TO_BED && villager.currentState != Villager::State::SLEEPING) 
+        {
+            Building* bestBed = nullptr;
+            float minBedDist = 99999.0f;
+
+            for (auto& b : m_buildings) {
+                if (b.buildingType == Building::WOODEN_BED || b.buildingType == Building::STONE_BED) {
+                    
+                    bool isBedOccupied = false;
+                    for (const auto& other : m_villagers) {
+
+                        if (&other == &villager) continue;   
+                       
+                        if ((other.currentState == Villager::State::SLEEPING || other.currentState == Villager::State::MOVING_TO_BED) &&
+                             glm::distance(other.targetPosition, b.position) < 5.0f) 
+                        {
+                            isBedOccupied = true;
+                            break; 
+                        }
+                    }
+
+                    if (isBedOccupied) continue;
+
+                    float dist = glm::distance(villager.position, b.position);
+                    if (dist < minBedDist) {
+                        minBedDist = dist;
+                        bestBed = &b;
+                    }
+                }
+            }
+
+            if (bestBed != nullptr) 
+            {
+                villager.currentState = Villager::State::MOVING_TO_BED;
+                
+                villager.targetPosition = bestBed->position; 
+
+                glm::vec2 safeSpot = getSafeInteractionPoint(bestBed->position);
+                villager.currentPath = Pathfinder::findPath(villager.position, safeSpot, *m_worldMap);
+                villager.currentPathIndex = 0;
+            } 
+            else 
+            {
+                villager.currentState = Villager::State::SLEEPING;
+            }
+        }
+
+        // --- 3. OBSŁUGA STANU "SPANIE" ---
+        if (villager.currentState == Villager::State::SLEEPING) 
+        {
+            bool onStoneBed = false;
+            for (const auto& b : m_buildings) {
+                // ZMIANA: używamy villager.position
+                if (b.buildingType == Building::STONE_BED && glm::distance(villager.position, b.position) < 20.0f) {
+                    onStoneBed = true;
+                    break;
+                }
+            }
+
+            float regenRate = onStoneBed ? 20.0f : 10.0f;
+            villager.energy += regenRate * deltaTime;
+
+            if (onStoneBed) globalMorale += 0.5f * deltaTime;
+
+            // ZMIANA: używamy villager.energy
+            if (villager.energy >= 100.0f) {
+                villager.energy = 100.0f;
+                villager.currentState = Villager::State::IDLE;
+
+                villager.position = getSafeInteractionPoint(villager.position);
+            }
+        }
 
         bool isTakingDamage = false; 
 
@@ -237,37 +349,7 @@ void GameState::update(float deltaTime) {
         // 2. INSTYNKT SAMOZACHOWAWCZY
         // =========================================================
         // --- PRIORYTET 1: WODA (Poniżej 40%) ---
-        auto getSafeInteractionPoint = [&](glm::vec2 buildingPos) -> glm::vec2 
-        {
-
-            std::vector<float> distances = { 10.0f, 15.0f, 25.0f, 35.0f };
-            
-            glm::vec2 directions[] = { 
-                {1,0}, {-1,0}, {0,1}, {0,-1},   // Prosto
-                {0.7f, 0.7f}, {-0.7f, 0.7f}, {0.7f, -0.7f}, {-0.7f, -0.7f} // Skosy
-            };
-            
-            for (float dist : distances) {
-                for(auto dir : directions) {
-                    glm::vec2 testPos = buildingPos + (dir * dist);
-                    glm::ivec2 gridPos = m_worldMap->worldToGrid(testPos);
-                    
-
-                    if (!m_worldMap->isObstacle(gridPos.x, gridPos.y)) {
-                        return testPos;
-                    }
-                }
-            }
-            return buildingPos;
-        };
-
-        bool isBusySurviving = 
-        (
-            villager.currentState == Villager::State::MOVING_TO_DRINK ||
-            villager.currentState == Villager::State::DRINKING ||
-            villager.currentState == Villager::State::MOVING_TO_EAT ||
-            villager.currentState == Villager::State::EATING
-        );
+        
 
         if (!isBusySurviving) 
         {
@@ -624,6 +706,17 @@ void GameState::update(float deltaTime) {
                 villager.currentState = Villager::State::IDLE;
             }
         }
+
+        // 9. spanko 
+        else if (villager.currentState == Villager::State::MOVING_TO_BED) 
+        {
+            if (moveAlongPath(speed)) 
+            {
+                villager.position = villager.targetPosition; 
+                villager.currentState = Villager::State::SLEEPING;
+            }
+        }
+
         ++it;
     } // Koniec pętli for
 

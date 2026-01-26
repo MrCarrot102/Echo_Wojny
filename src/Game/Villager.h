@@ -27,7 +27,10 @@ struct Villager {
         HAULING, 
         
         MOVING_TO_GATHER_WATER,
-        GATHERING_WATER
+        GATHERING_WATER, 
+
+        MOVING_TO_BED, 
+        SLEEPING
     }; 
     
     
@@ -37,6 +40,7 @@ struct Villager {
     float workTimer; // zegar odliczania pracy 
     float hunger; 
     float thirst; 
+    float energy = 100.0f; 
 
     // -- dodanie zdrowia -- 
     float health; 
