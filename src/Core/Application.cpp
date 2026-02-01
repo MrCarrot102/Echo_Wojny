@@ -57,12 +57,9 @@ void Application::init() {
     m_Renderer = std::make_unique<PrimitiveRenderer>(); 
     m_GameState = std::make_unique<GameState>(); 
 
-    
-
     // ustawianie koloru tla
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 }
-
 
 void Application::run() 
 {
@@ -113,8 +110,16 @@ void Application::pollEvents()
                 }
             } else {
 
-                if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape){
-                    m_Running = false; 
+                if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
+                {
+                    if (m_AppState == AppState::GAME)
+                    {
+                        m_AppState = AppState::PAUSE_MENU; 
+                    }    
+                    else if (m_AppState == AppState::PAUSE_MENU)
+                    {
+                        m_AppState = AppState::GAME; 
+                    }
                 }
 
                 if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::B){
@@ -555,7 +560,10 @@ void Application::update(float deltaTime){
     // -------------------- 
 
     // -- menu --
-    if (m_AppState == AppState::MENU || m_AppState == AppState::GAME_OVER) 
+    //if (m_AppState == AppState::MENU || m_AppState == AppState::GAME_OVER) 
+    //    return; 
+
+    if (m_AppState != AppState::GAME)
         return; 
 
     if (m_GameState->m_villagers.empty() || m_GameState->globalMorale <= 0.0f)
@@ -563,6 +571,7 @@ void Application::update(float deltaTime){
         m_AppState = AppState::GAME_OVER;
         return; 
     }
+
 
     // aktualizacja logiki gry 
     m_Camera->update(deltaTime, m_Window); 
@@ -600,20 +609,20 @@ void Application::render(){
     glClear(GL_COLOR_BUFFER_BIT); 
     float time = m_GameState->timeOfDay;
         glm::vec2 shadowOffset = {0.0f, 0.0f};
-        float shadowStretch = 0.0f; // Jak bardzo cień się wydłuża
+        float shadowStretch = 0.0f; 
         bool drawShadows = false;
 
         if (time >= 6.0f && time <= 18.0f) 
         {
             drawShadows = true;
-            // O 6:00 i 18:00 współczynnik wynosi +/- 6.0. W południe wynosi 0.
+  
             float sunAngle = (time - 12.0f); 
 
-            // Offset mówi, jak daleko przesuwa się ŚRODEK cienia
+    
             shadowOffset.x = sunAngle * 1.5f; 
-            shadowOffset.y = -2.0f; // Lekko w dół, pod nogi/podstawę
+            shadowOffset.y = -2.0f; 
 
-            // Stretch mówi, o ile PIKSELI cień staje się dłuższy (wartość bezwzględna)
+
             shadowStretch = std::abs(sunAngle) * 2.0f; 
         }
 
@@ -627,19 +636,19 @@ void Application::render(){
         ImGui::Text("       Echo Wojny");
         ImGui::Separator(); 
 
-        // przycisk nowa gra 
+
         if (ImGui::Button("Nowa Gra", ImVec2(280, 40)))
         {
-            // resetowanie gry 
+
             m_GameState = std::make_unique<GameState>(); 
-            // resetowanie kamery 
+ 
             m_Camera = std::make_unique<Camera2D>((float)m_Window.getSize().x, (float)m_Window.getSize().y);
             m_Camera->setPosition(glm::vec2(2000.0f, 2000.0f)); 
-            // przelaczanie stanu gry 
+ 
             m_AppState = AppState::GAME; 
         }
 
-        // pole tekstowe i wczytaj 
+
         ImGui::InputText("Plik", m_saveFilename, 128); 
         if (ImGui::Button("Wczytaj Gre", ImVec2(280, 40)))
         {
@@ -647,17 +656,58 @@ void Application::render(){
             m_AppState = AppState::GAME; 
         }
 
-        // wyjscie z gry 
+
         if (ImGui::Button("Wyjdz", ImVec2(280, 40)))
             m_Running = false; 
         
         ImGui::End(); 
+
     }
-    
+
+    else if (m_AppState == AppState::PAUSE_MENU)
+    {
+        ImGui::SetNextWindowPos(ImVec2(m_Window.getSize().x * 0.5f, m_Window.getSize().y * 0.5f), ImGuiCond_Always, ImVec2(0.5f, 0.5f));
+        ImGui::SetNextWindowSize(ImVec2(300, 320));
+
+        ImGui::Begin("Pauza", nullptr, ImGuiWindowFlags_NoDecoration); 
+
+        if (ImGui::Button("Wznów", ImVec2(280, 40))) 
+        {
+            m_AppState = AppState::GAME;
+        }
+     
+         if (ImGui::Button("Opcje", ImVec2(280, 40))) 
+         {
+
+         }
+     
+         ImGui::Separator();
+     
+         if (ImGui::Button("Zapisz Gre", ImVec2(280, 40))) 
+         {
+             m_GameState->saveGame("save.txt");
+         }
+     
+         if (ImGui::Button("Wczytaj Gre", ImVec2(280, 40))) 
+         {
+             m_GameState->loadGame("save.txt");
+             m_AppState = AppState::GAME; 
+         }
+     
+         ImGui::Separator();
+     
+         if (ImGui::Button("Wyjdz do Menu", ImVec2(280, 40))) 
+         {
+             m_AppState = AppState::MENU;
+         }
+     
+         ImGui::End();
+
+    }
     
     else if (m_AppState == AppState::GAME)
     {
-        // renderowanie gry 
+
         if (m_GameState->currentSeason == GameState::Season::SUMMER)
         {
             glClearColor(0.1f, 0.3f, 0.1f, 1.0f); 
@@ -669,7 +719,6 @@ void Application::render(){
         glClear(GL_COLOR_BUFFER_BIT); 
 
 
-        // 1 renderowanie zasobow 
         for (const auto& node : m_GameState->m_resourceNodes) { 
             glm::vec4 color = {1.0f, 1.0f, 1.0f, 1.0f}; 
 
@@ -677,46 +726,53 @@ void Application::render(){
 
             if (node.resourceType == ResourceNode::TREE)
             {
-                color = {0.0f, 0.5f, 0.0f, 1.0f}; // ciemnozielony na drzewo 
+                color = {0.0f, 0.5f, 0.0f, 1.0f}; 
             } 
+
             else if (node.resourceType == ResourceNode::ROCK) 
             {
-                color = {0.5f, 0.5f, 0.5f, 1.0f}; // szary na kamienie 
+                color = {0.5f, 0.5f, 0.5f, 1.0f}; 
             }
+
             else if (node.resourceType == ResourceNode::BERRY_BUSH) 
             {
                 color = {1.0f, 0.2f, 0.6f, 1.0f}; 
             }
             
-           if (drawShadows) {
+           if (drawShadows) 
+            {
                 glm::vec2 size = {10.0f + shadowStretch, 8.0f}; 
                 m_Renderer->drawSquare(*m_Camera, node.position + shadowOffset, size, {0.0f, 0.0f, 0.0f, 0.35f});
             }
 
             m_Renderer->drawSquare(*m_Camera, node.position, {10.0f, 10.0f}, color);
+        
         }
 
-        // 2 renderowanie mieszkancow 
+
         m_Window.pushGLStates(); 
 
-        // Pobieramy dane kamery do obliczeń pozycji na ekranie
+
         glm::vec2 camPos = m_Camera->getPosition();
         sf::Vector2f camSize = m_Camera->getSize();
         sf::Vector2f winSize = static_cast<sf::Vector2f>(m_Window.getSize()); 
         float scaleX = winSize.x / camSize.x;
         float scaleY = winSize.y / camSize.y;
 
-        // 2. renderowanie mieszkancow
+
         for (const auto& villager : m_GameState->m_villagers) 
         {
-            // Domyślny kolor: Czerwony
+   
             glm::vec4 color = {1.0f, 0.2f, 0.2f, 1.0f}; 
         
-            // Kolor dla zaznaczonego osadnika: Żółty
-            if (m_selectedVillager == &villager) {
+
+            if (m_selectedVillager == &villager) 
+            {
                 color = {1.0f, 1.0f, 0.0f, 1.0f}; 
             }
-            if (drawShadows) {
+
+            if (drawShadows) 
+            {
 
                 glm::vec2 v_shadowPos = villager.position + glm::vec2(shadowOffset.x * 0.5f, -3.0f);
                 
@@ -744,103 +800,133 @@ void Application::render(){
             }
 
             m_Renderer->drawCircle(*m_Camera, villager.position, 6.0f, color);
+        
         }
 
         m_Window.popGLStates();
 
         // renderowanie budynkow 
         // renderowanie budynkow 
-        for (const auto& b : m_GameState->m_buildings) {
+        for (const auto& b : m_GameState->m_buildings) 
+        {
             glm::vec4 color = {0.5f, 0.3f, 0.0f, 1.0f}; // brazowy domyślny
             glm::vec2 size = {20.0f, 20.0f}; // domyślny rozmiar (kwadrat)
 
             if (b.buildingType == Building::KITCHEN) color = {0.3f, 0.3f, 0.4f, 1.0f}; 
+            
             else if (b.buildingType == Building::WELL) color = {0.0f, 0.4f, 0.9f, 1.0f}; 
+            
             else if (b.buildingType == Building::STOCKPILE) color = {0.45f, 0.25f, 0.1f, 1.0f}; 
+            
             else if (b.buildingType == Building::CAMPFIRE) color = {1.0f, 0.5f, 0.0f, 1.0f}; 
+            
             else if (b.buildingType == Building::WALL) color = {0.4f, 0.4f, 0.4f, 1.0f}; 
+            
             else if (b.buildingType == Building::STONE_WELL) color = {0.0f, 0.6f, 0.7f, 1.0f}; 
-            // --- NOWE: ŁÓŻKA (Inny kolor i inny rozmiar!) ---
-            else if (b.buildingType == Building::WOODEN_BED) {
-                color = {0.6f, 0.4f, 0.2f, 1.0f}; // Jasne drewno
-                size = {20.0f, 10.0f}; // Łóżko jest podłużne!
-            }
-            else if (b.buildingType == Building::STONE_BED) {
-                color = {0.5f, 0.3f, 0.6f, 1.0f}; // Fioletowe (królewskie)
+
+            else if (b.buildingType == Building::WOODEN_BED) 
+            {
+                color = {0.6f, 0.4f, 0.2f, 1.0f}; 
                 size = {20.0f, 10.0f};
             }
 
-            // CIEŃ BUDYNKÓW I ŁÓŻEK
-            if (drawShadows) {
+            else if (b.buildingType == Building::STONE_BED) 
+            {
+                color = {0.5f, 0.3f, 0.6f, 1.0f}; 
+                size = {20.0f, 10.0f};
+            }
+
+
+            if (drawShadows) 
+            {
                 glm::vec2 shadowSize = {size.x + (shadowStretch * 2.0f), size.y};
                 glm::vec2 b_offset = shadowOffset * 2.0f;
                 m_Renderer->drawSquare(*m_Camera, b.position + b_offset, shadowSize, {0.0f, 0.0f, 0.0f, 0.35f});
             }
 
             m_Renderer->drawSquare(*m_Camera, b.position, size, color); 
+        
         }
 
 
-       // 4. DUCH BUDOWANIA (Podgląd przy myszce)
-        if (m_currentBuildMode != BuildMode::NONE) {
-            
-            // Domyślny kolor i rozmiar
+
+        if (m_currentBuildMode != BuildMode::NONE) 
+        {
+
             glm::vec4 ghostColor = {1.0f, 1.0f, 1.0f, 0.5f};
             glm::vec2 size = {20.0f, 20.0f};
 
-            // Ustawienia dla konkretnych budynków
-            if (m_currentBuildMode == BuildMode::KITCHEN) { 
+
+            if (m_currentBuildMode == BuildMode::KITCHEN) 
+            { 
                 ghostColor = {0.8f, 0.8f, 0.8f, 0.5f}; 
             }
-            else if (m_currentBuildMode == BuildMode::WELL) { 
+
+            else if (m_currentBuildMode == BuildMode::WELL) 
+            { 
                 ghostColor = {0.0f, 0.5f, 1.0f, 0.5f}; 
                 size = {15.0f, 15.0f}; 
             }
-            else if (m_currentBuildMode == BuildMode::STOCKPILE) { 
+
+            else if (m_currentBuildMode == BuildMode::STOCKPILE) 
+            { 
                 ghostColor = {0.9f, 0.9f, 0.8f, 0.5f}; 
                 size = {25.0f, 25.0f}; 
             }
-            else if (m_currentBuildMode == BuildMode::CAMPFIRE) { 
+
+            else if (m_currentBuildMode == BuildMode::CAMPFIRE) 
+            { 
                 ghostColor = {1.0f, 0.5f, 0.0f, 0.5f}; 
             }
             
-            else if (m_currentBuildMode == BuildMode::WALL) { 
+            else if (m_currentBuildMode == BuildMode::WALL) 
+            { 
                 ghostColor = {0.4f, 0.4f, 0.4f, 0.5f}; 
             }
-            else if (m_currentBuildMode == BuildMode::STONE_WELL) { 
+
+            else if (m_currentBuildMode == BuildMode::STONE_WELL) 
+            { 
                 ghostColor = {0.0f, 0.8f, 0.9f, 0.5f}; 
             }
 
-            else if (m_currentBuildMode == BuildMode::WOODEN_BED) { 
+            else if (m_currentBuildMode == BuildMode::WOODEN_BED) 
+            { 
                 ghostColor = {0.6f, 0.4f, 0.2f, 0.5f}; 
                 size = {20.0f, 10.0f}; 
             }
-            else if (m_currentBuildMode == BuildMode::STONE_BED) { 
+
+            else if (m_currentBuildMode == BuildMode::STONE_BED)
+            { 
                 ghostColor = {0.5f, 0.3f, 0.6f, 0.5f}; 
                 size = {20.0f, 10.0f};
             }
 
             m_Renderer->drawSquare(*m_Camera, m_ghostBuildingPos, size, ghostColor);
+        
         }
 
-
-        // -- dodanie cyklu dobowego i oswietlenia -- 
-        // obliczanie jasnosci otoczenia 
         float time = m_GameState->timeOfDay; 
         sf::Uint8 darknessAlpha = 0; 
 
-        if (time >= 20.0f || time < 4.0f) {
+        if (time >= 20.0f || time < 4.0f) 
+        {
             darknessAlpha = 200; 
         }
-        else if (time >= 18.0f && time < 20.0f) {
+
+        else if (time >= 18.0f && time < 20.0f) 
+        {
             float factor = (time - 18.0f) / 2.0f; 
             darknessAlpha = (sf::Uint8)(factor * 200); 
         }
-        else if (time >= 4.0f && time < 6.0f) {
+
+        else if (time >= 4.0f && time < 6.0f) 
+        {
             float factor = (time - 4.0f) / 2.0f; 
             darknessAlpha = (sf::Uint8)(200 - (factor * 200));
         }
-        else {
+
+        else 
+        {
             darknessAlpha = 0; 
         }
 
@@ -855,9 +941,11 @@ void Application::render(){
 
             sf::BlendMode eraser(sf::BlendMode::Zero, sf::BlendMode::One, sf::BlendMode::Add, sf::BlendMode::Zero, sf::BlendMode::OneMinusSrcAlpha, sf::BlendMode::Add); 
             sf::CircleShape lightShape; 
+            
             lightShape.setFillColor(sf::Color(255, 255, 255, 255)); 
 
             glm::vec2 camPos = m_Camera->getPosition();
+            
             sf::Vector2f camSize = m_Camera->getSize();
             sf::Vector2f winSize = static_cast<sf::Vector2f>(m_Window.getSize()); 
 
@@ -868,33 +956,32 @@ void Application::render(){
             {
 
                 glm::mat4 viewProj = m_Camera->getProjectionViewMatrix();
+               
                 float currentZoom = m_Camera->getZoom();
+               
                 sf::Vector2f winSize = static_cast<sf::Vector2f>(m_Window.getSize()); 
 
                 for (const auto& b : m_GameState->m_buildings)
                 {
                     float radius = 0.0f; 
-
-                    
+ 
                     if (b.buildingType == Building::CAMPFIRE) radius = 180.0f; 
+                    
                     else if (b.buildingType == Building::KITCHEN) radius = 100.0f; 
+                    
                     else if (b.buildingType == Building::WELL) radius = 60.0f;
+                    
                     else if (b.buildingType == Building::STONE_WELL) radius = 80.0f; 
 
                     if (radius > 0.0f) 
                     {
                         
                         glm::vec3 centerPos = glm::vec3(b.position.x + 10.0f, b.position.y + 10.0f, 0.0f); 
-
                         
                         glm::vec4 ndc = viewProj * glm::vec4(centerPos, 1.0f);
 
-                        
-                        float screenX = (ndc.x + 1.0f) * 0.5f * winSize.x;
-                        
+                        float screenX = (ndc.x + 1.0f) * 0.5f * winSize.x;   
                         float screenY = (1.0f - ndc.y) * 0.5f * winSize.y; 
-
-                      
                         float screenRadius = radius * currentZoom; 
 
                         lightShape.setRadius(screenRadius); 
@@ -902,6 +989,7 @@ void Application::render(){
                         lightShape.setPosition(screenX, screenY); 
 
                         m_lightMapTexture.draw(lightShape, eraser); 
+                    
                     }
                 }
             }
@@ -911,10 +999,13 @@ void Application::render(){
             m_lightMapSprite.setPosition(0, 0);
             
             m_Window.setView(m_Window.getDefaultView()); 
+           
             glDisable(GL_DEPTH_TEST);
+            
             m_Window.draw(m_lightMapSprite); 
             
             m_Window.popGLStates(); 
+        
         }
     
         float windowW = (float)m_Window.getSize().x;
@@ -928,11 +1019,12 @@ void Application::render(){
 
         ImGui::Begin("MainBar", nullptr, windowFlags);
 
-
         ImGui::BeginGroup();
         {
             ImGui::TextColored(ImVec4(1, 0.8f, 0, 1), "Dzien %d  |  %02d:00", m_GameState->dayCounter, (int)m_GameState->timeOfDay);
+            
             if (m_GameState->currentSeason == GameState::Season::SUMMER) ImGui::TextColored(ImVec4(0.2f, 1.0f, 0.2f, 1.0f), "LATO (%.1f C)", m_GameState->globalTemperature);
+            
             else ImGui::TextColored(ImVec4(0.4f, 0.6f, 1.0f, 1.0f), "ZIMA (%.1f C)", m_GameState->globalTemperature);
 
             ImGui::Separator();
@@ -942,15 +1034,19 @@ void Application::render(){
 
             ImGui::Spacing();
             ImGui::Text("Morale (%lu os.):", m_GameState->m_villagers.size());
+            
             if (m_GameState->globalMorale > 50.0f) ImGui::PushStyleColor(ImGuiCol_PlotHistogram, ImVec4(0.6f, 0.2f, 1.0f, 1.0f)); 
+            
             else ImGui::PushStyleColor(ImGuiCol_PlotHistogram, ImVec4(0.3f, 0.3f, 0.3f, 1.0f)); 
+            
             ImGui::ProgressBar(m_GameState->globalMorale / 100.0f, ImVec2(160, 15), "");
             ImGui::PopStyleColor();
+        
         }
+
         ImGui::EndGroup();
 
         ImGui::SameLine(0, 15); 
-
 
         ImGui::BeginGroup();
         {
@@ -961,7 +1057,9 @@ void Application::render(){
                 bool canAfford = (pool1 >= cost1 && pool2 >= cost2); 
 
                 if (isActive) ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 0.7f, 0.0f, 1.0f)); 
+                
                 else if (!canAfford) ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.5f, 0.2f, 0.2f, 1.0f)); 
+                
                 else ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.4f, 0.3f, 0.2f, 1.0f)); 
 
                 if (ImGui::Button(label, ImVec2(80, 30))) // <-- ZMNIEJSZONE Z 95x35
@@ -969,11 +1067,14 @@ void Application::render(){
                     m_currentBuildMode = isActive ? BuildMode::NONE : mode;
                     m_selectedVillager = nullptr; 
                 }
+                
                 ImGui::PopStyleColor();
+                
                 if (ImGui::IsItemHovered()) ImGui::SetTooltip("%s", tooltip);
             };
 
             int zero = 0; 
+            
             DrawBuildButton("KUCHNIA", 50, m_GameState->globalWood, 0, zero, BuildMode::KITCHEN, "50 Drewna"); ImGui::SameLine(); 
             DrawBuildButton("STUDNIA", 25, m_GameState->globalWood, 0, zero, BuildMode::WELL, "25 Drewna"); ImGui::SameLine();
             DrawBuildButton("MAGAZYN", 10, m_GameState->globalWood, 0, zero, BuildMode::STOCKPILE, "10 Drewna"); ImGui::SameLine(); 
@@ -984,14 +1085,13 @@ void Application::render(){
             DrawBuildButton("LOZE(D)", 15, m_GameState->globalWood, 0, zero, BuildMode::WOODEN_BED, "15 Drewna"); ImGui::SameLine();
             DrawBuildButton("LOZE(K)", 10, m_GameState->globalStone, 10, m_GameState->globalWood, BuildMode::STONE_BED, "10 Kam, 10 Drew");
         }
+
         ImGui::EndGroup();
 
         ImGui::SameLine(0, 15);
 
-
         float col4_width = 90.0f;
         float col4_posX = windowW - col4_width - 10.0f; 
-
 
         float availableWidth = col4_posX - ImGui::GetCursorPosX() - 15.0f; 
         float barWidth = std::max(80.0f, availableWidth); 
@@ -1011,6 +1111,7 @@ void Application::render(){
                 ImGui::PushStyleColor(ImGuiCol_PlotHistogram, ImVec4(1.0f, 0.9f, 0.1f, 1.0f));
                 ImGui::ProgressBar(m_selectedVillager->energy / 100.0f, ImVec2(barWidth, 12), "Energia"); ImGui::PopStyleColor();
             }
+            
             else 
             {
                 ImGui::TextDisabled("Brak celu.");
@@ -1021,19 +1122,9 @@ void Application::render(){
                 if (ImGui::Button(">", ImVec2(30, 25))) m_timeScale = 1.0f; ImGui::SameLine();
                 if (ImGui::Button(">>", ImVec2(30, 25))) m_timeScale = 5.0f;
             }
+       
         }
-        ImGui::EndGroup();
-
-        ImGui::SameLine(col4_posX); 
-        ImGui::BeginGroup();
-        {
-            if (ImGui::Button("ZAPISZ", ImVec2(90, 30))) m_GameState->saveGame("save.txt");
-            if (ImGui::Button("WCZYTAJ", ImVec2(90, 30))) m_GameState->loadGame("save.txt");
-            ImGui::Spacing();
-            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.7f, 0.2f, 0.2f, 1.0f));
-            if (ImGui::Button("WYJDZ", ImVec2(90, 30))) m_Running = false;
-            ImGui::PopStyleColor();
-        }
+        
         ImGui::EndGroup();
 
         ImGui::End();
@@ -1064,13 +1155,16 @@ void Application::render(){
         {
             m_GameState->resolveRefugeeEvent(true);
         }
+        
         ImGui::SameLine();
+        
         if (ImGui::Button("ODRZUC (N)", ImVec2(180, 40))) 
         {
             m_GameState->resolveRefugeeEvent(false);
         }
 
             ImGui::End();
+    
     }
 
     else if (m_AppState == AppState::GAME_OVER)
@@ -1088,6 +1182,7 @@ void Application::render(){
 
         auto windowWidth = ImGui::GetWindowSize().x;
         auto textWidth = ImGui::CalcTextSize("TWOJA OSADA UPADLA").x;
+       
         ImGui::SetCursorPosX((windowWidth - textWidth) * 0.5f);
         ImGui::TextColored(ImVec4(1.0f, 0.2f, 0.2f, 1.0f), "TWOJA OSADA UPADLA");
         
@@ -1096,10 +1191,15 @@ void Application::render(){
 
 
         if (m_GameState->m_villagers.empty()) 
+        {
             ImGui::TextWrapped("Wszyscy osadnicy zgineli z wycienczenia...");
+        }
+        
         else 
+        {
             ImGui::TextWrapped("Morale spadlo do zera, a osadnicy uciekli...");
-
+        }
+        
         ImGui::Spacing();
         ImGui::TextColored(ImVec4(1, 0.8f, 0, 1), "Przetrwano dni: %d", m_GameState->dayCounter);
         ImGui::Spacing(); ImGui::Spacing(); ImGui::Separator(); ImGui::Spacing();
@@ -1125,10 +1225,11 @@ void Application::render(){
         ImGui::PopStyleColor();
 
         ImGui::End();
+    
     }
-  
   
     ImGui::SFML::Render();
 
     m_Window.display(); 
+
 }

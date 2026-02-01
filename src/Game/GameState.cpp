@@ -28,13 +28,12 @@ GameState::GameState()
       m_worldMap(std::make_unique<WorldMap>(200, 200, 20.0f))
       
 {
-    // 1. ustawianie osadnikow 
-    m_villagers.emplace_back("Adam", glm::vec2(2000.0f, 2000.0f)); 
-    m_villagers.emplace_back("Ewa", glm::vec2(2020.0f, 2000.0f));
-    m_villagers.emplace_back("Radek", glm::vec2(2000.0f, 2020.0f));
 
-    // 2. proceduralnie generowany swiat perlin noise 
-    // parametry szumu 
+    m_villagers.emplace_back("Adam", glm::vec2(2300.0f, 2300.0f)); 
+    m_villagers.emplace_back("Ewa", glm::vec2(2320.0f, 2320.0f));
+    m_villagers.emplace_back("Radek", glm::vec2(2350.0f, 2350.0f));
+
+
     m_resourceNodes.emplace_back(ResourceNode::TREE, glm::vec2(1960.0f, 2000.0f), 100);
     m_resourceNodes.emplace_back(ResourceNode::TREE, glm::vec2(1980.0f, 2040.0f), 100);
     m_resourceNodes.emplace_back(ResourceNode::TREE, glm::vec2(2040.0f, 1960.0f), 100);
@@ -44,26 +43,24 @@ GameState::GameState()
     m_resourceNodes.emplace_back(ResourceNode::BERRY_BUSH, glm::vec2(2020.0f, 1950.0f), 50);
     m_resourceNodes.emplace_back(ResourceNode::BERRY_BUSH, glm::vec2(2060.0f, 1960.0f), 50);
 
-
-    // KROK B: GENERATOR PERLIN
+   
     float scale = 0.005f; 
     int step = 40;        
 
     float perlinSeed = (float)(rand() % 10000) / 100.0f; 
 
-    for (int y = 0; y < 4000; y += step) {
-        for (int x = 0; x < 4000; x += step) {
+    for (int y = 0; y < 4000; y += step) 
+    {
+        for (int x = 0; x < 4000; x += step) 
+        {
             
-            // --- ZMIANA: STREFA OCHRONNA 70 (Bardzo ciasno) ---
-            // Tylko ścisłe centrum (tam gdzie stoją ludzie) jest puste.
-            // Las będzie rósł tuż przy budynkach.
-            bool safePlayer = glm::distance(glm::vec2(x, y), glm::vec2(2000.0f, 2000.0f)) < 70.0f;
-            
-            // 2. Punkt spawnu uchodźców (150, 150) - To naprawia crash losowości!
-            bool safeRefugees = glm::distance(glm::vec2(x, y), glm::vec2(150.0f, 150.0f)) < 60.0f;
 
-            if (glm::distance(glm::vec2(x, y), glm::vec2(2000.0f, 2000.0f)) < 150.0f || 
-                glm::distance(glm::vec2(x, y), glm::vec2(150.0f, 150.0f)) < 60.0f)   // Strefa dla uchodźców
+            bool safePlayer = glm::distance(glm::vec2(x, y), glm::vec2(2300.0f, 2300.0f)) < 50.0f;
+            
+            bool safeRefugees = glm::distance(glm::vec2(x, y), glm::vec2(2300.0f, 2300.0f)) < 50.0f;
+
+            if (glm::distance(glm::vec2(x, y), glm::vec2(2300.0f, 2300.0f)) < 50.0f || 
+                glm::distance(glm::vec2(x, y), glm::vec2(2300.0f, 2300.0f)) < 50.0f)   // Strefa dla uchodźców
             {
                 continue;
             }
@@ -96,14 +93,12 @@ GameState::GameState()
             }
         }
     }
-     
-    // 4. aktualizowanie mapy logicznej bla bla bla pathtracing 
+
     for (const auto& node : m_resourceNodes)
     {
-        // konwersja pozycji z piksela na kratke 
+
         glm::ivec2 gridPos = m_worldMap->worldToGrid(node.position); 
 
-        // ustawianie przeszkody 
         m_worldMap->setObstacle(gridPos.x, gridPos.y, true); 
     }
 
@@ -123,7 +118,8 @@ GameState::GameState()
 
 }
 
-void GameState::update(float deltaTime) {
+void GameState::update(float deltaTime) 
+{
 
     if (m_currentMode != Mode::PLAYING) return;
 
@@ -174,6 +170,7 @@ void GameState::update(float deltaTime) {
             {
                 if (globalWood >= 5) globalWood -= 5; 
             }
+           
             else 
             {
                 if (globalWood >= 10) globalWood -= 10; 
@@ -191,18 +188,22 @@ void GameState::update(float deltaTime) {
 
             std::vector<float> distances = { 10.0f, 15.0f, 25.0f, 35.0f };
             
-            glm::vec2 directions[] = { 
+            glm::vec2 directions[] = 
+            { 
                 {1,0}, {-1,0}, {0,1}, {0,-1},   // Prosto
                 {0.7f, 0.7f}, {-0.7f, 0.7f}, {0.7f, -0.7f}, {-0.7f, -0.7f} // Skosy
             };
             
-            for (float dist : distances) {
-                for(auto dir : directions) {
+            for (float dist : distances) 
+            {
+                for(auto dir : directions) 
+                {
                     glm::vec2 testPos = buildingPos + (dir * dist);
                     glm::ivec2 gridPos = m_worldMap->worldToGrid(testPos);
                     
 
-                    if (!m_worldMap->isObstacle(gridPos.x, gridPos.y)) {
+                    if (!m_worldMap->isObstacle(gridPos.x, gridPos.y)) 
+                    {
                         return testPos;
                     }
                 }
@@ -237,10 +238,12 @@ void GameState::update(float deltaTime) {
             float minBedDist = 99999.0f;
 
             for (auto& b : m_buildings) {
-                if (b.buildingType == Building::WOODEN_BED || b.buildingType == Building::STONE_BED) {
+                if (b.buildingType == Building::WOODEN_BED || b.buildingType == Building::STONE_BED) 
+                {
                     
                     bool isBedOccupied = false;
-                    for (const auto& other : m_villagers) {
+                    for (const auto& other : m_villagers) 
+                    {
 
                         if (&other == &villager) continue;   
                        
@@ -255,7 +258,8 @@ void GameState::update(float deltaTime) {
                     if (isBedOccupied) continue;
 
                     float dist = glm::distance(villager.position, b.position);
-                    if (dist < minBedDist) {
+                    if (dist < minBedDist) 
+                    {
                         minBedDist = dist;
                         bestBed = &b;
                     }
@@ -272,6 +276,7 @@ void GameState::update(float deltaTime) {
                 villager.currentPath = Pathfinder::findPath(villager.position, safeSpot, *m_worldMap);
                 villager.currentPathIndex = 0;
             } 
+            
             else 
             {
                 villager.currentState = Villager::State::SLEEPING;
@@ -282,9 +287,11 @@ void GameState::update(float deltaTime) {
         if (villager.currentState == Villager::State::SLEEPING) 
         {
             bool onStoneBed = false;
-            for (const auto& b : m_buildings) {
+            for (const auto& b : m_buildings) 
+            {
                 // ZMIANA: używamy villager.position
-                if (b.buildingType == Building::STONE_BED && glm::distance(villager.position, b.position) < 20.0f) {
+                if (b.buildingType == Building::STONE_BED && glm::distance(villager.position, b.position) < 20.0f) 
+                {
                     onStoneBed = true;
                     break;
                 }
@@ -349,14 +356,14 @@ void GameState::update(float deltaTime) {
         // 2. INSTYNKT SAMOZACHOWAWCZY
         // =========================================================
         // --- PRIORYTET 1: WODA (Poniżej 40%) ---
-        
-
         if (!isBusySurviving) 
         {
             if (villager.thirst < 30.0f) 
             {
                 Building* targetWell = nullptr; 
-                for (auto& b : m_buildings) { 
+               
+                for (auto& b : m_buildings) 
+                { 
                     if (b.buildingType == Building::WELL) { targetWell = &b; break; }
                 }
 
@@ -377,6 +384,7 @@ void GameState::update(float deltaTime) {
                         villager.currentPath = path;
                         villager.currentPathIndex = 0;  
                     }
+                    
                     else 
                     {
                         if (rand() % 100 == 0) 
@@ -388,7 +396,8 @@ void GameState::update(float deltaTime) {
             else if (villager.hunger < 30.0f) 
             {
                 Building* targetKitchen = nullptr;
-                for (Building& b : m_buildings) {
+                for (Building& b : m_buildings) 
+                {
                     if (b.buildingType == Building::KITCHEN) { targetKitchen = &b; break; }
                 }
 
@@ -408,6 +417,7 @@ void GameState::update(float deltaTime) {
                         villager.currentPath = path; 
                         villager.currentPathIndex = 0; 
                     }
+                    
                     else 
                     {
                          if (rand() % 100 == 0)
@@ -435,14 +445,14 @@ void GameState::update(float deltaTime) {
             if (dist > 5.0f) // czy jest blisko punktu posredniego?
             {
                 villager.position += glm::normalize(dir) * moveSpeed * deltaTime;
-                return false; // idzie
+                return false; 
             } 
+            
             else 
             {
-                // zaliczyl ten punkt, idzie do nastepnego
+
                 villager.currentPathIndex++;
-                
-                // sprawdzamy czy to byl ostatni
+
                 if (villager.currentPathIndex >= villager.currentPath.size()) return true;
                 return false;
             }
@@ -451,8 +461,6 @@ void GameState::update(float deltaTime) {
         // =========================================================
         // MASZYNA STANÓW (Z UŻYCIEM NOWEJ FUNKCJI)
         // =========================================================
-
-        // 1. biegnie gdzie mu pokazemy na mapie 
         if (villager.currentState == Villager::State::MOVING_TO_POINT) 
         {
             if (moveAlongPath(speed))
@@ -461,10 +469,10 @@ void GameState::update(float deltaTime) {
             }
         }
 
-        // 2. biegnie pracowac bo trzeba zyc 
+
         else if (villager.currentState == Villager::State::MOVING_TO_WORK) 
         {
-            // sprawdzanie czy istnieje jeszcze zasob 
+
             if (villager.targetNode == nullptr) 
             {
                 villager.currentState = Villager::State::IDLE;
@@ -473,7 +481,6 @@ void GameState::update(float deltaTime) {
 
             if (moveAlongPath(speed)) 
             {
-                // jest u celu pracuje 
                 villager.currentState = Villager::State::GATHERING;
                 villager.workTimer = GATHER_TIME;
             }
@@ -498,20 +505,23 @@ void GameState::update(float deltaTime) {
                     villager.carryingResourceType = ResourceNode::Type::TREE;
                     villager.carryingAmount = 10;
                 }
+                
                 else if (villager.targetNode->resourceType == ResourceNode::Type::ROCK) 
                 {
                     villager.carryingResourceType = ResourceNode::Type::ROCK;
                     villager.carryingAmount = 5;
                 }
+                
                 else if (villager.targetNode->resourceType == ResourceNode::Type::BERRY_BUSH) 
                 {
                     villager.carryingResourceType = ResourceNode::Type::BERRY_BUSH;
                     villager.carryingAmount = 15;
                 }
 
-                // zmniejszanie zasobu na mapie 
+
                 villager.targetNode->amountLeft -= villager.carryingAmount;
-                if (villager.targetNode->amountLeft <= 0) {
+                if (villager.targetNode->amountLeft <= 0) 
+                {
                     villager.targetNode = nullptr;
                 }
 
@@ -855,8 +865,8 @@ void GameState::resolveRefugeeEvent(bool accepted)
         globalMorale += 15.0f; 
         if (globalMorale > 100.0f) globalMorale = 100.0f; 
         // dodawanie nowych mieszkancow 
-        m_villagers.emplace_back("Mariusz", glm::vec2(1900.0f, 1900.0f)); 
-        m_villagers.emplace_back("Mateusz", glm::vec2(1910.0f, 1900.0f));
+        m_villagers.emplace_back("Mariusz", glm::vec2(2300.0f, 2300.0f)); 
+        m_villagers.emplace_back("Mateusz", glm::vec2(2310.0f, 2300.0f));
         globalFood -= 30; 
         if (globalFood < 0) globalFood = 0; 
     } 

@@ -33,7 +33,8 @@ class Application
         {
             MENU, 
             GAME, 
-            GAME_OVER
+            GAME_OVER, 
+            PAUSE_MENU
         };
         
         enum class BuildMode {
