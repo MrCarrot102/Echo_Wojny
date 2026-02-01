@@ -431,7 +431,7 @@ void Application::pollEvents()
                                 glm::vec2 dir = glm::normalize(m_selectedVillager->position - building.position);
                                 if (glm::length(dir) == 0) dir = glm::vec2(1.0f, 0.0f);
                                 
-                                finalTargetPos = building.position + (dir * 25.0f); 
+                                finalTargetPos = building.position + (dir * 45.0f); 
                                 actionFound = true;
                                 break; 
                             }

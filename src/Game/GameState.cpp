@@ -855,9 +855,10 @@ void GameState::resolveRefugeeEvent(bool accepted)
         globalMorale += 15.0f; 
         if (globalMorale > 100.0f) globalMorale = 100.0f; 
         // dodawanie nowych mieszkancow 
-        m_villagers.emplace_back("Mariusz", glm::vec2(150.0f, 150.0f)); 
-        m_villagers.emplace_back("Mateusz", glm::vec2(155.0f, 150.0f));
+        m_villagers.emplace_back("Mariusz", glm::vec2(1900.0f, 1900.0f)); 
+        m_villagers.emplace_back("Mateusz", glm::vec2(1910.0f, 1900.0f));
         globalFood -= 30; 
+        if (globalFood < 0) globalFood = 0; 
     } 
     else 
     {   
