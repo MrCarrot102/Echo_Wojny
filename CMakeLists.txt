@@ -48,7 +48,7 @@ target_include_directories(gra
     ${PROJECT_SOURCE_DIR}/vendor 
     ${PROJECT_SOURCE_DIR}/vendor/imgui 
     ${PROJECT_SOURCE_DIR}/vendor/imgui-sfml
-    ${PROJECT_SORUCE_DIR}/vendor/stb
+    ${PROJECT_SOURCE_DIR}/vendor/stb
 )
 
 target_compile_definitions(gra PRIVATE IMGUI_SFML_USE_DEFAULT_CONFIG)
