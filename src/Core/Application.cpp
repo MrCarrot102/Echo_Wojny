@@ -749,9 +749,7 @@ void Application::render(){
         
         }
 
-
         m_Window.pushGLStates(); 
-
 
         glm::vec2 camPos = m_Camera->getPosition();
         sf::Vector2f camSize = m_Camera->getSize();
@@ -762,50 +760,109 @@ void Application::render(){
 
         for (const auto& villager : m_GameState->m_villagers) 
         {
-   
             glm::vec4 color = {1.0f, 0.2f, 0.2f, 1.0f}; 
         
-
             if (m_selectedVillager == &villager) 
             {
                 color = {1.0f, 1.0f, 0.0f, 1.0f}; 
             }
-
+        
+        
             if (drawShadows) 
             {
-
                 glm::vec2 v_shadowPos = villager.position + glm::vec2(shadowOffset.x * 0.5f, -3.0f);
-                
-
                 m_Renderer->drawSquare(*m_Camera, v_shadowPos, {8.0f + shadowStretch * 0.5f, 4.0f}, {0.0f, 0.0f, 0.0f, 0.35f});
             }
-
+        
+            m_Renderer->drawCircle(*m_Camera, villager.position, 6.0f, color);
+        
+            glm::mat4 viewProj = m_Camera->getProjectionViewMatrix();
+            glm::vec4 ndc = viewProj * glm::vec4(villager.position.x, villager.position.y, 0.0f, 1.0f);
+        
+            float screenX = (ndc.x + 1.0f) * 0.5f * m_Window.getSize().x;
+            float screenY = (1.0f - ndc.y) * 0.5f * m_Window.getSize().y;
+        
+        
             if (villager.currentState == Villager::State::SLEEPING) 
             {
-
-                glm::mat4 viewProj = m_Camera->getProjectionViewMatrix();
-                glm::vec4 ndc = viewProj * glm::vec4(villager.position.x, villager.position.y, 0.0f, 1.0f);
-                
-                float screenX = (ndc.x + 1.0f) * 0.5f * m_Window.getSize().x;
-                float screenY = (1.0f - ndc.y) * 0.5f * m_Window.getSize().y;
-
                 float floatOffset = std::sin(m_GameState->timeOfDay * 15.0f) * 10.0f;
-
-
                 ImGui::GetForegroundDrawList()->AddText(
-                    ImVec2(screenX - 15.0f, screenY - 25.0f + floatOffset), 
+                    ImVec2(screenX - 10.0f, screenY - 35.0f + floatOffset), 
                     IM_COL32(200, 200, 255, 255), 
                     "Zzz..."
                 );
             }
 
-            m_Renderer->drawCircle(*m_Camera, villager.position, 6.0f, color);
-        
+            if (villager.currentState == Villager::State::COMBAT) 
+            {
+            
+                float shakeX = (rand() % 5) - 2.5f;
+                float shakeY = (rand() % 5) - 2.5f;
+
+                ImGui::GetForegroundDrawList()->AddText(
+                    ImVec2(screenX + 5.0f + shakeX, screenY - 35.0f + shakeY), 
+                    IM_COL32(255, 100, 50, 255), 
+                    "CIACH!"
+                );
+            }
         }
 
         m_Window.popGLStates();
 
-        // renderowanie budynkow 
+        for (const auto& enemy : m_GameState->m_enemies) 
+        {
+            
+            glm::vec4 color = {0.8f, 0.0f, 0.2f, 1.0f}; 
+
+
+            if (drawShadows) 
+            {
+                glm::vec2 shadowSize = {12.0f + shadowStretch, 6.0f};
+                m_Renderer->drawSquare(*m_Camera, enemy.position + shadowOffset, shadowSize, {0.0f, 0.0f, 0.0f, 0.35f});
+            }
+
+            m_Renderer->drawCircle(*m_Camera, enemy.position, 9.0f, color);
+        
+            glm::mat4 viewProj = m_Camera->getProjectionViewMatrix();
+            glm::vec4 ndc = viewProj * glm::vec4(enemy.position.x, enemy.position.y, 0.0f, 1.0f);
+            float screenX = (ndc.x + 1.0f) * 0.5f * m_Window.getSize().x;
+            float screenY = (1.0f - ndc.y) * 0.5f * m_Window.getSize().y;
+        
+            float barWidth = 40.0f;
+            float barHeight = 6.0f;
+            float barYOffset = 30.0f; 
+            float hpPercent = enemy.health / enemy.maxHealth;
+            if(hpPercent < 0.0f) hpPercent = 0.0f;
+        
+            ImGui::GetForegroundDrawList()->AddRectFilled(
+                ImVec2(screenX - barWidth * 0.5f, screenY - barYOffset),
+                ImVec2(screenX + barWidth * 0.5f, screenY - barYOffset + barHeight),
+                IM_COL32(0, 0, 0, 255)
+            );
+
+            ImGui::GetForegroundDrawList()->AddRectFilled(
+                ImVec2(screenX - barWidth * 0.5f, screenY - barYOffset),
+                ImVec2(screenX - barWidth * 0.5f + (barWidth * hpPercent), screenY - barYOffset + barHeight),
+                IM_COL32(255, 0, 0, 255)
+            );
+
+            ImGui::GetForegroundDrawList()->AddRect(
+                ImVec2(screenX - barWidth * 0.5f, screenY - barYOffset),
+                ImVec2(screenX + barWidth * 0.5f, screenY - barYOffset + barHeight),
+                IM_COL32(255, 255, 255, 100)
+            );
+
+            if (enemy.currentState == Enemy::ATTACKING) 
+            {
+                 float shakeX = (rand() % 4) - 2.0f;
+                 ImGui::GetForegroundDrawList()->AddText(
+                    ImVec2(screenX + 10.0f + shakeX, screenY - 45.0f), 
+                    IM_COL32(255, 0, 0, 255), 
+                    "AGRR!"
+                );
+            }
+        }
+
         // renderowanie budynkow 
         for (const auto& b : m_GameState->m_buildings) 
         {
@@ -847,7 +904,6 @@ void Application::render(){
             m_Renderer->drawSquare(*m_Camera, b.position, size, color); 
         
         }
-
 
 
         if (m_currentBuildMode != BuildMode::NONE) 

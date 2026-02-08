@@ -378,6 +378,7 @@ CMakeFiles/gra.dir/src/main.cpp.o: \
  /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/ResourceNode.h \
  /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/Building.h \
  /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/WorldMap.h \
+ /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/Enemy.h \
  /home/mateuszsierakowski/Documents/Echo_Wojny/vendor/imgui-sfml/imgui-SFML.h \
  /usr/local/include/SFML/Graphics/Color.hpp \
  /usr/local/include/SFML/Graphics/Export.hpp \

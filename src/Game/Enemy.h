@@ -10,7 +10,8 @@ struct Enemy
     enum State 
     {
         PATROL,
-        CHASE
+        CHASE, 
+        ATTACKING
     };
     State currentState; 
 
@@ -21,12 +22,25 @@ struct Enemy
     float speed; 
     float aggroRange; 
 
+    float health; 
+    float maxHealth; 
+    float damage;
+    float attackRange; 
+    float attackTimer; 
+    float attackCooldown; 
+
     Enemy(glm::vec2 pos)
         : position(pos), 
         currentState(State::PATROL),
         targetPosition(pos), 
         currentPathIndex(0),
         speed(70.0f), 
-        aggroRange(300.0f)
+        aggroRange(300.0f),
+        health(50.0f),
+        maxHealth(50.0f),
+        damage(10.0f),
+        attackRange(20.0f),
+        attackTimer(0.0f),
+        attackCooldown(1.5f)
     {}
 };

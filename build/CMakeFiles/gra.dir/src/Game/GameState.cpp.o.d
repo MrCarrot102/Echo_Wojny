@@ -302,6 +302,7 @@ CMakeFiles/gra.dir/src/Game/GameState.cpp.o: \
  /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/ResourceNode.h \
  /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/Building.h \
  /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/WorldMap.h \
+ /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/Enemy.h \
  /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/Pathfinder.h \
  /home/mateuszsierakowski/Documents/Echo_Wojny/src/Game/../../vendor/stb/stb_perlin.h \
  /usr/include/c++/15/math.h /usr/include/c++/15/iostream

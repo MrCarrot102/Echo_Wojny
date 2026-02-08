@@ -8,6 +8,7 @@
 #include "Game/ResourceNode.h"     
 #include "Game/Building.h"
 #include "Game/WorldMap.h"
+#include "Game/Enemy.h"
 
 class GameState {
     public: 
@@ -53,7 +54,9 @@ class GameState {
         std::vector<Villager> m_villagers; 
         std::vector<ResourceNode> m_resourceNodes; 
         std::vector<Building> m_buildings; 
+        std::vector<Enemy> m_enemies; 
 
+        void updateCombat(float deltaTime); 
 
         std::unique_ptr<WorldMap> m_worldMap;
 

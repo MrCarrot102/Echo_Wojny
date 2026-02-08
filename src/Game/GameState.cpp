@@ -32,7 +32,7 @@ GameState::GameState()
     m_villagers.emplace_back("Adam", glm::vec2(2300.0f, 2300.0f)); 
     m_villagers.emplace_back("Ewa", glm::vec2(2320.0f, 2320.0f));
     m_villagers.emplace_back("Radek", glm::vec2(2350.0f, 2350.0f));
-
+    
 
     m_resourceNodes.emplace_back(ResourceNode::TREE, glm::vec2(1960.0f, 2000.0f), 100);
     m_resourceNodes.emplace_back(ResourceNode::TREE, glm::vec2(1980.0f, 2040.0f), 100);
@@ -177,11 +177,121 @@ void GameState::update(float deltaTime)
             }
         }
     }
-    
+
+
+    for (auto it = m_enemies.begin(); it != m_enemies.end(); ) 
+    {
+        Enemy& enemy = *it;
+        Villager* target = nullptr;
+        float minDistance = 9999.0f;
+
+
+        for (auto& v : m_villagers) 
+        {
+            float d = glm::distance(enemy.position, v.position);
+            if (d < minDistance) 
+            {
+                minDistance = d;
+                target = &v;
+            }
+        }
+
+
+        if (target && minDistance < enemy.aggroRange) 
+        {
+            if (minDistance <= enemy.attackRange) 
+            {
+
+                enemy.currentState = Enemy::ATTACKING;
+                enemy.attackTimer -= deltaTime;
+
+                if (enemy.attackTimer <= 0.0f) 
+                {
+
+                    target->health -= enemy.damage;
+                    std::cout << "[WALKA] Wróg bije " << target->name << " za " << enemy.damage << " hp!\n";
+                    enemy.attackTimer = enemy.attackCooldown;
+
+
+                    if (target->currentState != Villager::State::COMBAT && target->currentState != Villager::State::SLEEPING) 
+                    {
+                        target->currentState = Villager::State::COMBAT;
+                    }
+                }
+            } 
+            else 
+            {
+
+                enemy.currentState = Enemy::CHASE;
+                glm::vec2 dir = glm::normalize(target->position - enemy.position);
+                enemy.position += dir * enemy.speed * deltaTime;
+            }
+        } 
+        else 
+        {
+            enemy.currentState = Enemy::PATROL;
+        }
+
+
+        if (enemy.health <= 0.0f) 
+        {
+            std::cout << "[ZWYCIESTWO] Wróg pokonany!\n";
+            it = m_enemies.erase(it);
+        } 
+        else 
+        {
+            ++it;
+        }
+    }
+
+    for (auto& villager : m_villagers) 
+    {
+        if (villager.currentState == Villager::State::COMBAT) 
+        {
+
+            Enemy* targetEnemy = nullptr;
+            float minEnemyDist = 50.0f; 
+
+            for (auto& e : m_enemies) 
+            {
+                float d = glm::distance(villager.position, e.position);
+                if (d < minEnemyDist) 
+                {
+                    minEnemyDist = d;
+                    targetEnemy = &e;
+                }
+            }
+
+            if (targetEnemy) 
+            {
+                if (minEnemyDist > 20.0f) 
+                {
+                    glm::vec2 dir = glm::normalize(targetEnemy->position - villager.position);
+                    villager.position += dir * 65.0f * deltaTime; 
+                } 
+                else 
+                {
+                    // Atakuj
+                    villager.attackTimer -= deltaTime;
+                    if (villager.attackTimer <= 0.0f) 
+                    {
+                        targetEnemy->health -= villager.damage;
+                        std::cout << "[WALKA] " << villager.name << " kontratakuje!\n";
+                        villager.attackTimer = 1.0f;
+                    }
+                }
+            } 
+            else 
+            {
+                villager.currentState = Villager::State::IDLE;
+            }
+        }
+    }   
+
     // --- 2. petla po mieszkancach  ---
     for (auto it = m_villagers.begin(); it != m_villagers.end(); ) 
     {
-        Villager& villager = *it; // dostep do osadnika przez referencje 
+        Villager& villager = *it;
         
         auto getSafeInteractionPoint = [&](glm::vec2 buildingPos) -> glm::vec2 
         {
@@ -801,17 +911,22 @@ void GameState::checkForDailyEvents()
         globalWater += 20; 
     }
 
-    if (dayCounter == 5 && !m_eventDay5Triggered)
+    if (dayCounter == 8 && !m_eventDay5Triggered)
     {   
         m_eventDay5Triggered = true; 
 
-        currentEventTitle = "Najazd na bazę";
-        currentEventDescription = "W nocy banda wrogiego wojska napadla na nasza wioske i ukradla nasze zapasy.\n\nStracilismy: -30 Jedzenia, -40 Drewna";
-        globalFood -= 30;
-        globalWood -= 40; 
+        currentEventTitle = "ALARM BOJOWY!";
+        currentEventDescription = "Wrogowie przelamali nasze zabezpieczenia!\nMusimy walczyc o przetrwanie!\n(Pojawilo sie 3 bandytow)";
 
+        globalFood -= 10;
         if (globalFood < 0 ) globalFood = 0; 
-        if (globalWood < 0 ) globalWood = 0; 
+
+        m_enemies.emplace_back(glm::vec2(2250.0f, 2250.0f)); // Lewy gorny rog
+        m_enemies.emplace_back(glm::vec2(2350.0f, 2250.0f)); // Prawy gorny rog
+
+        std::cout << "[EVENT] NAJAZD! Zrespiono 3 wrogow!\n";
+        
+        setMode(Mode::EVENT_PAUSED);
     }
 
     if (dayCounter == 2 && !m_eventRefugeesTriggered) 

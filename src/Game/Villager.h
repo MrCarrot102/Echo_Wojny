@@ -30,7 +30,9 @@ struct Villager {
         GATHERING_WATER, 
 
         MOVING_TO_BED, 
-        SLEEPING
+        SLEEPING,
+
+        COMBAT
     }; 
     
     
@@ -41,6 +43,9 @@ struct Villager {
     float hunger; 
     float thirst; 
     float energy = 100.0f; 
+
+    float attackTimer = 0.0f; 
+    float damage = 5.0f; 
 
     // -- dodanie zdrowia -- 
     float health; 
