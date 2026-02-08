@@ -305,6 +305,7 @@ gra: CMakeFiles/gra.dir/vendor/imgui-sfml/imgui-SFML.cpp.o
 gra: CMakeFiles/gra.dir/build.make
 gra: CMakeFiles/gra.dir/compiler_depend.ts
 gra: /usr/local/lib64/libsfml-graphics.so.2.6.2
+gra: /usr/local/lib64/libsfml-audio.so.2.6.2
 gra: /usr/lib64/libGL.so
 gra: /usr/lib64/libGLEW.so
 gra: /usr/local/lib64/libsfml-window.so.2.6.2

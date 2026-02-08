@@ -305,6 +305,9 @@ SFML_DIR:PATH=/usr/local/lib64/cmake/SFML
 //Path to a file.
 SFML_DOC_DIR:PATH=SFML_DOC_DIR-NOTFOUND
 
+//The directory containing a CMake configuration file for glm.
+glm_DIR:PATH=/usr/share/cmake/glm
+
 
 ########################
 # INTERNAL cache entries

@@ -17,6 +17,7 @@ gra: \
   CMakeFiles/gra.dir/vendor/imgui/imgui_demo.cpp.o \
   CMakeFiles/gra.dir/vendor/imgui-sfml/imgui-SFML.cpp.o \
   /usr/local/lib64/libsfml-graphics.so.2.6.2 \
+  /usr/local/lib64/libsfml-audio.so.2.6.2 \
   /usr/lib64/libGL.so \
   /usr/lib64/libGLEW.so \
   /usr/local/lib64/libsfml-window.so.2.6.2 \
@@ -49,6 +50,12 @@ gra: \
   /usr/lib/gcc/x86_64-redhat-linux/15/../../../../lib64/crtn.o \
   /usr/lib64/libfreetype.so.6 \
   /lib64/ld-linux-x86-64.so.2 \
+  /usr/lib64/libopenal.so.1 \
+  /usr/lib64/libvorbisenc.so.2 \
+  /usr/lib64/libvorbisfile.so.3 \
+  /usr/lib64/libvorbis.so.0 \
+  /usr/lib64/libogg.so.0 \
+  /usr/lib64/libFLAC.so.14 \
   /usr/lib64/libGLX.so.0 \
   /usr/lib64/libX11.so.6 \
   /usr/lib64/libXext.so.6 \
@@ -61,6 +68,7 @@ gra: \
   /usr/lib64/libpng16.so.16 \
   /usr/lib64/libharfbuzz.so.0 \
   /usr/lib64/libbrotlidec.so.1 \
+  /usr/lib64/libfmt.so.11 \
   /usr/lib64/libxcb.so.1 \
   /usr/lib64/libXrender.so.1 \
   /usr/lib64/libXfixes.so.3 \
@@ -106,6 +114,8 @@ CMakeFiles/gra.dir/vendor/imgui/imgui_demo.cpp.o:
 CMakeFiles/gra.dir/vendor/imgui-sfml/imgui-SFML.cpp.o:
 
 /usr/local/lib64/libsfml-graphics.so.2.6.2:
+
+/usr/local/lib64/libsfml-audio.so.2.6.2:
 
 /usr/lib64/libGL.so:
 
@@ -171,6 +181,18 @@ CMakeFiles/gra.dir/vendor/imgui-sfml/imgui-SFML.cpp.o:
 
 /lib64/ld-linux-x86-64.so.2:
 
+/usr/lib64/libopenal.so.1:
+
+/usr/lib64/libvorbisenc.so.2:
+
+/usr/lib64/libvorbisfile.so.3:
+
+/usr/lib64/libvorbis.so.0:
+
+/usr/lib64/libogg.so.0:
+
+/usr/lib64/libFLAC.so.14:
+
 /usr/lib64/libGLX.so.0:
 
 /usr/lib64/libX11.so.6:
@@ -194,6 +216,8 @@ CMakeFiles/gra.dir/vendor/imgui-sfml/imgui-SFML.cpp.o:
 /usr/lib64/libharfbuzz.so.0:
 
 /usr/lib64/libbrotlidec.so.1:
+
+/usr/lib64/libfmt.so.11:
 
 /usr/lib64/libxcb.so.1:
 
