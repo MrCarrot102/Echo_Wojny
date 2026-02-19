@@ -1,71 +1,70 @@
-#pragma once 
+#pragma once
 #include <glm/glm.hpp>
-#include <string> 
-#include <vector> 
-
+#include <string>
+#include <vector>
 
 #include "Game/ResourceNode.h"
 
-struct ResourceNode; 
+struct ResourceNode;
 
-// szkielet mieszkanca to tylko kontener na dane (chwilowo) 
-struct Villager {
-    glm::vec2 position; 
-    std::string name; 
-     
-    // stany jejaja 
-    enum State { 
-        IDLE, // bezczynnosc 
-        MOVING_TO_POINT, // idzie do jakiegos losowego punktu 
-        MOVING_TO_WORK, // idzie to zasobu 
-        GATHERING, // zbiera
-        MOVING_TO_EAT, // chce mu sie zrec 
-        EATING,  // zre cos
-        MOVING_TO_DRINK, 
-        DRINKING,
-        MOVING_TO_HAUL, 
-        HAULING, 
-        
-        MOVING_TO_GATHER_WATER,
-        GATHERING_WATER, 
+// szkielet mieszkanca to tylko kontener na dane (chwilowo)
+struct Villager
+{
+  glm::vec2 position;
+  std::string name;
 
-        MOVING_TO_BED, 
-        SLEEPING,
+  // stany jejaja
+  enum State
+  {
+    IDLE,             // bezczynnosc
+    MOVING_TO_POINT,  // idzie do jakiegos losowego punktu
+    MOVING_TO_WORK,   // idzie to zasobu
+    GATHERING,        // zbiera
+    MOVING_TO_EAT,    // chce mu sie zrec
+    EATING,           // zre cos
+    MOVING_TO_DRINK,
+    DRINKING,
+    MOVING_TO_HAUL,
+    HAULING,
 
-        COMBAT
-    }; 
-    
-    
-    
-    State currentState; 
-    
-    float workTimer; // zegar odliczania pracy 
-    float hunger; 
-    float thirst; 
-    float energy = 100.0f; 
+    MOVING_TO_GATHER_WATER,
+    GATHERING_WATER,
 
-    float attackTimer = 0.0f; 
-    float damage = 5.0f; 
+    MOVING_TO_BED,
+    SLEEPING,
 
-    // -- dodanie zdrowia -- 
-    float health; 
-    // cel 
-    glm::vec2 targetPosition; 
-    std::vector<glm::vec2> currentPath; 
-    int currentPathIndex;  
+    COMBAT
+  };
 
-    ResourceNode::Type carryingResourceType; 
-    int carryingAmount; 
+  State currentState;
 
-    // statystyki
-    ResourceNode* targetNode; // wskaznik na zasob, przy ktorym sie pracuje 
-    
-    // konstruktor ulatwiajacy tworzenie 
-    Villager(const std::string& n, const glm::vec2& pos)
-        : name(n), 
-        position(pos), 
-        currentState(State::IDLE), 
-        targetPosition(pos), 
+  float workTimer;  // zegar odliczania pracy
+  float hunger;
+  float thirst;
+  float energy = 100.0f;
+
+  float attackTimer = 0.0f;
+  float damage = 5.0f;
+
+  // -- dodanie zdrowia --
+  float health;
+  // cel
+  glm::vec2 targetPosition;
+  std::vector<glm::vec2> currentPath;
+  int currentPathIndex;
+
+  ResourceNode::Type carryingResourceType;
+  int carryingAmount;
+
+  // statystyki
+  ResourceNode* targetNode;  // wskaznik na zasob, przy ktorym sie pracuje
+
+  // konstruktor ulatwiajacy tworzenie
+  Villager(const std::string& n, const glm::vec2& pos)
+      : name(n),
+        position(pos),
+        currentState(State::IDLE),
+        targetPosition(pos),
         targetNode(nullptr),
         workTimer(0.0f),
         hunger(100.0f),
@@ -74,6 +73,6 @@ struct Villager {
         carryingResourceType(ResourceNode::Type::NONE),
         carryingAmount(0),
         currentPathIndex(0)
-        {}
+  {
+  }
 };
-

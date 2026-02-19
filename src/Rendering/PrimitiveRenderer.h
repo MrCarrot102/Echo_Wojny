@@ -1,28 +1,27 @@
-#pragma once 
-#include "Rendering/Shader.h"
-#include "Rendering/Camera2D.h"
+#pragma once
 #include <glm/glm.hpp>
 #include <memory>
 
-class PrimitiveRenderer {
-    public: 
-        PrimitiveRenderer(); 
-        ~PrimitiveRenderer();
+#include "Rendering/Camera2D.h"
+#include "Rendering/Shader.h"
 
-        void drawSquare(Camera2D& camera, 
-                    const glm::vec2& position, 
-                    const glm::vec2& size, 
-                    const glm::vec4& color);
+class PrimitiveRenderer
+{
+ public:
+  PrimitiveRenderer();
+  ~PrimitiveRenderer();
 
-        void drawCircle(Camera2D& camera, const glm::vec2& position, float radius, const glm::vec4& color);
+  void drawSquare(Camera2D& camera, const glm::vec2& position,
+                  const glm::vec2& size, const glm::vec4& color);
 
-    private:
-        std::unique_ptr<Shader> m_Shader;
-        GLuint m_QuadVAO; 
-        GLuint m_QuadVBO; 
+  void drawCircle(Camera2D& camera, const glm::vec2& position, float radius,
+                  const glm::vec4& color);
 
-        unsigned int m_CircleVAO, m_CircleVBO; 
-        int m_CircleVertexCount; 
-                    
+ private:
+  std::unique_ptr<Shader> m_Shader;
+  GLuint m_QuadVAO;
+  GLuint m_QuadVBO;
+
+  unsigned int m_CircleVAO, m_CircleVBO;
+  int m_CircleVertexCount;
 };
-

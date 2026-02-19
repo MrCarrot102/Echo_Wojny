@@ -1,73 +1,78 @@
-#pragma once 
-#include <vector> 
+#pragma once
+#include <fstream>
+#include <memory>
 #include <string>
-#include <memory> 
-#include <fstream> 
+#include <vector>
 
-#include "Game/Villager.h"
-#include "Game/ResourceNode.h"     
 #include "Game/Building.h"
-#include "Game/WorldMap.h"
 #include "Game/Enemy.h"
+#include "Game/ResourceNode.h"
+#include "Game/Villager.h"
+#include "Game/WorldMap.h"
 
-class GameState {
-    public: 
-        GameState(); 
+class GameState
+{
+ public:
+  GameState();
 
-        enum class Mode { PLAYING, EVENT_PAUSED }; 
+  enum class Mode
+  {
+    PLAYING,
+    EVENT_PAUSED
+  };
 
-        // system pogody 
-        enum Season { SUMMER, WINTER }; 
-        Season currentSeason; 
+  // system pogody
+  enum Season
+  {
+    SUMMER,
+    WINTER
+  };
+  Season currentSeason;
 
-        float globalTemperature; 
-        float seasonTimer; 
-        float heatingTimer; 
+  float globalTemperature;
+  float seasonTimer;
+  float heatingTimer;
 
+  // glowna funkcja ticki symulacji
+  void update(float deltaTime);
+  void checkForDailyEvents();
+  Building* findNearestStockpile(const glm::vec2& fromPos);
+  void setMode(Mode newMode);
+  Mode getMode() const { return m_currentMode; }
+  void resolveRefugeeEvent(bool accepted);
 
-        // glowna funkcja ticki symulacji 
-        void update(float deltaTime); 
-        void checkForDailyEvents(); 
-        Building* findNearestStockpile(const glm::vec2& fromPos); 
-        void setMode(Mode newMode); 
-        Mode getMode() const { return m_currentMode; }
-        void resolveRefugeeEvent(bool accepted); 
+  // dane gry
+  int dayCounter;
+  float timeOfDay;
+  int globalFood;
+  int globalWood;
+  int globalWater;
+  int globalStone;
+  int globalMorale;
+  Mode m_currentMode;
+  std::string currentEventTitle;
+  std::string currentEventDescription;
 
-        // dane gry 
-        int dayCounter;  
-        float timeOfDay;  
-        int globalFood; 
-        int globalWood; 
-        int globalWater; 
-        int globalStone; 
-        int globalMorale; 
-        Mode m_currentMode; 
-        std::string currentEventTitle; 
-        std::string currentEventDescription; 
+  // zapisywanie gry
+  void saveGame(const std::string& filename);
+  void loadGame(const std::string& filename);
 
-        // zapisywanie gry 
-        void saveGame(const std::string& filename); 
-        void loadGame(const std::string& filename); 
+  // npc
+  std::vector<Villager> m_villagers;
+  std::vector<ResourceNode> m_resourceNodes;
+  std::vector<Building> m_buildings;
+  std::vector<Enemy> m_enemies;
 
+  void updateCombat(float deltaTime);
 
-        // npc 
-        std::vector<Villager> m_villagers; 
-        std::vector<ResourceNode> m_resourceNodes; 
-        std::vector<Building> m_buildings; 
-        std::vector<Enemy> m_enemies; 
+  std::unique_ptr<WorldMap> m_worldMap;
 
-        void updateCombat(float deltaTime); 
+ private:
+  // liczenie czasu
+  float m_TimeAccumulator;
 
-        std::unique_ptr<WorldMap> m_worldMap;
-
-    private: 
-        // liczenie czasu 
-        float m_TimeAccumulator; 
-        
-        // wydarzenia
-        bool m_eventDay3Triggered; 
-        bool m_eventDay5Triggered; 
-        bool m_eventRefugeesTriggered; 
-
+  // wydarzenia
+  bool m_eventDay3Triggered;
+  bool m_eventDay5Triggered;
+  bool m_eventRefugeesTriggered;
 };
-

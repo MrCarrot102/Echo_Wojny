@@ -1,35 +1,36 @@
-#pragma once 
-#include <vector> 
-#include <glm/glm.hpp> 
+#pragma once
+#include <glm/glm.hpp>
+#include <vector>
 
-struct Tile {
-    bool isWall; 
+struct Tile
+{
+  bool isWall;
 
-    Tile() : isWall(false) {} 
+  Tile() : isWall(false) {}
 };
 
-class WorldMap {
-    public: 
-        WorldMap(int width, int height, float tileSize); 
+class WorldMap
+{
+ public:
+  WorldMap(int width, int height, float tileSize);
 
-        // funkcje pomocnicze 
-        void setObstacle(int x, int y, bool isObstacle); 
-        bool isObstacle(int x, int y) const; 
-        bool isBlocked(int x, int y) const; 
+  // funkcje pomocnicze
+  void setObstacle(int x, int y, bool isObstacle);
+  bool isObstacle(int x, int y) const;
+  bool isBlocked(int x, int y) const;
 
-        // konwersja z swiata na siatke 
-        glm::ivec2 worldToGrid(const glm::vec2& worldPos) const; 
-        glm::vec2 gridToWorld(const glm::ivec2& gridPos) const; 
+  // konwersja z swiata na siatke
+  glm::ivec2 worldToGrid(const glm::vec2& worldPos) const;
+  glm::vec2 gridToWorld(const glm::ivec2& gridPos) const;
 
-        // gettery 
-        int getWidth() const {return m_width; }
-        int getHeight() const {return m_height; }
-        float getTileSize() const {return m_tileSize; }
+  // gettery
+  int getWidth() const { return m_width; }
+  int getHeight() const { return m_height; }
+  float getTileSize() const { return m_tileSize; }
 
-    private: 
-        int m_width; 
-        int m_height; 
-        float m_tileSize; 
-        std::vector<Tile> m_grid; // tablica jednowymiarowa 2d (dla wydajnosc)
-
+ private:
+  int m_width;
+  int m_height;
+  float m_tileSize;
+  std::vector<Tile> m_grid;  // tablica jednowymiarowa 2d (dla wydajnosc)
 };
