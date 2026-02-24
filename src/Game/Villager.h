@@ -7,21 +7,19 @@
 
 struct ResourceNode;
 
-// szkielet mieszkanca to tylko kontener na dane (chwilowo)
 struct Villager
 {
   glm::vec2 position;
   std::string name;
 
-  // stany jejaja
   enum State
   {
-    IDLE,             // bezczynnosc
-    MOVING_TO_POINT,  // idzie do jakiegos losowego punktu
-    MOVING_TO_WORK,   // idzie to zasobu
-    GATHERING,        // zbiera
-    MOVING_TO_EAT,    // chce mu sie zrec
-    EATING,           // zre cos
+    IDLE,
+    MOVING_TO_POINT,
+    MOVING_TO_WORK,
+    GATHERING,
+    MOVING_TO_EAT,
+    EATING,
     MOVING_TO_DRINK,
     DRINKING,
     MOVING_TO_HAUL,
@@ -38,7 +36,7 @@ struct Villager
 
   State currentState;
 
-  float workTimer;  // zegar odliczania pracy
+  float workTimer;
   float hunger;
   float thirst;
   float energy = 100.0f;
@@ -46,9 +44,7 @@ struct Villager
   float attackTimer = 0.0f;
   float damage = 5.0f;
 
-  // -- dodanie zdrowia --
   float health;
-  // cel
   glm::vec2 targetPosition;
   std::vector<glm::vec2> currentPath;
   int currentPathIndex;
@@ -56,10 +52,8 @@ struct Villager
   ResourceNode::Type carryingResourceType;
   int carryingAmount;
 
-  // statystyki
-  ResourceNode* targetNode;  // wskaznik na zasob, przy ktorym sie pracuje
+  ResourceNode* targetNode;
 
-  // konstruktor ulatwiajacy tworzenie
   Villager(const std::string& n, const glm::vec2& pos)
       : name(n),
         position(pos),
